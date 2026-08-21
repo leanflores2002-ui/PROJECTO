@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: romix-api
+    runtime: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    autoDeploy: false
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_JWT_SECRET
+        sync: false
+      - key: SUPABASE_JWKS_URL
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: PUBLIC_FRONTEND_ORIGIN
+        sync: false
+      - key: ADMIN_FRONTEND_ORIGIN
+        sync: false
+      - key: ROMIX_CATALOG_SOURCE
+        value: json

@@ -452,14 +452,17 @@
     if (!Array.isArray(cart) || !cart.length) return '';
     const lines = cart.map((item) => {
       const qty = Number(item.qty ?? item.quantity) || 0;
+      const productLabel = item.type ? `${item.name || 'Producto'} (${item.type})` : (item.name || 'Producto');
       const parts = [
-        `- ${item.name || 'Producto'}`,
+        `- ${productLabel}`,
         item.color ? `Color: ${item.color}` : '',
         item.talle ? `Talle: ${item.talle}` : '',
         `Cant: ${qty}`,
       ].filter(Boolean);
       return parts.join(' | ');
     });
+    const { totalPrice } = getCartTotals(cart);
+    lines.push('', `Total: $${totalPrice.toFixed(2)}`);
     return encodeURIComponent(lines.join('\n'));
   };
 

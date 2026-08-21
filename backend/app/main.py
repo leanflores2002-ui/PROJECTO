@@ -8,6 +8,7 @@ from html import escape as html_escape
 from pathlib import Path
 from threading import RLock
 import threading
+from contextlib import asynccontextmanager
 from typing import Dict, List, Tuple
 from urllib.parse import urljoin
 
@@ -16,6 +17,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
+from .admin_api import router as admin_router
+from .config import get_settings
+from .database import close_database_pool, database_health, open_database_pool
+from .public_api import router as public_router
 
 
 def repo_root() -> Path:
@@ -290,28 +296,42 @@ def inject_product_meta(
     return rendered
 
 
-app = FastAPI(title="ROMIX API", version="1.0.0")
+settings = get_settings()
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    load_products()
+    load_variants(force=True)
+    open_database_pool()
+    try:
+        yield
+    finally:
+        close_database_pool()
 
-# Permitir consumir desde el mismo host y uso local
+
+app = FastAPI(title="ROMIX API", version="1.1.0", lifespan=lifespan)
+
+# Los origins se controlan por entorno. En produccion se rechaza explicitamente "*".
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # para desarrollo; ajustar en prod
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
 )
 
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok"}
+    return {"status": "ok", "environment": settings.environment, "catalogSource": settings.catalog_source}
 
 
-@app.on_event("startup")
-def warm_products_cache():
-    # Precalentamos cache para evitar latencia en las primeras peticiones
-    load_products()
-    load_variants(force=True)
+@app.get("/api/health/ready")
+def readiness():
+    if not settings.database_url:
+        return {"status": "degraded", "database": "not_configured", "catalog": "json"}
+    if not database_health():
+        raise HTTPException(status_code=503, detail="Database unavailable")
+    return {"status": "ready", "database": "ok", "catalog": settings.catalog_source}
 
 
 @app.get("/api/products")
@@ -485,6 +505,11 @@ def create_order(body: dict):
     updates, order_items = validate_and_reserve(items)
     order_id = os.urandom(8).hex()
     return {"orderId": order_id, "updatedVariants": updates, "items": order_items}
+
+
+# Rutas nuevas, mantenidas en paralelo durante la migracion para no romper consumidores actuales.
+app.include_router(public_router)
+app.include_router(admin_router)
 
 
 # Servir estaticos desde el frontend publico

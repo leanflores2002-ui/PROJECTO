@@ -1,7 +1,13 @@
 import json
+import pytest
 from fastapi.testclient import TestClient
 
 from backend.app import main
+
+
+@pytest.fixture(autouse=True)
+def avoid_writing_inventory_file(monkeypatch):
+    monkeypatch.setattr(main, "persist_variants", lambda: None)
 
 
 def setup_state():
@@ -9,7 +15,7 @@ def setup_state():
     main._products_cache = [
         {"id": "p1", "name": "Producto 1"},
     ]
-    main._products_mtime = 0
+    main._products_mtime = main.DATA_FILE.stat().st_mtime
     main._products_json_cache = json.dumps(main._products_cache, ensure_ascii=False)
     # Variantes de prueba
     main._variants = {
