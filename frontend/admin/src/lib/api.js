@@ -20,9 +20,23 @@ export async function apiRequest(path, { token, method = 'GET', body, signal } =
     },
     ...(body ? { body: JSON.stringify(body) } : {}),
   });
-  const payload = await response.json().catch(() => null);
-  if (!response.ok) {
-    throw new ApiError(payload?.detail || 'No se pudo completar la solicitud', response.status, payload);
+
+  const raw = await response.text();
+  let payload = null;
+  if (raw) {
+    try {
+      payload = JSON.parse(raw);
+    } catch {
+      payload = null;
+    }
   }
+
+  if (!response.ok) {
+    const detail = payload?.detail;
+    const fallback = raw && raw.length < 240 ? raw : '';
+    const message = detail || fallback || `Error HTTP ${response.status} al llamar ${path}`;
+    throw new ApiError(message, response.status, payload);
+  }
+
   return payload;
 }
