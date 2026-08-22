@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
+import logging
+import re
 from typing import Iterator
 
 from fastapi import HTTPException, status
@@ -11,7 +13,25 @@ from psycopg_pool import ConnectionPool
 from .config import get_settings
 
 
+logger = logging.getLogger("romix.database")
 _pool: ConnectionPool | None = None
+
+
+def _safe_database_error(error: Exception) -> str:
+    """Return a useful connection error without leaking database credentials."""
+    message = str(error) or error.__class__.__name__
+    message = re.sub(
+        r"(postgres(?:ql)?://[^:\s/@]+:)[^@\s]+(@)",
+        r"\1***\2",
+        message,
+        flags=re.IGNORECASE,
+    )
+    message = re.sub(
+        r"(?i)(password\s*=\s*)[^\s]+",
+        r"\1***",
+        message,
+    )
+    return message
 
 
 def open_database_pool() -> None:
@@ -58,5 +78,10 @@ def database_health() -> bool:
         with database_connection() as connection:
             row = connection.execute("select 1 as ok").fetchone()
             return bool(row and row["ok"] == 1)
-    except Exception:
+    except Exception as exc:
+        logger.error(
+            "Database health check failed (%s): %s",
+            exc.__class__.__name__,
+            _safe_database_error(exc),
+        )
         return False
