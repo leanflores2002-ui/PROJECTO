@@ -214,6 +214,7 @@ def _build_catalog(connection) -> list[dict]:
             (str(image.get("public_url") or "").strip() for image in product_images if image.get("is_primary")),
             image_urls[0] if image_urls else str(legacy.get("image") or "").strip(),
         )
+        specifications = _json_dict(row.get("specifications"))
 
         item.update(
             {
@@ -237,7 +238,8 @@ def _build_catalog(connection) -> list[dict]:
                 "barcode": row.get("barcode") or "",
                 "tags": list(row.get("tags") or []),
                 "featured": bool(row.get("featured")),
-                "specifications": _json_dict(row.get("specifications")),
+                "specifications": specifications,
+                "specs": specifications,
                 "visible": True,
                 "active": True,
                 "publish": "published",
@@ -296,10 +298,8 @@ def sync_public_catalog(connection, *, force: bool = False) -> bool:
         catalog = _build_catalog(connection)
         allow_empty = os.getenv("ROMIX_ALLOW_EMPTY_CATALOG", "").strip().lower() in {"1", "true", "yes", "on"}
         if not catalog and marker[0] and not allow_empty:
-            # Si existen productos pero ninguno esta publicado, respetamos el estado publicado: catalogo vacio.
             pass
         elif not catalog and not marker[0] and not allow_empty:
-            # Evita vaciar accidentalmente la tienda si la migracion aun no se ejecuto.
             return False
 
         CATALOG_FILE.parent.mkdir(parents=True, exist_ok=True)
