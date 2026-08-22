@@ -4,6 +4,7 @@ import App from './App';
 import './styles.css';
 import './admin-enhancements';
 import './admin-modules';
+import './content-modules';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
