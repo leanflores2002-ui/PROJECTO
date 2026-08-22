@@ -150,9 +150,20 @@ def size_stock(entry: Any) -> int:
     return 5
 
 
+def normalize_color_hex(value: Any) -> str | None:
+    raw = str(value or "").strip()
+    if not raw:
+        return None
+    if re.fullmatch(r"#[0-9A-Fa-f]{3}", raw):
+        return "#" + "".join(char * 2 for char in raw[1:])
+    if re.fullmatch(r"#[0-9A-Fa-f]{6}", raw):
+        return raw
+    return None
+
+
 def color_value(entry: Any) -> tuple[str, str | None]:
     if isinstance(entry, dict):
-        return str(entry.get("name") or "Unico").strip(), entry.get("hex")
+        return str(entry.get("name") or "Unico").strip(), normalize_color_hex(entry.get("hex"))
     return str(entry or "Unico").strip(), None
 
 
