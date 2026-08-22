@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import secrets
 from collections import defaultdict
-from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, Field
 
+from .catalog_sync import _build_catalog
 from .database import database_connection
 
 
@@ -22,6 +22,13 @@ class PublicOrderItem(BaseModel):
 
 class PublicOrder(BaseModel):
     items: list[PublicOrderItem] = Field(min_length=1, max_length=200)
+
+
+@router.get("/catalog")
+def public_catalog():
+    """Catalogo publicado en el formato compatible con la tienda historica."""
+    with database_connection() as connection:
+        return _build_catalog(connection)
 
 
 @router.post("/orders", status_code=status.HTTP_201_CREATED)
@@ -45,12 +52,12 @@ def create_public_order(payload: PublicOrder):
                   on spg.product_id = p.id and spg.size = v.size
                 left join public.product_price_groups pg
                   on pg.product_id = p.id and pg.price_group = spg.price_group
-                where (p.slug = %s or p.id::text = %s)
+                where (p.slug = %s or p.legacy_id = %s or p.id::text = %s)
                   and lower(v.color) = lower(%s) and lower(v.size) = lower(%s)
                   and p.status = 'published' and p.deleted_at is null and v.status = 'active'
                 for update of v
                 """,
-                (product_reference, product_reference, color, size),
+                (product_reference, product_reference, product_reference, color, size),
             ).fetchone()
             if not variant:
                 raise HTTPException(
