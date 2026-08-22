@@ -12,7 +12,9 @@ from .admin_api import slugify
 from .database import database_connection
 from .security import AdminPrincipal, require_admin, require_roles
 
-router = APIRouter(prefix="/api/admin", tags=["admin"])
+# This router is mounted inside admin_api.router, which already owns /api/admin.
+# Keep this prefix empty to avoid /api/admin/api/admin/... routes.
+router = APIRouter(tags=["admin"])
 
 
 class CategoryWrite(BaseModel):
