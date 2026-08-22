@@ -3,8 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import './styles.css';
 import './admin-enhancements';
-import './admin-modules';
-import './content-modules';
+import './product-focus';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
