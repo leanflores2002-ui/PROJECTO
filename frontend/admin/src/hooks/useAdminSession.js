@@ -17,12 +17,25 @@ export function useAdminSession() {
         if (active) setState({ status: 'signed-out', session: null, admin: null, error: null });
         return;
       }
+
+      // Force the login screen to unmount while the backend validates the
+      // Supabase session. If validation fails, LoginPage mounts again with
+      // the backend error instead of silently staying on the same screen.
+      if (active) setState({ status: 'loading', session, admin: null, error: null });
+
       try {
         const admin = await apiRequest('/api/admin/session', { token: session.access_token });
         if (active) setState({ status: 'authenticated', session, admin, error: null });
       } catch (error) {
         await supabase.auth.signOut();
-        if (active) setState({ status: 'signed-out', session: null, admin: null, error: error.message });
+        if (active) {
+          setState({
+            status: 'signed-out',
+            session: null,
+            admin: null,
+            error: error?.message || 'No se pudo validar el acceso administrativo.',
+          });
+        }
       }
     }
 
