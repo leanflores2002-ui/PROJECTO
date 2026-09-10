@@ -29,6 +29,7 @@ import {
 import { config, hasAuthConfig, isAllowedAdminPath } from './config';
 import { useAdminSession } from './hooks/useAdminSession';
 import { apiRequest } from './lib/api';
+import Statistics from './Statistics';
 import { supabase } from './lib/supabase';
 
 const NAVIGATION = [
@@ -169,47 +170,6 @@ function Header({ title, subtitle, admin, onMenu }) {
   );
 }
 
-function Metric({ label, value, tone }) {
-  return (
-    <article className="metric">
-      <span className={`metric__mark ${tone ? `metric__mark--${tone}` : ''}`} />
-      <div><p>{label}</p><strong>{value ?? '—'}</strong></div>
-    </article>
-  );
-}
-
-function DashboardPage({ token, onNavigate }) {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState('');
-  useEffect(() => {
-    const controller = new AbortController();
-    apiRequest('/api/admin/dashboard', { token, signal: controller.signal })
-      .then(setData)
-      .catch((reason) => { if (reason.name !== 'AbortError') setError(reason.message); });
-    return () => controller.abort();
-  }, [token]);
-  const summary = data?.summary;
-  return (
-    <div className="page page--dashboard">
-      <div className="page-heading"><div><h1>Dashboard</h1><p>Estado real del catálogo, inventario y actividad.</p></div><button className="button button--primary" onClick={() => onNavigate('editor')}><Plus size={17} />Nuevo producto</button></div>
-      <InlineAlert>{error}</InlineAlert>
-      {!data && !error ? <Spinner label="Cargando resumen" /> : null}
-      <section className="metrics-grid" aria-label="Resumen de productos">
-        <Metric label="Productos totales" value={summary?.total_products} />
-        <Metric label="Publicados" value={summary?.published_products} tone="success" />
-        <Metric label="Borradores" value={summary?.draft_products} tone="muted" />
-        <Metric label="Ocultos" value={summary?.hidden_products} tone="muted" />
-        <Metric label="Stock bajo" value={summary?.low_stock_products} tone="warning" />
-        <Metric label="Sin stock" value={summary?.out_of_stock_products} tone="danger" />
-      </section>
-      <div className="dashboard-columns">
-        <section className="panel"><div className="panel__heading"><h2>Pedidos recientes</h2></div>{data?.recentOrders?.length ? <ul className="activity-list">{data.recentOrders.map((order) => <li key={order.id}><div><strong>{order.reference}</strong><span>{order.item_count} unidades</span></div><time>{new Date(order.created_at).toLocaleString('es-AR')}</time></li>)}</ul> : <p className="empty-copy">No hay pedidos registrados.</p>}</section>
-        <section className="panel"><div className="panel__heading"><h2>Actividad reciente</h2></div>{data?.recentActivity?.length ? <ul className="activity-list">{data.recentActivity.map((item) => <li key={item.id}><div><strong>{item.action}</strong><span>{item.administrator}</span></div><time>{new Date(item.created_at).toLocaleString('es-AR')}</time></li>)}</ul> : <p className="empty-copy">No hay actividad registrada.</p>}</section>
-      </div>
-    </div>
-  );
-}
-
 function StatusPill({ status }) {
   const labels = { published: 'Publicado', draft: 'Borrador', hidden: 'Oculto', active: 'Activa', inactive: 'Inactiva' };
   return <span className={`status-pill status-pill--${status}`}>{labels[status] || status}</span>;
@@ -295,6 +255,7 @@ function ProductEditor({ token, productId, preview, onBack }) {
   const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(!preview);
   const [saving, setSaving] = useState(false);
+  const [previewHtml, setPreviewHtml] = useState('');
   const [message, setMessage] = useState({ kind: '', text: '' });
 
   useEffect(() => {
@@ -327,12 +288,28 @@ function ProductEditor({ token, productId, preview, onBack }) {
     slug: '',
     sku: '',
     status: 'draft',
-    variants: current.variants.map((variant) => ({ ...variant, id: null, clientId: crypto.randomUUID() })),
+    variants: current.variants.map((variant) => ({ ...variant, id: null, sku: null, barcode: null, stock: 0, updated_at: null, clientId: crypto.randomUUID() })),
   }));
-  const previewProduct = () => {
-    if (!form.slug) return;
-    window.open(`${config.publicSiteUrl}/product.html?slug=${encodeURIComponent(form.slug)}`, '_blank', 'noopener,noreferrer');
+  const previewProduct = async () => {
+    if (!form.id) return;
+    try {
+      const result=await apiRequest(`/api/admin/products/${form.id}/preview`, {token});
+      setPreviewHtml(result.html);
+    } catch(error) { setMessage({kind:'error',text:error.message}); }
   };
+
+  async function moveImage(index) {
+    if (index===0 || saving) return;
+    const ids=form.images.map(image => image.id);
+    [ids[index-1],ids[index]]=[ids[index],ids[index-1]];
+    setSaving(true);
+    try {
+      const result=await apiRequest(`/api/admin/products/${form.id}/images`,{token,method:'PATCH',body:{image_ids:ids,expected_updated_at:form.updated_at}});
+      setForm(current => ({...current,images:result.images,updated_at:result.updated_at}));
+      setMessage({kind:'success',text:'Orden de imagenes guardado.'});
+    } catch(error) { setMessage({kind:'error',text:error.message}); }
+    finally { setSaving(false); }
+  }
 
   async function save(nextStatus) {
     if (preview) return;
@@ -340,13 +317,14 @@ function ProductEditor({ token, productId, preview, onBack }) {
     setMessage({ kind: '', text: '' });
     const decimal = (value) => value === '' || value == null ? null : Number(value);
     const payload = {
+      expected_updated_at: form.updated_at || null,
       name: form.name.trim(), slug: form.slug.trim() || null, sku: form.sku.trim(), barcode: form.barcode.trim() || null,
       audience: form.audience, category_id: form.category_id || null, season_key: form.season_key.trim() || null,
       description_html: form.description_html, status: nextStatus, base_price: Number(form.base_price || 0),
       compare_at_price: decimal(form.compare_at_price), tags: form.tags.split(',').map((tag) => tag.trim()).filter(Boolean),
       featured: form.featured, specifications: form.specifications, collection_ids: form.collection_ids,
       price_groups: Object.fromEntries(Object.entries(form.price_groups).filter(([, value]) => value !== '').map(([key, value]) => [key, Number(value)])),
-      variants: form.variants.map(({ clientId: _clientId, ...variant }) => ({ ...variant, id: variant.id || null, stock: Number(variant.stock || 0), price_override: decimal(variant.price_override) })),
+      variants: form.variants.map(({ clientId: _clientId, ...variant }) => ({ ...variant, id: variant.id || null, stock: variant.id ? null : Number(variant.stock || 0), price_override: decimal(variant.price_override) })),
     };
     try {
       const result = await apiRequest(form.id ? `/api/admin/products/${form.id}` : '/api/admin/products', { token, method: form.id ? 'PUT' : 'POST', body: payload });
@@ -362,7 +340,8 @@ function ProductEditor({ token, productId, preview, onBack }) {
   if (loading) return <div className="page"><Spinner label="Cargando editor" /></div>;
   return (
     <div className="editor-page">
-      <div className="editor-heading"><div><h1>{form.id ? 'Editar producto' : 'Nuevo producto'}</h1><p>La información publicada será visible en el catálogo ROMIX.</p></div><div className="editor-heading__actions">{preview ? <span className="preview-label">Vista local · sin datos ficticios</span> : null}<button type="button" className="button button--secondary" disabled={!form.slug} onClick={previewProduct}><Eye size={16} />Vista previa</button><button type="button" className="button button--secondary" disabled={!form.id} onClick={duplicateProduct}><Copy size={16} />Duplicar producto</button></div></div>
+      {previewHtml ? <section className="product-preview" role="dialog" aria-label="Vista previa del producto guardado"><button type="button" className="button" onClick={() => setPreviewHtml('')}>Cerrar vista previa</button><p>Ultima version guardada. Vista previa sin compras ni registro de visitas.</p><iframe title="Detalle publico del producto" sandbox="allow-scripts" srcDoc={previewHtml} /></section> : null}
+      <div className="editor-heading"><div><h1>{form.id ? 'Editar producto' : 'Nuevo producto'}</h1><p>La información publicada será visible en el catálogo ROMIX.</p></div><div className="editor-heading__actions">{preview ? <span className="preview-label">Vista local · sin datos ficticios</span> : null}<button type="button" className="button button--secondary" disabled={!form.id} onClick={previewProduct}><Eye size={16} />Vista previa</button><button type="button" className="button button--secondary" disabled={!form.id} onClick={duplicateProduct}><Copy size={16} />Duplicar producto</button></div></div>
       <InlineAlert kind={message.kind}>{message.text}</InlineAlert>
       <div className="editor-layout">
         <main className="editor-main">
@@ -370,13 +349,14 @@ function ProductEditor({ token, productId, preview, onBack }) {
             <h2>Imágenes del producto</h2>
             <div className="media-row">
               <button type="button" className="upload-box" disabled title="Se habilita al conectar Supabase Storage"><UploadCloud size={27} /><strong>Subir imágenes</strong><span>JPG, PNG, WEBP o AVIF · Máx. 10 MB</span></button>
-              <div className="image-strip">{form.images.length ? form.images.map((item) => <figure key={item.id || item.public_url}><img src={publicAssetUrl(item.public_url)} alt={item.alt_text || form.name} /><figcaption>{item.is_primary ? 'Principal' : 'Galería'}</figcaption></figure>) : <div className="media-empty"><Image size={24} /><span>Sin imágenes cargadas</span></div>}</div>
+              <div className="image-strip">{form.images.length ? form.images.map((item, index) => <figure key={item.id || item.public_url}><img src={publicAssetUrl(item.public_url)} alt={item.alt_text || form.name} /><figcaption>{item.is_primary ? 'Principal' : 'Galería'}</figcaption><button type="button" className="button button--small" disabled={index===0 || saving} onClick={() => moveImage(index)}>Mover antes</button></figure>) : <div className="media-empty"><Image size={24} /><span>Sin imágenes cargadas</span></div>}</div>
             </div>
           </section>
           <section className="panel editor-section">
             <h2>Información básica</h2>
             <div className="form-grid">
               <label className="span-2">Nombre del producto <span>*</span><input value={form.name} onChange={(e) => update('name', e.target.value)} required /></label>
+              <label>Slug<input value={form.slug} onChange={(e) => update('slug', e.target.value)} /></label>
               <label>SKU <span>*</span><input value={form.sku} onChange={(e) => update('sku', e.target.value)} required /></label>
               <label>Código de barras <small>(opcional)</small><input value={form.barcode} onChange={(e) => update('barcode', e.target.value)} /></label>
               <label>Público <span>*</span><select value={form.audience} onChange={(e) => update('audience', e.target.value)}><option value="mujer">Mujer</option><option value="hombre">Hombre</option><option value="ninos">Niño</option></select></label>
@@ -388,12 +368,12 @@ function ProductEditor({ token, productId, preview, onBack }) {
           </section>
           <section className="panel editor-section">
             <div className="panel__heading"><div><h2>Variantes</h2><p>La misma variante alimenta producto e inventario.</p></div><button type="button" className="button button--secondary button--small" onClick={addVariant}><Plus size={15} />Agregar variante</button></div>
-            <div className="table-wrap"><table className="variant-table"><thead><tr><th>Talle</th><th>Color</th><th>Stock</th><th>Precio propio</th><th>Estado</th><th><span className="sr-only">Eliminar</span></th></tr></thead><tbody>{form.variants.map((variant, index) => <tr key={variant.id || variant.clientId}><td><input aria-label={`Talle variante ${index + 1}`} value={variant.size} onChange={(e) => updateVariant(index, 'size', e.target.value)} /></td><td><div className="color-input"><input type="color" aria-label={`Color visual ${index + 1}`} value={variant.color_hex || '#000000'} onChange={(e) => updateVariant(index, 'color_hex', e.target.value)} /><input aria-label={`Color variante ${index + 1}`} value={variant.color} onChange={(e) => updateVariant(index, 'color', e.target.value)} /></div></td><td><input type="number" min="0" aria-label={`Stock variante ${index + 1}`} value={variant.stock} onChange={(e) => updateVariant(index, 'stock', e.target.value)} /></td><td><input type="number" min="0" step="0.01" aria-label={`Precio variante ${index + 1}`} value={variant.price_override ?? ''} onChange={(e) => updateVariant(index, 'price_override', e.target.value)} placeholder="Base" /></td><td><select aria-label={`Estado variante ${index + 1}`} value={variant.status} onChange={(e) => updateVariant(index, 'status', e.target.value)}><option value="active">Activa</option><option value="inactive">Inactiva</option></select></td><td><button type="button" className="icon-button icon-button--danger" onClick={() => removeVariant(index)} aria-label={`Quitar variante ${index + 1}`}><Trash2 size={16} /></button></td></tr>)}</tbody></table></div>
+            <div className="table-wrap"><table className="variant-table"><thead><tr><th>Talle</th><th>Color</th><th>Stock</th><th>SKU / Codigo de barras</th><th>Umbral stock bajo</th><th>Precio propio</th><th>Estado</th><th><span className="sr-only">Eliminar</span></th></tr></thead><tbody>{form.variants.map((variant, index) => <tr key={variant.id || variant.clientId}><td><input aria-label={`Talle variante ${index + 1}`} value={variant.size} onChange={(e) => updateVariant(index, 'size', e.target.value)} /></td><td><div className="color-input"><input type="color" aria-label={`Color visual ${index + 1}`} value={variant.color_hex || '#000000'} onChange={(e) => updateVariant(index, 'color_hex', e.target.value)} /><input aria-label={`Color variante ${index + 1}`} value={variant.color} onChange={(e) => updateVariant(index, 'color', e.target.value)} /></div></td><td><input type="number" min="0" disabled={Boolean(variant.id)} title="Ajustar existencias desde Inventario / Stock" aria-label={`Stock variante ${index + 1}`} value={variant.stock} onChange={(e) => updateVariant(index, 'stock', e.target.value)} /></td><td><input aria-label={`SKU variante ${index + 1}`} value={variant.sku || ''} onChange={(e) => updateVariant(index, 'sku', e.target.value)} /><input aria-label={`Codigo de barras variante ${index + 1}`} value={variant.barcode || ''} onChange={(e) => updateVariant(index, 'barcode', e.target.value)} /></td><td><input type="number" min="0" aria-label={`Umbral variante ${index + 1}`} value={variant.low_stock_threshold ?? 3} onChange={(e) => updateVariant(index, 'low_stock_threshold', Number(e.target.value))} /></td><td><input type="number" min="0" step="0.01" aria-label={`Precio variante ${index + 1}`} value={variant.price_override ?? ''} onChange={(e) => updateVariant(index, 'price_override', e.target.value)} placeholder="Base" /></td><td><select aria-label={`Estado variante ${index + 1}`} value={variant.status} onChange={(e) => updateVariant(index, 'status', e.target.value)}><option value="active">Activa</option><option value="inactive">Inactiva</option></select></td><td><button type="button" className="icon-button icon-button--danger" onClick={() => removeVariant(index)} aria-label={`Quitar variante ${index + 1}`}><Trash2 size={16} /></button></td></tr>)}</tbody></table></div>
             {!form.variants.length ? <p className="empty-copy">Todavía no hay variantes. Agregá talle, color y stock.</p> : null}
           </section>
           <section className="panel editor-section">
             <h2>Especificaciones</h2>
-            <div className="form-grid form-grid--specs">{[['material', 'Material'], ['composition', 'Composición'], ['fit', 'Calce'], ['origin', 'Origen'], ['care', 'Lavado y cuidado']].map(([key, label]) => <label key={key}>{label}<input value={form.specifications[key] || ''} onChange={(e) => update('specifications', { ...form.specifications, [key]: e.target.value })} /></label>)}</div>
+            <div className="form-grid form-grid--specs">{[['short_description', 'Descripcion corta'], ['features', 'Caracteristicas'], ['material', 'Material'], ['composition', 'Composición'], ['fit', 'Calce'], ['origin', 'Origen'], ['care', 'Lavado y cuidado']].map(([key, label]) => <label key={key}>{label}<input value={form.specifications[key] || ''} onChange={(e) => update('specifications', { ...form.specifications, [key]: e.target.value })} /></label>)}</div>
           </section>
         </main>
         <aside className="editor-aside">
@@ -403,7 +383,7 @@ function ProductEditor({ token, productId, preview, onBack }) {
           <section className="panel side-panel product-summary"><h2>Resumen</h2><dl><div><dt>SKU</dt><dd>{form.sku || 'Sin definir'}</dd></div><div><dt>Público</dt><dd>{form.audience}</dd></div><div><dt>Variantes</dt><dd>{form.variants.length}</dd></div><div><dt>Stock total</dt><dd>{form.variants.reduce((total, variant) => total + Number(variant.stock || 0), 0)}</dd></div></dl></section>
         </aside>
       </div>
-      <footer className="save-bar"><button type="button" className="button button--ghost" onClick={onBack}><X size={17} />Descartar cambios</button><div><button type="button" className="button button--secondary" onClick={() => save('draft')} disabled={saving || preview}><Save size={17} />Guardar borrador</button><button type="button" className="button button--primary" onClick={() => save('published')} disabled={saving || preview}><Save size={17} />Guardar y publicar</button></div></footer>
+      {saving ? <p role="status">Guardando...</p> : null}<footer className="save-bar"><button type="button" className="button button--ghost" onClick={onBack}><X size={17} />Descartar cambios</button><div><button type="button" className="button button--secondary" onClick={() => save('draft')} disabled={saving || preview}><Save size={17} />Guardar borrador</button><button type="button" className="button button--primary" onClick={() => save('published')} disabled={saving || preview}><Save size={17} />Guardar y publicar</button></div></footer>
     </div>
   );
 }
@@ -423,7 +403,7 @@ function AppShell({ token, admin, preview = false }) {
       <Sidebar active={active} open={sidebarOpen} onClose={() => setSidebarOpen(false)} onNavigate={(page) => setRoute({ page, productId: null })} />
       <div className="admin-main">
         <Header title={title} subtitle={route.page === 'editor' ? (route.productId ? 'Editar producto' : 'Nuevo producto') : null} admin={admin} onMenu={() => setSidebarOpen(true)} />
-        {route.page === 'dashboard' ? <DashboardPage token={token} onNavigate={(page) => setRoute({ page, productId: null })} /> : null}
+        {route.page === 'dashboard' ? <Statistics token={token} /> : null}
         {route.page === 'products' ? <ProductsPage token={token} onEdit={(productId) => setRoute({ page: 'editor', productId })} /> : null}
         {route.page === 'editor' ? <ProductEditor token={token} productId={route.productId} preview={preview} onBack={() => setRoute({ page: 'products', productId: null })} /> : null}
         {!['dashboard', 'products', 'editor'].includes(route.page) ? <PlaceholderPage id={route.page} /> : null}

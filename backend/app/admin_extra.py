@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 
 from .admin_api import slugify
 from .database import database_connection
+from .inventory_service import InventoryService
 from .security import AdminPrincipal, require_admin, require_roles
 
 # This router is mounted inside admin_api.router, which already owns /api/admin.
@@ -203,6 +204,12 @@ def update_order_status(
         ).fetchone()
         if not current:
             raise HTTPException(status_code=404, detail="Pedido no encontrado")
+        if current['status'] == payload.status:
+            return {'id': order_id, 'status': payload.status}
+        if current['status'] == 'cancelled':
+            raise HTTPException(409, 'El pedido cancelado ya libero stock. Crea un pedido nuevo.')
+        if payload.status == 'cancelled':
+            InventoryService.release_stock(connection, order_id, admin.user_id)
         connection.execute(
             "update public.orders set status = %s, updated_at = now() where id = %s",
             (payload.status, order_id),

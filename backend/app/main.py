@@ -21,7 +21,11 @@ from fastapi.templating import Jinja2Templates
 from .admin_api import router as admin_router
 from .config import get_settings
 from .database import close_database_pool, database_health, open_database_pool
-from .public_api import router as public_router
+from .public_api import router as public_router, create_public_order, PublicOrder
+from .database import database_connection
+from .catalog_sync import _build_catalog
+from .inventory_service import InventoryService
+from .product_schemas import ProductDetail, ProductListItem
 
 
 def repo_root() -> Path:
@@ -300,7 +304,6 @@ settings = get_settings()
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     load_products()
-    load_variants(force=True)
     open_database_pool()
     try:
         yield
@@ -309,6 +312,14 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(title="ROMIX API", version="1.1.0", lifespan=lifespan)
+
+
+@app.middleware('http')
+async def avoid_stale_business_data(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith('/api/'):
+        response.headers['Cache-Control'] = 'no-store'
+    return response
 
 # Los origins se controlan por entorno. En produccion se rechaza explicitamente "*".
 app.add_middleware(
@@ -334,22 +345,23 @@ def readiness():
     return {"status": "ready", "database": "ok", "catalog": settings.catalog_source}
 
 
-@app.get("/api/products")
+@app.get("/api/products", response_model=list[ProductListItem])
 def get_products(section: str | None = None):
-    products = load_products()
+    with database_connection() as connection:
+        products = _build_catalog(connection)
     if section:
         section = section.strip().lower()
         products = [p for p in products if str(p.get("section", "")).lower() == section]
     return products
 
 
-@app.get("/api/products/{slug}")
+@app.get("/api/products/{slug}", response_model=ProductDetail)
 def get_product(slug: str):
-    products = load_products()
-    for p in products:
-        if slugify(p.get("name", "")) == slug:
-            return p
-    raise HTTPException(status_code=404, detail="Producto no encontrado")
+    with database_connection() as connection:
+        products = _build_catalog(connection, reference=slug)
+    if products:
+        return products[0]
+    raise HTTPException(404, 'Producto no encontrado')
 
 
 @app.get("/api/search")
@@ -492,19 +504,15 @@ def validate_and_reserve(items: List[dict]) -> Tuple[List[dict], List[dict]]:
     return updates, order_items
 
 
-@app.get("/api/variants")
+@app.get('/api/variants')
 def list_variants():
-    return list(load_variants().values())
+    with database_connection() as connection:
+        return InventoryService.list_stock(connection)
 
 
-@app.post("/api/orders")
-def create_order(body: dict):
-    items = body.get("items") if isinstance(body, dict) else None
-    if not items or not isinstance(items, list):
-        raise HTTPException(status_code=400, detail="items es requerido")
-    updates, order_items = validate_and_reserve(items)
-    order_id = os.urandom(8).hex()
-    return {"orderId": order_id, "updatedVariants": updates, "items": order_items}
+@app.post('/api/orders', status_code=201)
+def create_order(body: PublicOrder):
+    return create_public_order(body)
 
 
 # Rutas nuevas, mantenidas en paralelo durante la migracion para no romper consumidores actuales.

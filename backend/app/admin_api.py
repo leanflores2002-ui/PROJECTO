@@ -2,17 +2,26 @@ from __future__ import annotations
 
 import re
 import unicodedata
+import json
+from pathlib import Path
+from html import escape
 from decimal import Decimal
+from datetime import datetime, date
 from typing import Literal
 from uuid import UUID
 
 import bleach
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from psycopg.errors import UniqueViolation
 from psycopg.types.json import Jsonb
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from .database import database_connection
+from .inventory_service import InventoryService
+from .statistics_service import StatisticsService
+from .catalog_sync import _build_catalog
+from .config import get_settings
+from .product_schemas import AdminProductDetail, ProductDetail
 from .security import AdminPrincipal, require_admin, require_roles
 
 
@@ -46,12 +55,30 @@ class VariantInput(BaseModel):
     size: str = Field(min_length=1, max_length=40)
     color: str = Field(min_length=1, max_length=80)
     color_hex: str | None = Field(default=None, pattern=r"^#[0-9A-Fa-f]{6}$")
-    stock: int = Field(default=0, ge=0)
+    stock: int | None = Field(default=None, ge=0)
+    sku: str | None = Field(default=None, max_length=80)
+    barcode: str | None = Field(default=None, max_length=80)
+    low_stock_threshold: int = Field(default=3, ge=0)
+    updated_at: datetime | None = None
     price_override: Decimal | None = Field(default=None, ge=0, max_digits=12, decimal_places=2)
     status: Literal["active", "inactive"] = "active"
 
+    @field_validator('sku', 'barcode', mode='before')
+    @classmethod
+    def optional_identifier(cls, value):
+        return str(value).strip() or None if value is not None else None
+
+    @field_validator('size', 'color')
+    @classmethod
+    def required_option(cls, value):
+        value = value.strip()
+        if not value:
+            raise ValueError('Color y talle no pueden estar vacíos')
+        return value
+
 
 class ProductWrite(BaseModel):
+    expected_updated_at: datetime | None = None
     name: str = Field(min_length=2, max_length=180)
     slug: str | None = Field(default=None, min_length=2, max_length=200)
     sku: str = Field(min_length=1, max_length=80)
@@ -95,8 +122,47 @@ class ProductWrite(BaseModel):
 
 
 class StockAdjustment(BaseModel):
-    stock: int = Field(ge=0)
+    operation: Literal['set', 'add', 'remove'] = 'set'
+    stock: int | None = Field(default=None, ge=0)
+    quantity: int | None = Field(default=None, gt=0)
     reason: str = Field(min_length=3, max_length=300)
+    movement_type: Literal['incoming', 'outgoing', 'adjustment', 'cancellation'] = 'adjustment'
+    expected_updated_at: datetime
+
+    @model_validator(mode='after')
+    def validate_adjustment(self):
+        self.reason = self.reason.strip()
+        if len(self.reason) < 3:
+            raise ValueError('Ingres? un motivo de al menos tres caracteres')
+        if self.operation == 'set' and self.stock is None:
+            raise ValueError('Indic? el stock final')
+        if self.operation != 'set' and self.quantity is None:
+            raise ValueError('Indic? la cantidad a agregar o quitar')
+        return self
+
+
+class ImageOrder(BaseModel):
+    image_ids: list[UUID] = Field(min_length=1, max_length=100)
+    expected_updated_at: datetime
+
+
+@router.patch('/products/{product_id}/images')
+def reorder_images(product_id: UUID, payload: ImageOrder, admin: AdminPrincipal = Depends(require_roles('superadmin','admin','operator'))):
+    with database_connection() as connection, connection.transaction():
+        product = connection.execute('select updated_at from public.products where id=%s for update', (product_id,)).fetchone()
+        if not product:
+            raise HTTPException(404, 'Producto no encontrado')
+        if product['updated_at'] != payload.expected_updated_at:
+            raise HTTPException(409, 'Las imágenes cambiaron. Recargá el producto.')
+        current = connection.execute('select id from public.product_images where product_id=%s order by position,created_at for update', (product_id,)).fetchall()
+        if len(payload.image_ids) != len(current) or len(set(payload.image_ids)) != len(current) or set(payload.image_ids) != {row['id'] for row in current}:
+            raise HTTPException(422, 'La lista debe contener cada imagen del producto una sola vez')
+        for position, image_id in enumerate(payload.image_ids):
+            connection.execute('update public.product_images set position=%s where id=%s', (position,image_id))
+        connection.execute('update public.products set updated_at=now() where id=%s', (product_id,))
+        _audit(connection,admin,'product.images_reordered','product',product_id,
+               {'before':[str(row['id']) for row in current],'after':[str(value) for value in payload.image_ids]})
+        return _product_detail(connection,product_id)
 
 
 def _audit(connection, admin: AdminPrincipal, action: str, entity: str, entity_id: UUID, details: dict) -> None:
@@ -155,50 +221,49 @@ def _replace_product_children(connection, product_id: UUID, payload: ProductWrit
             (product_id, group, amount),
         )
 
+    existing = {row['id']: row for row in connection.execute(
+        'select id,stock,updated_at,status from public.product_variants where product_id=%s order by id for update',
+        (product_id,),
+    ).fetchall()}
     retained_ids: list[UUID] = []
     for variant in payload.variants:
         if variant.id:
-            current = connection.execute(
-                "select stock from public.product_variants where id = %s and product_id = %s for update",
-                (variant.id, product_id),
-            ).fetchone()
+            current = existing.get(variant.id)
             if not current:
                 raise HTTPException(status_code=400, detail=f"La variante {variant.id} no pertenece al producto")
+            if variant.stock is not None:
+                raise HTTPException(422, 'Usa Inventario para modificar stock de una variante existente')
+            if variant.updated_at != current['updated_at']:
+                raise HTTPException(409, 'La variante cambio. Recarga el producto antes de guardar.')
             connection.execute(
                 """
                 update public.product_variants
-                set size = %s, color = %s, color_hex = %s, stock = %s,
+                set size = %s, color = %s, color_hex = %s, sku = %s, barcode = %s, low_stock_threshold = %s,
                     price_override = %s, status = %s, updated_at = now()
                 where id = %s
                 """,
                 (
-                    variant.size.strip(), variant.color.strip(), variant.color_hex, variant.stock,
+                    variant.size.strip(), variant.color.strip(), variant.color_hex, variant.sku, variant.barcode, variant.low_stock_threshold,
                     variant.price_override, variant.status, variant.id,
                 ),
             )
+            if current['status'] != variant.status:
+                _audit(connection,admin,'variant.status_changed','product_variant',variant.id,{'before':current['status'],'after':variant.status})
             retained_ids.append(variant.id)
-            if current["stock"] != variant.stock:
-                connection.execute(
-                    """
-                    insert into public.stock_movements
-                        (variant_id, movement_type, quantity_delta, stock_before, stock_after, reason, admin_user_id)
-                    values (%s, 'adjustment', %s, %s, %s, 'Edicion de producto', %s)
-                    """,
-                    (variant.id, variant.stock - current["stock"], current["stock"], variant.stock, admin.user_id),
-                )
         else:
             created = connection.execute(
                 """
                 insert into public.product_variants
-                    (product_id, size, color, color_hex, stock, price_override, status)
-                values (%s, %s, %s, %s, %s, %s, %s)
+                    (product_id, size, color, color_hex, stock, price_override, status, sku, barcode, low_stock_threshold)
+                values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 returning id
                 """,
                 (
                     product_id, variant.size.strip(), variant.color.strip(), variant.color_hex,
-                    variant.stock, variant.price_override, variant.status,
+                    variant.stock or 0, variant.price_override, variant.status, variant.sku, variant.barcode, variant.low_stock_threshold,
                 ),
             ).fetchone()
+            _audit(connection,admin,'variant.created','product_variant',created['id'],{'color':variant.color,'size':variant.size,'stock':variant.stock or 0})
             retained_ids.append(created["id"])
             if variant.stock:
                 connection.execute(
@@ -210,6 +275,9 @@ def _replace_product_children(connection, product_id: UUID, payload: ProductWrit
                     (created["id"], variant.stock, variant.stock, admin.user_id),
                 )
 
+    for variant_id, previous in existing.items():
+        if variant_id not in retained_ids and previous['status'] == 'active':
+            _audit(connection,admin,'variant.status_changed','product_variant',variant_id,{'before':'active','after':'inactive'})
     if retained_ids:
         connection.execute(
             """
@@ -246,7 +314,7 @@ def _product_detail(connection, product_id: UUID) -> dict:
     }
     product["variants"] = connection.execute(
         """
-        select id, size, color, color_hex, stock, price_override, status, updated_at
+        select id, sku, barcode, low_stock_threshold, size, color, color_hex, stock, price_override, status, updated_at
         from public.product_variants where product_id = %s order by color, size
         """,
         (product_id,),
@@ -278,46 +346,10 @@ def admin_session(admin: AdminPrincipal = Depends(require_admin)):
     }
 
 
-@router.get("/dashboard")
-def dashboard(admin: AdminPrincipal = Depends(require_admin)):
-    del admin
+@router.get('/dashboard')
+def dashboard(start: date | None = None, end: date | None = None, admin: AdminPrincipal = Depends(require_admin)):
     with database_connection() as connection:
-        summary = connection.execute(
-            """
-            select
-                count(*) as total_products,
-                count(*) filter (where status = 'published') as published_products,
-                count(*) filter (where status = 'draft') as draft_products,
-                count(*) filter (where status = 'hidden') as hidden_products,
-                count(*) filter (where total_stock = 0) as out_of_stock_products,
-                count(*) filter (where total_stock between 1 and 5) as low_stock_products
-            from (
-                select p.id, p.status, coalesce(sum(v.stock) filter (where v.status = 'active'), 0) as total_stock
-                from public.products p
-                left join public.product_variants v on v.product_id = p.id
-                where p.deleted_at is null
-                group by p.id
-            ) product_stock
-            """
-        ).fetchone()
-        recent_orders = connection.execute(
-            """
-            select o.id, o.reference, o.status, o.created_at, coalesce(sum(oi.quantity), 0) as item_count
-            from public.orders o
-            left join public.order_items oi on oi.order_id = o.id
-            group by o.id order by o.created_at desc limit 6
-            """
-        ).fetchall()
-        activity = connection.execute(
-            """
-            select a.id, a.action, a.entity_type, a.entity_id, a.created_at,
-                   coalesce(p.display_name, 'Administrador') as administrator
-            from public.audit_logs a
-            left join public.admin_profiles p on p.user_id = a.admin_user_id
-            order by a.created_at desc limit 8
-            """
-        ).fetchall()
-    return {"summary": summary, "recentOrders": recent_orders, "recentActivity": activity}
+        return StatisticsService.dashboard(connection, start, end)
 
 
 @router.get("/categories")
@@ -389,11 +421,33 @@ def list_products(
     return {"items": rows, "page": page, "pageSize": page_size, "total": total}
 
 
-@router.get("/products/{product_id}")
+@router.get("/products/{product_id}", response_model=AdminProductDetail)
 def get_product(product_id: UUID, admin: AdminPrincipal = Depends(require_admin)):
     del admin
     with database_connection() as connection:
         return _product_detail(connection, product_id)
+
+
+@router.get('/products/{product_id}/preview')
+def preview_product(product_id: UUID, request: Request, admin: AdminPrincipal = Depends(require_admin)):
+    with database_connection() as connection:
+        products = _build_catalog(connection, str(product_id), include_unpublished=True)
+    if not products:
+        raise HTTPException(404, 'Producto no encontrado')
+    product = ProductDetail(**products[0]).model_dump(mode='json')
+    document = (Path(__file__).resolve().parents[2] / 'frontend/public/product.html').read_text(encoding='utf-8')
+    origin = get_settings().public_frontend_origin or str(request.base_url).rstrip('/')
+    payload = json.dumps(product, ensure_ascii=True).replace('<', '\\u003c')
+    # Opaque sandbox frames cannot access browser storage; provide disposable storage
+    # so the unchanged storefront helpers work without access to the admin session.
+    storage_shim = """for(const key of ['localStorage','sessionStorage']) {
+      const values=new Map(); Object.defineProperty(window,key,{value:{
+        getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,String(v)),
+        removeItem:k=>values.delete(k),clear:()=>values.clear()}});
+    }"""
+    bootstrap = f'<base href="{escape(origin, quote=True)}/"><script>{storage_shim}window.ROMIX_PRODUCT_PREVIEW={payload};</script>'
+    document = re.sub(r'<link[^>]*as="fetch"[^>]*>', '', document)
+    return {'html': document.replace('<head>', '<head>'+bootstrap, 1)}
 
 
 @router.post("/products", status_code=status.HTTP_201_CREATED)
@@ -444,10 +498,12 @@ def update_product(
         with database_connection() as connection, connection.transaction():
             _validate_relations(connection, payload)
             current = connection.execute(
-                "select status, base_price from public.products where id = %s for update", (product_id,)
+                "select status, base_price, updated_at, name, description_html, specifications from public.products where id = %s and deleted_at is null for update", (product_id,)
             ).fetchone()
             if not current:
                 raise HTTPException(status_code=404, detail="Producto no encontrado")
+            if payload.expected_updated_at != current["updated_at"]:
+                raise HTTPException(409, "El producto cambio. Recarga antes de guardar.")
             clean_slug = slugify(payload.slug or payload.name)
             connection.execute(
                 """
@@ -467,6 +523,9 @@ def update_product(
             )
             _replace_product_children(connection, product_id, payload, admin)
             changes = {
+                'nameBefore':current['name'],'nameAfter':payload.name.strip(),
+                'descriptionBefore':current['description_html'],'descriptionAfter':sanitize_description(payload.description_html),
+                'specificationsBefore':current['specifications'],'specificationsAfter':payload.specifications,
                 "statusBefore": current["status"], "statusAfter": payload.status,
                 "basePriceBefore": str(current["base_price"]), "basePriceAfter": str(payload.base_price),
             }
@@ -486,27 +545,12 @@ def adjust_stock(
     admin: AdminPrincipal = Depends(require_roles("superadmin", "admin", "operator")),
 ):
     with database_connection() as connection, connection.transaction():
-        variant = connection.execute(
-            "select id, product_id, stock from public.product_variants where id = %s for update",
-            (variant_id,),
-        ).fetchone()
-        if not variant:
-            raise HTTPException(status_code=404, detail="Variante no encontrada")
-        before = variant["stock"]
-        connection.execute(
-            "update public.product_variants set stock = %s, updated_at = now() where id = %s",
-            (payload.stock, variant_id),
-        )
-        connection.execute(
-            """
-            insert into public.stock_movements
-                (variant_id, movement_type, quantity_delta, stock_before, stock_after, reason, admin_user_id)
-            values (%s, 'adjustment', %s, %s, %s, %s, %s)
-            """,
-            (variant_id, payload.stock - before, before, payload.stock, payload.reason.strip(), admin.user_id),
-        )
-        _audit(
-            connection, admin, "stock.adjusted", "product_variant", variant_id,
-            {"before": before, "after": payload.stock, "reason": payload.reason.strip()},
-        )
-    return {"variantId": variant_id, "stock": payload.stock}
+        result = InventoryService.adjust_stock(connection, variant_id, payload, admin.user_id)
+        _audit(connection, admin, 'stock.adjusted', 'product_variant', variant_id,
+               {'before': result['stockBefore'], 'after': result['stock'], 'reason': payload.reason})
+        return result
+
+
+# Existing category/collection/order handlers; keep one implementation per operation.
+from .admin_extra import router as extra_router  # noqa: E402
+router.include_router(extra_router)

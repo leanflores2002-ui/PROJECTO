@@ -53,12 +53,12 @@ function simplifyDashboard() {
   const heading = [...document.querySelectorAll('.page-heading h1')].find((node) => node.textContent.trim() === 'Dashboard');
   if (!heading) return;
   const page = heading.closest('.page');
-  if (!page) return;
+  if (!page || page.classList.contains('page--statistics')) return;
 
   const intro = heading.parentElement?.querySelector('p');
   if (intro) intro.textContent = 'Control rápido de productos publicados, borradores y stock.';
 
-  page.querySelector('.dashboard-columns')?.remove();
+  if (page.classList.contains('page--statistics')) return;
   if (page.querySelector('.romix-focus-dashboard')) return;
 
   const panel = document.createElement('section');
@@ -89,10 +89,6 @@ function labelControl(prefix) {
   return { label, control: label?.querySelector('input, select, textarea') || null };
 }
 
-function removeCollectionField() {
-  const { label } = labelControl('Colección');
-  label?.remove();
-}
 
 function setReactInputValue(input, value) {
   if (!input) return;
@@ -266,6 +262,7 @@ async function resolveProduct(auth) {
 
 function writePayload(detail, status) {
   return {
+    expected_updated_at: detail.updated_at,
     name: detail.name,
     slug: detail.slug,
     sku: detail.sku,
@@ -287,7 +284,9 @@ function writePayload(detail, status) {
       size: variant.size,
       color: variant.color,
       color_hex: variant.color_hex || null,
-      stock: Number(variant.stock || 0),
+      stock: null,
+      updated_at: variant.updated_at,
+      sku: variant.sku, barcode: variant.barcode, low_stock_threshold: variant.low_stock_threshold,
       price_override: variant.price_override == null ? null : Number(variant.price_override),
       status: variant.status || 'active',
     })),
@@ -345,16 +344,6 @@ function enhanceSaveBar() {
   if (draft) draft.title = 'Guarda los cambios sin mostrar el artículo en la tienda.';
 }
 
-function renamePreviewAction() {
-  const button = [...document.querySelectorAll('.editor-heading__actions button')].find((item) => item.textContent.includes('Vista previa'));
-  if (!button || button.dataset.romixRenamed === '1') return;
-  button.dataset.romixRenamed = '1';
-  const textNode = [...button.childNodes].find((node) => node.nodeType === Node.TEXT_NODE);
-  if (textNode) textNode.textContent = 'Ver en la tienda';
-  else button.append('Ver en la tienda');
-  button.title = 'Abrí la ficha pública del producto. Guardá antes para ver los cambios nuevos.';
-}
-
 function enhanceStatusPanel() {
   const panel = [...document.querySelectorAll('.editor-aside .side-panel')].find((item) => item.querySelector('h2')?.textContent.trim() === 'Estado del producto');
   if (!panel || panel.querySelector('.romix-status-note')) return;
@@ -367,12 +356,12 @@ function enhanceStatusPanel() {
 function enhanceEditor() {
   const editor = document.querySelector('.editor-page');
   if (!editor) return;
-  removeCollectionField();
+  // Collection editing is owned by the React product editor.
   enhanceSku();
   addSectionNotes();
   ensureImpactPanel();
   enhanceSaveBar();
-  renamePreviewAction();
+
   enhanceStatusPanel();
 }
 

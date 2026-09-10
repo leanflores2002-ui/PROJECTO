@@ -170,3 +170,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); outline
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+.statistics-lists { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:16px; margin-top:16px; }
+.page--statistics .panel { padding:20px; min-width:0; }
+.variant-table { min-width:900px; }
+
+.product-preview { position:fixed; inset:16px; background:white; z-index:1000; padding:12px; box-shadow:0 0 0 100vmax #0008; display:flex; flex-direction:column; }
+.product-preview iframe { width:100%; flex:1; border:0; }
+.editor-main, .editor-aside, .editor-section, .table-wrap { min-width:0; max-width:100%; }
+.table-wrap { position:relative; }
+.image-strip figure { height:auto; padding-bottom:6px; align-self:flex-start; }
+.image-strip figure > button { display:block; width:calc(100% - 8px); margin:4px; }
+.editor-page .variant-table th:nth-child(n) { width:auto; }
+.placeholder-panel:has(.romix-inventory-search) { display:block; padding:16px; text-align:left; }
+.romix-stock-editor { table-layout:auto; min-width:780px; }
+.romix-stock-editor td:nth-child(3) { min-width:260px; white-space:normal; }
+.romix-stock-editor td:nth-child(3) > * { display:block; width:100%; margin:5px 0; }
+@media (max-width:1000px) { .editor-layout { grid-template-columns:minmax(0,1fr); } }

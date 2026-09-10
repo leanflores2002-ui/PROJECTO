@@ -10,15 +10,16 @@ export class ApiError extends Error {
 }
 
 export async function apiRequest(path, { token, method = 'GET', body, signal } = {}) {
+  const multipart = body instanceof FormData;
   const response = await fetch(`${config.apiUrl}${path}`, {
     method,
     signal,
     headers: {
       Accept: 'application/json',
-      ...(body ? { 'Content-Type': 'application/json' } : {}),
+      ...(body && !multipart ? { 'Content-Type': 'application/json' } : {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    ...(body ? { body: JSON.stringify(body) } : {}),
+    ...(body ? { body: multipart ? body : JSON.stringify(body) } : {}),
   });
 
   const raw = await response.text();
@@ -33,8 +34,13 @@ export async function apiRequest(path, { token, method = 'GET', body, signal } =
 
   if (!response.ok) {
     const detail = payload?.detail;
-    const fallback = raw && raw.length < 240 ? raw : '';
-    const message = detail || fallback || `Error HTTP ${response.status} al llamar ${path}`;
+    const messages = { 401: 'Tu sesión venció. Volvé a ingresar.', 403: 'No tenés permisos para esta acción.',
+      404: 'No se encontró el recurso.', 409: 'Los datos cambiaron. Recargá antes de guardar.',
+      422: 'Revisá los campos del formulario.', 500: 'No se pudo completar la operación.',
+      503: 'El servicio no está disponible. Intentá nuevamente.' };
+    const validation = Array.isArray(detail) ? detail.map((item) =>
+      `${(item.loc || []).filter((part) => part !== 'body').join(' / ')}: ${item.msg || 'Valor inválido'}`).join('; ') : '';
+    const message = (typeof detail === 'string' ? detail : validation) || messages[response.status] || 'No se pudo completar la solicitud.';
     throw new ApiError(message, response.status, payload);
   }
 

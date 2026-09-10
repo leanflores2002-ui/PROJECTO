@@ -26,4 +26,4 @@ services:
       - key: ADMIN_FRONTEND_ORIGIN
         sync: false
       - key: ROMIX_CATALOG_SOURCE
-        value: json
+        value: database

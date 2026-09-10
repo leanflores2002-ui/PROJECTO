@@ -1,3 +1,5 @@
+> Documento historico. Para la integracion actual y despliegue, consultar [STOCK_ARCHITECTURE.md](STOCK_ARCHITECTURE.md), [PRODUCT_DATA_FLOW.md](PRODUCT_DATA_FLOW.md) y [STOCK_IMPLEMENTATION_REPORT.md](STOCK_IMPLEMENTATION_REPORT.md).
+
 # ROMIX Admin: arquitectura y operación
 
 ## Componentes

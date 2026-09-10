@@ -104,7 +104,7 @@ def _ordered_names(preferred: list[Any], available: list[str], key: str | None =
     return result
 
 
-def _build_catalog(connection) -> list[dict]:
+def _build_catalog(connection, reference=None, *, include_unpublished=False) -> list[dict]:
     products = connection.execute(
         """
         select
@@ -114,9 +114,11 @@ def _build_catalog(connection) -> list[dict]:
           c.name as category_name, c.slug as category_slug
         from public.products p
         left join public.categories c on c.id = p.category_id
-        where p.status = 'published' and p.deleted_at is null
+        where (p.status = 'published' or %s) and p.deleted_at is null
+        and (%s::text is null or p.slug=%s or p.legacy_id=%s or p.id::text=%s)
         order by p.name asc
         """
+        , (include_unpublished, reference, reference, reference, reference)
     ).fetchall()
     if not products:
         return []
@@ -151,7 +153,7 @@ def _build_catalog(connection) -> list[dict]:
     images: dict[str, list[dict]] = {}
     for row in connection.execute(
         """
-        select product_id, public_url, alt_text, position, is_primary
+        select product_id, public_url, alt_text, position, is_primary, source
         from public.product_images
         where product_id = any(%s)
         order by product_id, position, created_at
@@ -163,11 +165,13 @@ def _build_catalog(connection) -> list[dict]:
     variants: dict[str, list[dict]] = {}
     for row in connection.execute(
         """
-        select id, product_id, size, color, color_hex, stock, low_stock_threshold,
-               price_override, status
-        from public.product_variants
-        where product_id = any(%s) and status = 'active'
-        order by product_id, color, size
+        select v.id, v.product_id, v.size, v.color, v.color_hex, v.stock, v.low_stock_threshold,
+               v.price_override, v.status, coalesce(v.price_override,pg.amount,p.base_price) as unit_price
+        from public.product_variants v join public.products p on p.id=v.product_id
+        left join public.product_size_price_groups spg on spg.product_id=p.id and spg.size=v.size
+        left join public.product_price_groups pg on pg.product_id=p.id and pg.price_group=spg.price_group
+        where v.product_id = any(%s) and v.status = 'active'
+        order by v.product_id, v.color, v.size
         """,
         (product_ids,),
     ).fetchall():
@@ -177,7 +181,13 @@ def _build_catalog(connection) -> list[dict]:
     for row in products:
         pid = str(row["id"])
         legacy = _json_dict(row.get("legacy_payload"))
-        item = dict(legacy)
+        # Only presentation compatibility fields may cross the public boundary.
+        legacy_fields = {
+            'imageBase', 'imageExt', 'imageDir', 'imageMap', 'images', 'image',
+            'thumb', 'thumbnail', 'imageWidth', 'imageHeight', 'designs',
+            'sizeGuide', 'sizeGuideKey', 'sizeGuideId', 'fit', 'collection',
+        }
+        item = {key: value for key, value in legacy.items() if key in legacy_fields}
         product_variants = variants.get(pid, [])
         product_images = images.get(pid, [])
 
@@ -192,6 +202,17 @@ def _build_catalog(connection) -> list[dict]:
             {"name": name, **({"hex": color_hex.get(name.lower())} if color_hex.get(name.lower()) else {})}
             for name in color_order
         ]
+        # Imported catalogs contain per-color assets that are not individual gallery rows.
+        # Preserve them until a Storage image is chosen as the new primary image.
+        primary_record = next((image for image in product_images if image.get('is_primary')), {})
+        storage_primary = primary_record.get('source') == 'storage'
+        old_colors = {str(c.get('name', '')).strip().lower(): c for c in legacy.get('colors', []) if isinstance(c, dict)}
+        for color in colors:
+            if storage_primary:
+                color['image'] = primary_record['public_url']
+            else:
+                old = old_colors.get(color['name'].lower(), {})
+                color.update({key: old[key] for key in ('image', 'images', 'swatch', 'preview', 'pattern') if key in old})
 
         available_sizes = list(dict.fromkeys(str(v["size"]).strip() for v in product_variants if str(v["size"]).strip()))
         size_order = _ordered_names(legacy.get("sizes") or [], available_sizes, key="size")
@@ -219,6 +240,7 @@ def _build_catalog(connection) -> list[dict]:
         item.update(
             {
                 "id": str(row.get("legacy_id") or row["slug"]),
+                "databaseId": pid,
                 "slug": row["slug"],
                 "name": row["name"],
                 "section": row["audience"],
@@ -226,7 +248,7 @@ def _build_catalog(connection) -> list[dict]:
                 "categorySlug": row.get("category_slug") or "",
                 "season": row.get("season_key") or legacy.get("season") or "",
                 "seasonKey": row.get("season_key") or legacy.get("seasonKey") or "",
-                "description": _plain_text(row.get("description_html")) or legacy.get("description") or legacy.get("desc") or "",
+                "description": _plain_text(row.get("description_html")),
                 "descriptionHtml": row.get("description_html") or "",
                 "price": _number(row.get("base_price")) or 0,
                 "priceByGroup": price_groups.get(pid) or {"common": _number(row.get("base_price")) or 0},
@@ -250,7 +272,9 @@ def _build_catalog(connection) -> list[dict]:
                         "color": v["color"],
                         "colorHex": v.get("color_hex"),
                         "stock": int(v.get("stock") or 0),
+                        "lowStockThreshold": v["low_stock_threshold"],
                         "priceOverride": _number(v.get("price_override")),
+                        "unitPrice": _number(v['unit_price']),
                         "status": v.get("status") or "active",
                     }
                     for v in product_variants
@@ -271,7 +295,7 @@ def _build_catalog(connection) -> list[dict]:
 
         if colors and primary:
             current_map = item.get("imageMap") if isinstance(item.get("imageMap"), dict) else {}
-            item["imageMap"] = {color["name"]: current_map.get(color["name"], primary) for color in colors}
+            item["imageMap"] = {color["name"]: color.get('image') or current_map.get(color["name"], primary) for color in colors}
 
         catalog.append(item)
 

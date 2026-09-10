@@ -570,7 +570,7 @@
         const raw = String(value || '').trim();
         if (!raw) return '';
         if (/^https?:\/\//i.test(raw)) return raw;
-        return new URL(raw.replace(/^\/+/, ''), location.origin + '/').href;
+        return new URL(raw.replace(/^\/+/, ''), new URL('/', document.baseURI).href).href;
       }
 
       function ensureProductImagePreload(value) {
@@ -594,9 +594,9 @@
       function buildShareUrl(product) {
         const slug = buildShareSlug(product);
         if (slug) {
-          return new URL(`share/${encodeURIComponent(slug)}/`, location.origin + '/').href;
+          return new URL(`share/${encodeURIComponent(slug)}/`, new URL('/', document.baseURI).href).href;
         }
-        return new URL(buildHref(product, false), location.origin + '/').href;
+        return new URL(buildHref(product, false), new URL('/', document.baseURI).href).href;
       }
 
       function buildShareMessageBody(product) {
@@ -822,6 +822,10 @@
       }
 
       function getPriceForSize(product, sizeValue) {
+        const variant=(product.variants || []).find(v => String(v.color).toLowerCase()===String(currentSelectedColor).toLowerCase() && String(v.size)===String(sizeValue));
+        if (variant && variant.unitPrice != null) return Number(variant.unitPrice);
+        if (variant && variant.priceOverride != null) return Number(variant.priceOverride);
+
         const group = getPriceGroupForProductSize(product, sizeValue);
         const base = Number(product.price || 0);
         if (!group || !product.priceByGroup || typeof product.priceByGroup !== 'object') {
@@ -1036,6 +1040,7 @@
           if (candidateId != null) colorId = candidateId;
         }
 
+        if (window.ROMIX_PRODUCT_PREVIEW) return null;
         const size = getSelectedSizeValue();
         if (!size) {
           showSizeError();
@@ -1048,6 +1053,11 @@
         const image = getSafeProductImage(currentProduct || {}, colorKey, colorOption && colorOption.index);
         const productId = currentProduct && currentProduct.id ? currentProduct.id : slugifyName(currentProduct && currentProduct.name);
 
+        const liveStock=window.romixInventory?.getStock(productId,colorKey,size);
+        const existingQty=(window.romixCart?.getCart() || []).filter(item => item.productId===productId && item.colorKey===colorKey && item.size===size).reduce((sum,item) => sum+item.qty,0);
+        if (typeof liveStock === 'number' && liveStock < qty+existingQty) {
+          showToast('Stock insuficiente para esta variante.', 'error'); return null;
+        }
         if (window.romixCart && typeof window.romixCart.addToCart === 'function') {
           window.romixCart.addToCart({
             productId,
@@ -1110,15 +1120,14 @@
       }
 
       async function loadProducts(){
-        const cached = parsePreloadedList();
-        if (cached && cached.length) return cached;
+
         if (window.romixProductsStore && typeof window.romixProductsStore.load === 'function') {
           return window.romixProductsStore.load({
             preloadedScriptId: 'preloaded-products',
             dataUrl: DATA_URL
           });
         }
-        const response = await fetch(new URL(DATA_URL, location.href));
+        const response = await fetch(new URL(DATA_URL, document.baseURI));
         if (!response.ok) throw new Error('HTTP ' + response.status);
         const json = await response.json();
         return sanitizeList(Array.isArray(json) ? json : []);
@@ -1128,7 +1137,7 @@
         if (!Array.isArray(list)) return null;
         let product = null;
         if (idParam) {
-          product = list.find(item => String(item.id) === idParam);
+          product = list.find(item => String(item.id) === idParam || item.slug === idParam || slugifyName(item.name || '') === idParam);
         }
         if (!product && slugParam) {
           product = list.find(item => slugifyName(item.name || '') === slugParam);
@@ -1184,13 +1193,13 @@
         if (Array.isArray(product.sizes)) {
           product.sizes.forEach(size => {
             const key = String(size.size || size).trim() || 'Unico';
-            fallback[key] = statusToQty(size.status);
+            fallback[key] = 'unknown';
           });
         }
         const map = {};
         if (product.stockByColor && typeof product.stockByColor === 'object') {
           Object.entries(product.stockByColor).forEach(([colorName, data]) => {
-            map[colorName] = buildSizeMap(data, fallback);
+            map[colorName] = Object.fromEntries(Object.keys(buildSizeMap(data, fallback)).map(key => [key, 'unknown']));
           });
         }
         let palette = [];
@@ -1229,7 +1238,7 @@
               const remoteStock = inventory.getStock(productKey, colorName, sizeKey);
               if (remoteStock !== inventory.STOCK_UNKNOWN && Number.isFinite(Number(remoteStock))) {
                 map[colorName][sizeKey] = Math.max(0, Number(remoteStock));
-              } else if (map[colorName][sizeKey] !== 0) {
+              } else {
                 map[colorName][sizeKey] = 'unknown';
               }
             });
@@ -1411,7 +1420,7 @@
         let items = Array.isArray(gallery)
           ? gallery.map(item => item && item.src).filter(Boolean).map(src => {
             try {
-              return new URL(src, window.location.href).href;
+              return new URL(src, document.baseURI).href;
             } catch {
               return src;
             }
@@ -1579,7 +1588,7 @@
           items = Array.isArray(nextGallery)
             ? nextGallery.map(item => item && item.src).filter(Boolean).map(src => {
               try {
-                return new URL(src, window.location.href).href;
+                return new URL(src, document.baseURI).href;
               } catch {
                 return src;
               }
@@ -1927,25 +1936,27 @@
           .replace(/^-+|-+$/g, '') || 'product';
       }
 
+      function escapeProductText(value) { const el=document.createElement('span'); el.textContent=String(value ?? ''); return el.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
       function buildProductAccordionItems(product){
+        const specLabels = {material:'Material',composition:'Composición',care:'Cuidados',fit:'Calce',origin:'Origen',features:'Características',short_description:'Descripción corta'};
         const items = [];
         if (hasProductValue(product.description)) {
           items.push({
             title: 'Descripción',
-            content: `<p class="product-accordion__text">${String(product.description).trim()}</p>`
+            content: `<p class="product-accordion__text">${escapeProductText(product.description)}</p>`
           });
         }
 
         const details = [
-          hasProductValue(product.type) ? `<li><span class="product-accordion__label">Tipo:</span> ${product.type}</li>` : '',
+          hasProductValue(product.type) ? `<li><span class="product-accordion__label">Tipo:</span> ${escapeProductText(product.type)}</li>` : '',
           hasProductValue(product.season) ? `<li><span class="product-accordion__label">Temporada:</span> ${String(product.season).replace(/-/g, ' ')}</li>` : '',
           ...(Array.isArray(product.features)
-            ? product.features.filter(hasProductValue).map(value => `<li>${String(value).trim()}</li>`)
+            ? product.features.filter(hasProductValue).map(value => `<li>${escapeProductText(value)}</li>`)
             : []),
           ...(product.specs && typeof product.specs === 'object'
             ? Object.entries(product.specs)
               .filter(([key, value]) => hasProductValue(key) && hasProductValue(value))
-              .map(([key, value]) => `<li><span class="product-accordion__label">${String(key).trim()}:</span> ${String(value).trim()}</li>`)
+              .map(([key, value]) => `<li><span class="product-accordion__label">${escapeProductText(specLabels[key] || key)}:</span> ${escapeProductText(value)}</li>`)
             : [])
         ];
         const detailsContent = buildAccordionList(details);
@@ -2062,14 +2073,14 @@
         const primaryImageFallback = primaryImage.src || PLACEHOLDER;
         detail.innerHTML = `
           <div class="mobile-product-name" aria-hidden="true">
-            <h1>${product.name || 'Producto'}</h1>
+            <h1>${escapeProductText(product.name || 'Producto')}</h1>
           </div>
           <div class="detail-grid">
             <div class="gallery">
               <div class="main-image" role="button" tabindex="0" aria-label="Abrir zoom de imagen" aria-haspopup="dialog">
                 <picture id="main-image-picture">
                   ${primaryImage.webpSrc ? `<source srcset="${primaryImage.webpSrc}" sizes="${PRODUCT_IMAGE_SIZES}" type="image/webp" />` : ''}
-                  <img id="main-image" src="${primaryImageSrc}" alt="${product.name || 'Producto'}" width="${productImageSize.width}" height="${productImageSize.height}" loading="eager" decoding="async" fetchpriority="high" sizes="${PRODUCT_IMAGE_SIZES}" onerror="this.onerror=null;this.src='${primaryImageFallback}';" />
+                  <img id="main-image" src="${primaryImageSrc}" alt="${escapeProductText(product.name || 'Producto')}" width="${productImageSize.width}" height="${productImageSize.height}" loading="eager" decoding="async" fetchpriority="high" sizes="${PRODUCT_IMAGE_SIZES}" onerror="this.onerror=null;this.src='${primaryImageFallback}';" />
                 </picture>
                 <button type="button" class="zoom-btn" id="zoom-open" aria-label="Acercar imagen" aria-haspopup="dialog">
                   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 4H4v4M16 4h4v4M20 16v4h-4M4 16v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -2092,7 +2103,7 @@
               <div>
                 <p class="product-context">${['ROMIX', sectionLabel, typeLabel].filter(Boolean).join(' &middot; ')}</p>
                 <div class="title-row">
-                  <h1>${product.name || 'Producto'}</h1>
+                  <h1>${escapeProductText(product.name || 'Producto')}</h1>
                   ${badge}
                 </div>
               </div>
@@ -2157,14 +2168,14 @@
               <button type="button" class="zoom-close" id="zoom-close" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
               <button type="button" class="zoom-nav prev" id="zoom-prev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 6-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
               <div class="zoom-stage" id="zoom-stage" tabindex="0" aria-label="Imagen ampliada">
-                <img id="zoom-image" src="${PLACEHOLDER}" alt="${product.name || 'Producto'}" width="${productImageSize.width}" height="${productImageSize.height}" loading="lazy" decoding="async" />
+                <img id="zoom-image" src="${PLACEHOLDER}" alt="${escapeProductText(product.name || 'Producto')}" width="${productImageSize.width}" height="${productImageSize.height}" loading="lazy" decoding="async" />
               </div>
               <button type="button" class="zoom-nav next" id="zoom-next" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             </div>
           </div>
           `;
         renderProductPrice(product, getPriceForSize(product, ''));
-        document.title = product.name ? `ROMIX - ${product.name}` : 'ROMIX - Detalle';
+        document.title = product.name ? `ROMIX - ${escapeProductText(product.name)}` : 'ROMIX - Detalle';
 
         const mainImage = detail.querySelector('#main-image');
         const thumbContainer = detail.querySelector('#gallery-thumbs');
@@ -2445,7 +2456,7 @@
           ].filter(Boolean);
           setResponsiveMainImage(
             variantSources,
-            displayName ? `${product.name || 'Producto'} - ${displayName}` : (product.name || 'Producto')
+            displayName ? `${escapeProductText(product.name || 'Producto')} - ${displayName}` : (product.name || 'Producto')
           );
           renderSizesForColor(colorName);
           updateSizesStateForColor(product, colorName);
@@ -2483,7 +2494,7 @@
             const qty = stockUnknown ? null : Number(rawStock);
             if (stockUnknown) hasUnknownStock = true;
             else total += qty;
-            const stockState = stockUnknown ? 'unknown' : (qty <= 0 ? 'out' : (qty <= 3 ? 'low' : 'available'));
+            const stockState = stockUnknown ? 'unknown' : (qty <= 0 ? 'out' : (qty <= (window.romixInventory?.getThreshold(product.id, colorName, sizeKey) ?? 3) ? 'low' : 'available'));
             const chip = document.createElement('button');
             chip.type = 'button';
             chip.className = 'size-chip size-option';
@@ -2494,7 +2505,7 @@
             chip.textContent = sizeKey;
             chip.setAttribute('aria-pressed', 'false');
             chip.setAttribute('aria-label', stockState === 'unknown'
-              ? `Seleccionar talle ${sizeKey}, disponibilidad a confirmar`
+              ? `Seleccionar talle ${sizeKey}, consultar disponibilidad`
               : (stockState === 'low' ? `Seleccionar talle ${sizeKey}, pocas unidades` : `Seleccionar talle ${sizeKey}`));
             if (stockState === 'out') chip.classList.add('out');
             chip.addEventListener('click', () => {
@@ -2509,6 +2520,11 @@
               activeSize = currentSelectedSize;
               clearSizeError();
               updatePriceForSize(product, currentSelectedSize);
+              const available=window.romixInventory?.getStock(product.id,colorName,sizeKey);
+              const threshold=window.romixInventory?.getThreshold(product.id,colorName,sizeKey) ?? 3;
+              if(stockNote) stockNote.textContent=typeof available!=='number' ? 'Consultar disponibilidad' : available===0 ? 'Sin stock' : available<=threshold ? 'Ultimas unidades' : 'Disponible';
+              STOCK_MAX=typeof available==='number' ? available : null;
+              setQuantity(currentQty);
             });
             sizeWrapper.appendChild(chip);
           });
@@ -2542,16 +2558,10 @@
         }
 
         function getColorTotalStock(product, colorName) {
-          if (product && Array.isArray(product.variants)) {
-            return product.variants.reduce((sum, v) => {
-              if (String(v.color).toLowerCase() === String(colorName).toLowerCase()) {
-                return sum + Number(v.stock || 0);
-              }
-              return sum;
-            }, 0);
-          }
           const map = stockMap[colorName] || stockMap['Unico'] || {};
-          return Object.values(map).reduce((acc, qty) => acc + (Number(qty) || 0), 0);
+          const values=Object.values(map);
+          if (values.some(value => value==='unknown')) return null;
+          return values.reduce((sum,value) => sum+Number(value || 0),0);
         }
 
         function updateSizesStateForColor(product, colorName){
@@ -2568,13 +2578,13 @@
 
             if (stock == null) {
               btn.dataset.state = 'unknown';
-              btn.setAttribute('aria-label', `Seleccionar talle ${sizeVal}, disponibilidad a confirmar`);
+              btn.setAttribute('aria-label', `Seleccionar talle ${sizeVal}, consultar disponibilidad`);
             } else if (stock <= 0) {
               btn.classList.add('size-option--out');
               btn.disabled = true;
               btn.setAttribute('aria-disabled', 'true');
               btn.setAttribute('aria-label', `Talle ${sizeVal} sin stock`);
-            } else if (stock <= 3) {
+            } else if (stock <= (window.romixInventory?.getThreshold(product.id, colorName, sizeVal) ?? 3)) {
               btn.classList.add('size-option--low');
               btn.setAttribute('aria-label', `Seleccionar talle ${sizeVal}, pocas unidades`);
             } else {
@@ -3100,8 +3110,8 @@
         });
       }
 
-      const productsRequest = loadProducts();
-      const inventoryRequest = window.romixInventory && typeof window.romixInventory.syncFromApi === 'function'
+      const productsRequest = window.ROMIX_PRODUCT_PREVIEW ? Promise.resolve([window.ROMIX_PRODUCT_PREVIEW]) : loadProducts();
+      const inventoryRequest = !window.ROMIX_PRODUCT_PREVIEW && window.romixInventory && typeof window.romixInventory.syncFromApi === 'function'
         ? window.romixInventory.syncFromApi()
         : Promise.resolve({ ok: false });
 
@@ -3112,14 +3122,24 @@
         try {
           const [list] = await Promise.all([productsRequest, inventoryRequest]);
           const safeList = Array.isArray(list) ? list.filter(item => !isHiddenProduct(item)) : [];
-          const product = (serverProduct && !isHiddenProduct(serverProduct))
-            ? serverProduct
-            : findProduct(safeList);
+          const product = window.ROMIX_PRODUCT_PREVIEW || findProduct(safeList) || ((window.romixProductsStore?.getStatus().source !== 'api' && serverProduct && !isHiddenProduct(serverProduct)) ? serverProduct : null);
           if (!product) {
             showNotFound();
             return;
           }
+          if(window.ROMIX_PRODUCT_PREVIEW) window.romixInventory?.mergeUpdates((product.variants || []).map(v => ({...v,product_id:product.id,low_stock_threshold:v.lowStockThreshold})),{authoritative:true});
           renderProduct(product);
+          if (product.databaseId && !window.ROMIX_PRODUCT_PREVIEW) {
+            try {
+              const key = 'romixView:' + product.databaseId;
+              const eventKey = sessionStorage.getItem(key) || crypto.randomUUID();
+              sessionStorage.setItem(key, eventKey);
+              fetch('/api/public/products/' + encodeURIComponent(product.databaseId) + '/view', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ event_key: eventKey })
+              }).catch(() => {});
+            } catch {}
+          }
+          if (window.ROMIX_PRODUCT_PREVIEW) document.querySelectorAll('#btn-add, #btn-buy').forEach(button => { button.disabled=true; });
           renderFeatures(product);
           scheduleRelatedProducts(safeList, product);
           if (buyParam === '1') {

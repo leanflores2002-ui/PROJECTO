@@ -405,6 +405,12 @@
     const newItem = normalizeItem(product);
     if (!newItem) return cart;
 
+    const knownStock = window.romixInventory?.getStock(newItem.productId || newItem.id, newItem.colorName || newItem.color, newItem.talle || newItem.size);
+    const already = cart.find(item => item.key === newItem.key);
+    if (typeof knownStock === 'number' && knownStock < newItem.qty + Number(already?.qty || 0)) {
+      window.dispatchEvent(new CustomEvent('romix:stock-unavailable'));
+      return cart;
+    }
     let addedItem = newItem;
     const existingIndex = cart.findIndex((item) => item.key === newItem.key);
     if (existingIndex >= 0) {

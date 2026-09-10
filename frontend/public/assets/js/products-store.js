@@ -252,6 +252,14 @@
     }
   }
 
+  function withoutVerifiedStock(product) {
+    const copy={...product,stock:null,totalStock:null,stockStatus:'unknown'};
+    delete copy.stockByColor;
+    copy.sizes=(copy.sizes || []).map(size => typeof size==='object' ? {...size,stock:null,status:'unknown'} : {size,status:'unknown'});
+    copy.variants=(copy.variants || []).map(variant => ({...variant,stock:null}));
+    return copy;
+  }
+
   async function fetchProducts(options) {
     const opts = options || {};
     const dataUrl = new URL(opts.dataUrl || DATA_URL, location.href);
@@ -286,7 +294,7 @@
         throw error;
       }
       if (!Array.isArray(parsed)) throw new Error('products.json no contiene una lista');
-      const fileList = sanitizeList(parsed);
+      const fileList = sanitizeList(parsed).map(withoutVerifiedStock);
       writeSessionCache(fileList, 'json');
       loadStatus = { source: 'json', stale: false, errors: errors.map(String) };
       return fileList;
@@ -298,7 +306,7 @@
     if (cached) {
       loadStatus = { source: cached.source, stale: true, errors: errors.map(String) };
       console.warn('[products-store] Red no disponible; se usa el último catálogo validado.', errors[errors.length - 1]);
-      return cached.list;
+      return cached.list.map(withoutVerifiedStock);
     }
 
     const combined = new Error('No se pudo cargar el catálogo desde API, JSON ni caché.');
@@ -319,7 +327,7 @@
         const preloaded = fromPreloaded(opts);
         if (preloaded) {
           loadStatus = { source: 'preloaded', stale: true, errors: [String(error)] };
-          return preloaded;
+          return preloaded.map(withoutVerifiedStock);
         }
         throw error;
       })

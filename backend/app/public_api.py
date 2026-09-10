@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import secrets
+import hashlib
+import json
 from collections import defaultdict
 from pathlib import Path
 from urllib.parse import quote
@@ -13,6 +15,7 @@ from pydantic import BaseModel, Field
 from .catalog_sync import _build_catalog
 from .config import get_settings
 from .database import database_connection
+from .inventory_service import InventoryService
 from .security import AdminPrincipal, require_admin
 
 
@@ -30,6 +33,7 @@ class PublicOrderItem(BaseModel):
 
 
 class PublicOrder(BaseModel):
+    request_key: UUID
     items: list[PublicOrderItem] = Field(min_length=1, max_length=200)
 
 
@@ -212,89 +216,86 @@ def delete_product_image(
         return {"images": _product_images(connection, image["product_id"])}
 
 
-@router.post("/orders", status_code=status.HTTP_201_CREATED)
+def _order_result(connection, order):
+    items = connection.execute("""
+        select coalesce(p.legacy_id,p.slug) as "productId", i.product_name as name,
+               i.color, i.size, i.quantity as qty, i.unit_price as price,
+               v.stock, v.id as "variantId"
+        from public.order_items i join public.products p on p.id=i.product_id
+        join public.product_variants v on v.id=i.variant_id
+        where i.order_id=%s order by v.id
+    """, (order['id'],)).fetchall()
+    return {'orderId': order['id'], 'reference': order['reference'], 'createdAt': order['created_at'],
+            'items': items, 'updatedVariants': items}
+
+
+@router.post('/orders', status_code=201)
 def create_public_order(payload: PublicOrder):
-    grouped: dict[tuple[str, str, str], int] = defaultdict(int)
-    for item in payload.items:
-        key = (item.productId.strip(), item.color.strip(), item.size.strip())
-        grouped[key] += item.qty
-
-    requested = sorted((*key, quantity) for key, quantity in grouped.items())
-    reserved: list[dict] = []
+    signature = hashlib.sha256(json.dumps(sorted(
+        (i.productId.strip(), i.color.strip().casefold(), i.size.strip().casefold(), i.qty)
+        for i in payload.items), ensure_ascii=True).encode()).hexdigest()
     with database_connection() as connection, connection.transaction():
-        for product_reference, color, size, quantity in requested:
-            variant = connection.execute(
-                """
-                select v.id, v.product_id, v.stock, v.color, v.size, p.name,
-                       coalesce(v.price_override, pg.amount, p.base_price) as unit_price
-                from public.product_variants v
-                join public.products p on p.id = v.product_id
-                left join public.product_size_price_groups spg
-                  on spg.product_id = p.id and spg.size = v.size
-                left join public.product_price_groups pg
-                  on pg.product_id = p.id and pg.price_group = spg.price_group
-                where (p.slug = %s or p.legacy_id = %s or p.id::text = %s)
-                  and lower(v.color) = lower(%s) and lower(v.size) = lower(%s)
-                  and p.status = 'published' and p.deleted_at is null and v.status = 'active'
+        # Serialize retries before resolving rows. No stock is changed twice on a network retry.
+        connection.execute('select pg_advisory_xact_lock(hashtextextended(%s,0))', (str(payload.request_key),))
+        previous = connection.execute('select * from public.orders where request_key=%s', (payload.request_key,)).fetchone()
+        if previous:
+            if previous['request_hash'] != signature:
+                raise HTTPException(409, 'La clave del pedido ya fue usada con otros productos')
+            return _order_result(connection, previous)
+        quantities = defaultdict(int)
+        for item in payload.items:
+            row = connection.execute("""
+                select v.id from public.product_variants v join public.products p on p.id=v.product_id
+                where (p.slug=%s or p.legacy_id=%s or p.id::text=%s)
+                  and lower(v.color)=lower(%s) and lower(v.size)=lower(%s)
+                  and p.status='published' and p.deleted_at is null and v.status='active'
+            """, (item.productId.strip(),)*3 + (item.color.strip(),item.size.strip())).fetchone()
+            if not row:
+                raise HTTPException(404, 'Producto o variante no disponible')
+            quantities[row['id']] += item.qty
+        reserved = []
+        # Canonical UUID ordering also handles aliases and case differences safely.
+        for variant_id in sorted(quantities, key=str):
+            variant = connection.execute("""
+                select v.id,v.product_id,v.stock,v.color,v.size,p.name,
+                  coalesce(v.price_override,pg.amount,p.base_price) as unit_price
+                from public.product_variants v join public.products p on p.id=v.product_id
+                left join public.product_size_price_groups spg on spg.product_id=p.id and spg.size=v.size
+                left join public.product_price_groups pg on pg.product_id=p.id and pg.price_group=spg.price_group
+                where v.id=%s and v.status='active' and p.status='published' and p.deleted_at is null
                 for update of v
-                """,
-                (product_reference, product_reference, product_reference, color, size),
-            ).fetchone()
+            """, (variant_id,)).fetchone()
             if not variant:
-                raise HTTPException(
-                    status_code=400,
-                    detail=f"No existe una variante publicada para {product_reference}, {color}, talle {size}",
-                )
-            if variant["stock"] < quantity:
-                raise HTTPException(
-                    status_code=409,
-                    detail=f"Stock insuficiente para {variant['name']}, {variant['color']}, talle {variant['size']}",
-                )
-            reserved.append({**variant, "quantity": quantity})
-
-        reference = f"ROM-{secrets.token_hex(5).upper()}"
-        order = connection.execute(
-            "insert into public.orders (reference, status) values (%s, 'submitted') returning id, created_at",
-            (reference,),
-        ).fetchone()
-        updates: list[dict] = []
+                raise HTTPException(409, 'La variante cambio. Revisa el pedido.')
+            quantity = quantities[variant_id]
+            if variant['stock'] < quantity:
+                raise HTTPException(409, 'Stock insuficiente para ' + variant['name'])
+            reserved.append({**variant, 'quantity': quantity})
+        order = connection.execute("""
+            insert into public.orders(reference,status,request_key,request_hash)
+            values (%s,'submitted',%s,%s) returning id,reference,created_at
+        """, ('ROM-'+secrets.token_hex(5).upper(),payload.request_key,signature)).fetchone()
         for variant in reserved:
-            before = variant["stock"]
-            after = before - variant["quantity"]
-            connection.execute(
-                "update public.product_variants set stock = %s, updated_at = now() where id = %s",
-                (after, variant["id"]),
-            )
-            connection.execute(
-                """
-                insert into public.order_items
-                    (order_id, product_id, variant_id, product_name, color, size, quantity, unit_price)
-                values (%s, %s, %s, %s, %s, %s, %s, %s)
-                """,
-                (
-                    order["id"], variant["product_id"], variant["id"], variant["name"],
-                    variant["color"], variant["size"], variant["quantity"], variant["unit_price"],
-                ),
-            )
-            connection.execute(
-                """
-                insert into public.stock_movements
-                    (variant_id, movement_type, quantity_delta, stock_before, stock_after, reason, order_id)
-                values (%s, 'order', %s, %s, %s, 'Pedido de catalogo', %s)
-                """,
-                (variant["id"], -variant["quantity"], before, after, order["id"]),
-            )
-            updates.append(
-                {
-                    "productId": str(variant["product_id"]),
-                    "color": variant["color"],
-                    "size": variant["size"],
-                    "stock": after,
-                }
-            )
-    return {
-        "orderId": order["id"],
-        "reference": reference,
-        "createdAt": order["created_at"],
-        "updatedVariants": updates,
-    }
+            before, after = variant['stock'], variant['stock']-variant['quantity']
+            connection.execute('update public.product_variants set stock=%s,updated_at=now() where id=%s', (after,variant['id']))
+            connection.execute("""
+                insert into public.order_items(order_id,product_id,variant_id,product_name,color,size,quantity,unit_price)
+                values (%s,%s,%s,%s,%s,%s,%s,%s)
+            """, (order['id'],variant['product_id'],variant['id'],variant['name'],variant['color'],variant['size'],variant['quantity'],variant['unit_price']))
+            InventoryService.record_movement(connection,variant['id'],before,after,'Pedido de catalogo','order',order_id=order['id'])
+        return _order_result(connection,order)
+
+
+class ProductView(BaseModel):
+    event_key: UUID
+
+
+@router.post('/products/{product_id}/view', status_code=202)
+def record_product_view(product_id: UUID, payload: ProductView):
+    with database_connection() as connection:
+        row = connection.execute("""
+            insert into public.product_view_events(product_id,event_key)
+            select id,%s from public.products where id=%s and status='published' and deleted_at is null
+            on conflict(event_key) do nothing returning id
+        """, (payload.event_key,product_id)).fetchone()
+    return {'recorded': bool(row)}

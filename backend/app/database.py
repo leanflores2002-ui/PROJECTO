@@ -6,9 +6,9 @@ import re
 from typing import Iterator
 
 from fastapi import HTTPException, status
-from psycopg import Connection
+from psycopg import Connection, OperationalError
 from psycopg.rows import dict_row
-from psycopg_pool import ConnectionPool
+from psycopg_pool import ConnectionPool, PoolTimeout
 
 from .config import get_settings
 
@@ -69,8 +69,11 @@ def get_database_pool() -> ConnectionPool:
 @contextmanager
 def database_connection() -> Iterator[Connection]:
     pool = get_database_pool()
-    with pool.connection() as connection:
-        yield connection
+    try:
+        with pool.connection(timeout=5) as connection:
+            yield connection
+    except (OperationalError, PoolTimeout) as exc:
+        raise HTTPException(503, "La base de datos no esta disponible. Intenta nuevamente.") from exc
 
 
 def database_health() -> bool:

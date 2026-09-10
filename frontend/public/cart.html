@@ -1096,47 +1096,40 @@
       renderCart();
     }
 
-    function handleOrder(){
-      if (orderStatus === 'success' || orderInProgress) return;
-      if (inventoryLoading) {
-        showCartAlert('info', 'Estamos verificando disponibilidad. Intenta nuevamente en un momento.');
-        return;
-      }
+    async function handleOrder(){
+      if (orderInProgress) return;
       const cart = window.romixCart.getCart();
-      if (!cart.length) {
-        showCartAlert('error', 'Tu carrito esta vacio.');
-        return;
-      }
-      const orderBtn = document.getElementById('order-btn');
-      orderInProgress = true;
-      if (orderBtn) orderBtn.disabled = true;
-      hideCartAlert();
-      const validation = validateCartStock(cart);
-      if (!validation.valid && validation.errors.length) {
-        showCartAlert('error', validation.errors[0]);
-        orderInProgress = false;
-        if (orderBtn) orderBtn.disabled = false;
-        return;
-      }
-      if (validation.warnings && validation.warnings.length) {
-        showCartAlert('info', validation.warnings[0]);
-      }
-      const message = window.romixCart.buildWhatsAppMessage(cart);
-      if (!message) {
-        showCartAlert('error', 'No se pudo generar el pedido.');
-        orderInProgress = false;
-        if (orderBtn) orderBtn.disabled = false;
-        return;
-      }
-      const orderWindow = window.open(`https://wa.me/${WA_NUMBER}?text=${message}`, '_blank', 'noopener');
-      if (!orderWindow) {
-        showCartAlert('error', 'El navegador bloqueo la apertura de WhatsApp. Habilita las ventanas emergentes e intenta nuevamente.');
-        orderInProgress = false;
-        if (orderBtn) orderBtn.disabled = false;
-        return;
-      }
-      finalizeOrder();
-      orderInProgress = false;
+      if (!cart.length) { showCartAlert('error', 'Tu carrito esta vacio.'); return; }
+      const items=cart.map(item => ({ productId: String(item.productId || item.id || item.pid || ''),
+        color: String(item.colorName || item.color || 'Unico'), size: String(item.talle || item.size || 'U'), qty: Number(item.qty || item.quantity) }));
+      const signature=JSON.stringify(items);
+      let pending;
+      try {
+        pending=JSON.parse(localStorage.getItem('romixPendingOrder') || 'null');
+        if (!pending || pending.signature !== signature) pending={ signature, request_key: crypto.randomUUID() };
+        localStorage.setItem('romixPendingOrder',JSON.stringify(pending));
+      } catch { showCartAlert('error','No se pudo guardar la referencia del pedido. Revisa el almacenamiento del navegador.'); return; }
+      orderInProgress=true;
+      const orderBtn=document.getElementById('order-btn'); if(orderBtn) orderBtn.disabled=true;
+      showCartAlert('info','Validando precios y stock...');
+      try {
+        const response=await fetch('/api/orders', { method:'POST', headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({items,request_key:pending.request_key}) });
+        const result=await response.json();
+        if(!response.ok) throw new Error(typeof result.detail==='string' ? result.detail : 'No se pudo confirmar el pedido. Revisa productos y cantidades.');
+        const message=window.romixCart.buildWhatsAppMessage(result.items);
+        const url=`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Pedido '+result.reference+'\n')}${message}`;
+        window.romixInventory?.mergeUpdates(result.updatedVariants,{authoritative:true});
+        finalizeOrder();
+        localStorage.removeItem('romixPendingOrder');
+        showCartAlert('success', 'Pedido '+result.reference+' registrado. Continua en WhatsApp.');
+        const link=document.createElement('a'); link.href=url; link.target='_blank'; link.rel='noopener';
+        link.className='button'; link.textContent='Enviar pedido por WhatsApp';
+        document.getElementById('cart-list').appendChild(link);
+        window.open(url,'_blank','noopener');
+      } catch(error) {
+        showCartAlert('error', error.message || 'Servicio no disponible. Tu carrito se conserva.');
+      } finally { orderInProgress=false; if(orderBtn) orderBtn.disabled=false; }
     }
     window.orderCartWhatsApp = handleOrder;
     function renderCart(){

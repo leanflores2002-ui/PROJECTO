@@ -70,7 +70,7 @@ def get_settings() -> Settings:
             f"{supabase_url.rstrip('/')}/auth/v1/.well-known/jwks.json" if supabase_url else None
         ),
         admin_path=os.getenv("ADMIN_PATH", "/admin").strip() or "/admin",
-        catalog_source=os.getenv("ROMIX_CATALOG_SOURCE", "json").strip().lower(),
+        catalog_source=os.getenv("ROMIX_CATALOG_SOURCE", "database").strip().lower(),
     )
 
 

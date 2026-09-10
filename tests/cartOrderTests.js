@@ -23,6 +23,12 @@ async function prepareCartDom(cartItems) {
     beforeParse(window) {
       window.localStorage.setItem('cart', JSON.stringify(cartItems));
       window.alert = () => {};
+      window.fetch = async (url, options) => {
+        if (url === '/api/variants') return { ok:true, json:async () => [] };
+        const payload=JSON.parse(options.body);
+        if (!payload.request_key || payload.items.some(item => 'price' in item)) throw new Error('Invalid request contract');
+        return { ok:true, json:async () => ({ reference:'QA-1', updatedVariants:[], items:cartItems.map(item => ({...item,qty:item.quantity})) }) };
+      };
       window.open = (url, target) => {
         events.push({ url, target });
         return { opener: null };
@@ -80,6 +86,7 @@ function assert(condition, message) {
   const orderButton = dom.window.document.getElementById('order-btn');
   assert(orderButton, 'Order button should exist');
   orderButton.click();
+  await new Promise(resolve => setTimeout(resolve, 50));
   assert(events.length === 1, 'orderCartWhatsApp should open WhatsApp once');
 
   const url = new URL(events[0].url);

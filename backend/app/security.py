@@ -39,6 +39,8 @@ def _decode_supabase_token(token: str) -> dict:
     try:
         header = jwt.get_unverified_header(token)
         algorithm = str(header.get("alg") or "")
+        if algorithm not in {"HS256", "ES256", "RS256"}:
+            raise HTTPException(status_code=401, detail="Algoritmo JWT no permitido")
         if algorithm == "HS256" and settings.supabase_jwt_secret:
             key = settings.supabase_jwt_secret
         elif settings.supabase_jwks_url:

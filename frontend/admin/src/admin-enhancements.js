@@ -139,13 +139,9 @@ async function enhanceUploadButton(button) {
       const product = await resolveCurrentProduct(token);
       const form = new FormData();
       files.forEach((file) => form.append('files', file));
-      const response = await fetch(`${config.apiUrl}/api/public/admin/products/by-sku/${encodeURIComponent(product.sku)}/images`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-        body: form,
+      await apiRequest(`/api/public/admin/products/by-sku/${encodeURIComponent(product.sku)}/images`, {
+        token, method: 'POST', body: form,
       });
-      const payload = await response.json().catch(() => null);
-      if (!response.ok) throw new Error(payload?.detail || 'No se pudieron subir las imágenes.');
       await renderEditorImages(token, product);
       showLocalMessage(files.length === 1 ? 'Imagen subida correctamente.' : `${files.length} imágenes subidas correctamente.`);
     } catch (error) {
@@ -175,8 +171,8 @@ function stockTone(stock) {
 async function fetchAllProducts(token) {
   const first = await apiRequest('/api/admin/products?page=1&page_size=100', { token });
   if ((first.total || 0) <= 100) return first.items || [];
-  const second = await apiRequest('/api/admin/products?page=2&page_size=100', { token });
-  return [...(first.items || []), ...(second.items || [])];
+  const remaining = await Promise.all(Array.from({length: Math.ceil(first.total / 100)-1}, (_,index) => apiRequest(`/api/admin/products?page=${index+2}&page_size=100`, {token})));
+  return [...(first.items || []), ...remaining.flatMap(page => page.items || [])];
 }
 
 async function renderInventory(panel) {
@@ -232,17 +228,39 @@ async function renderInventory(panel) {
               const size = document.createElement('td'); size.textContent = variant.size;
               const stockCell = document.createElement('td');
               const input = document.createElement('input'); input.type = 'number'; input.min = '0'; input.value = variant.stock;
-              stockCell.appendChild(input);
+              const operation = document.createElement('select');
+              [['set','Establecer'],['add','Agregar'],['remove','Quitar']].forEach(([value,label]) => {
+                const option = document.createElement('option'); option.value=value; option.textContent=label; operation.appendChild(option);
+              });
+              operation.setAttribute('aria-label', 'Operacion de stock');
+              const reason = document.createElement('input'); reason.placeholder='Motivo del movimiento'; reason.setAttribute('aria-label','Motivo');
+              const feedback = document.createElement('p'); feedback.setAttribute('role','status');
+              const identity = document.createElement('small'); identity.textContent=`SKU: ${variant.sku || product.sku} / Barras: ${variant.barcode || detail.barcode || '-'}`;
+              const availability = document.createElement('small');
+              const refreshAvailability = () => { availability.textContent = variant.stock === 0 ? 'Sin stock' : variant.stock <= variant.low_stock_threshold ? 'Stock bajo' : 'Disponible'; };
+              refreshAvailability();
+              stockCell.append(identity, availability, operation, input, reason, feedback);
               const state = document.createElement('td'); state.textContent = variant.status === 'active' ? 'Activa' : 'Inactiva';
               const action = document.createElement('td');
               const save = document.createElement('button'); save.type = 'button'; save.className = 'button button--secondary button--small'; save.textContent = 'Guardar';
               save.addEventListener('click', async () => {
-                save.disabled = true;
+                if (reason.value.trim().length < 3) { feedback.textContent='Ingresa el motivo del movimiento.'; return; }
+                save.disabled = true; save.textContent='Guardando...';
                 try {
-                  await apiRequest(`/api/admin/inventory/${variant.id}/adjust`, { token, method: 'POST', body: { stock: Number(input.value || 0), reason: 'Ajuste desde Inventario / Stock' } });
+                  const result = await apiRequest(`/api/admin/inventory/${variant.id}/adjust`, { token, method: 'POST', body: {
+                    operation: operation.value, stock: operation.value === 'set' ? Number(input.value) : null,
+                    quantity: operation.value !== 'set' ? Number(input.value) : null,
+                    reason: reason.value.trim(), expected_updated_at: variant.updated_at,
+                    movement_type: operation.value === 'add' ? 'incoming' : operation.value === 'remove' ? 'outgoing' : 'adjustment'
+                  } });
+                  feedback.textContent=`Anterior: ${result.stockBefore} / Movimiento: ${result.quantityDelta} / Nuevo: ${result.stock}`;
+                  variant.updated_at=result.updated_at;
+                  input.value=result.stock; operation.value='set';
                   save.textContent = 'Guardado';
-                  product.stock = (detail.variants || []).reduce((sum, item) => sum + (item.id === variant.id ? Number(input.value || 0) : Number(item.stock || 0)), 0);
-                  variant.stock = Number(input.value || 0);
+                  variant.stock = result.stock; refreshAvailability();
+                  product.stock = (detail.variants || []).filter(item => item.status === 'active').reduce((sum,item) => sum + Number(item.stock),0);
+                  row.children[2].textContent = product.stock;
+                  row.children[3].textContent = product.stock===0 ? 'Sin stock' : detail.variants.some(item => item.status==='active' && item.stock>0 && item.stock<=item.low_stock_threshold) ? 'Stock bajo' : 'Disponible';
                 } catch (error) {
                   window.alert(error.message);
                 } finally {

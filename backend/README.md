@@ -16,4 +16,4 @@ uvicorn backend.app.main:app --reload --port 8000
 pytest backend/tests -q
 ```
 
-El catálogo continúa usando JSON por defecto (`ROMIX_CATALOG_SOURCE=json`) hasta completar y verificar la migración.
+El catalogo y stock se consultan desde PostgreSQL. Ver [arquitectura de stock](../docs/STOCK_ARCHITECTURE.md) y [flujo de producto](../docs/PRODUCT_DATA_FLOW.md). El JSON queda como fallback de presentacion, sin disponibilidad autoritativa.
