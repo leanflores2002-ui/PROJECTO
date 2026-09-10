@@ -67,6 +67,10 @@
     return !!normalized && MEDIA_SET.has(normalized);
   }
 
+  function isVeranoProduct(product){
+    return seasonKeyForProduct(product) === 'verano';
+  }
+
   function normalizeSeason(value){
     const normalized = normalizeName(value);
     if (!normalized) return '';
@@ -89,7 +93,7 @@
   window.romixSeasonFilter = {
     normalizeName,
     isMediaEstacionProduct,
-    isVeranoProduct: isMediaEstacionProduct,
+    isVeranoProduct,
     seasonKeyForProduct,
     seasonLabelFromKey,
     mediaSet: MEDIA_SET,

@@ -4,6 +4,7 @@
   const COLOR_LIMIT = 8;
   const SIZE_BASE = ["1", "2", "3", "4", "5", "6"];
   const imageUtils = window.romixImageUtils || {};
+  const pricing = window.romixPricing || {};
   const cardImageSize = imageUtils.dimensions && imageUtils.dimensions.productCard
     ? imageUtils.dimensions.productCard
     : { width: 720, height: 960 };
@@ -12,7 +13,7 @@
   const PAGE_CONFIG = {
     mujer: { title: "Mujer", label: "Mujer" },
     hombre: { title: "Hombre", label: "Hombre" },
-    ninos: { title: "Ninos", label: "Ninos" },
+    ninos: { title: "Niños", label: "Niños" },
     novedades: { title: "Novedades", label: null },
     catalogo: { title: "Catalogo", label: null }
   };
@@ -20,7 +21,7 @@
   const SECTION_OPTIONS = [
     { key: "mujer", label: "Mujer" },
     { key: "hombre", label: "Hombre" },
-    { key: "ninos", label: "Nino" }
+    { key: "ninos", label: "Niños" }
   ];
 
   const CATEGORY_OPTIONS = [
@@ -34,8 +35,9 @@
   ];
 
   const SEASON_OPTIONS = [
-    { key: "media-estacion", label: "Media Estacion" },
-    { key: "invierno", label: "Invierno" }
+    { key: "media-estacion", label: "Media estación" },
+    { key: "invierno", label: "Invierno" },
+    { key: "verano", label: "Verano" }
   ];
 
   const SORT_OPTIONS = [
@@ -52,6 +54,7 @@
   ]);
 
   const STOCK_META = {
+    unknown: { label: "Consultar disponibilidad", css: "status-unknown" },
     available: { label: "Disponible", css: "status-available" },
     low: { label: "Por agotarse", css: "status-low" },
     out: { label: "Sin stock", css: "status-out" }
@@ -130,6 +133,7 @@
     sizeValues: [],
     visibleCount: window.innerWidth <= 768 ? 8 : 12
   };
+  let filterLastFocus = null;
 
   function isCompactVariantViewport() {
     return window.innerWidth <= 768;
@@ -316,6 +320,7 @@
   function normalizeSeasonFilterValue(value) {
     const key = normalizeText(value);
     if (!key) return "";
+    if (key.includes("verano")) return "verano";
     if (key.includes("invierno")) return "invierno";
     if (key.includes("media")) return "media-estacion";
     if (key.includes("estacion")) return "media-estacion";
@@ -364,6 +369,26 @@
 
     const raw = params.get("q") || params.get("query") || params.get("search") || "";
     return String(raw || "").trim();
+  }
+
+  function readInitialSortKey() {
+    let params = null;
+    try {
+      params = new URLSearchParams(window.location.search || "");
+    } catch (_error) {
+      return "recommended";
+    }
+
+    const requested = normalizeText(params.get("sort") || params.get("order") || "recommended");
+    const aliases = {
+      recomendados: "recommended",
+      recomendado: "recommended",
+      recommended: "recommended",
+      "price-asc": "price-asc",
+      "price-desc": "price-desc"
+    };
+    const normalized = aliases[requested] || requested;
+    return SORT_OPTIONS.some((entry) => entry.key === normalized) ? normalized : "recommended";
   }
 
   function readInitialSearchAnyTokens() {
@@ -694,10 +719,11 @@
 
   function normalizeStatus(rawStatus) {
     const key = normalizeText(rawStatus);
-    if (!key) return "available";
+    if (!key || key.includes("unknown") || key.includes("consult")) return "unknown";
     if (key.includes("sin") || key.includes("agot") || key.includes("out") || key.includes("unavail")) return "out";
     if (key.includes("low") || key.includes("poco") || key.includes("por")) return "low";
-    return "available";
+    if (key.includes("available") || key.includes("disponible") || key.includes("stock")) return "available";
+    return "unknown";
   }
 
   function getRawImageMap(product) {
@@ -719,7 +745,7 @@
     const fallback = String(fallbackSrc || "").trim()
       || (typeof imageUtils.fallbackRasterPath === "function" ? imageUtils.fallbackRasterPath(primary) : primary);
     const derivedWebp = typeof imageUtils.replaceExtension === "function" ? imageUtils.replaceExtension(primary, "webp") : primary;
-    const derivedAvif = typeof imageUtils.replaceExtension === "function" ? imageUtils.replaceExtension(primary, "avif") : "";
+    const derivedAvif = "";
     const webp = /\.webp$/i.test(primary) ? primary : (ext && ext !== "avif" ? derivedWebp : "");
     const modernAvif = /\.avif$/i.test(primary) ? primary : (avif || derivedAvif);
     const resolvedFallback = ext === "webp" || ext === "avif"
@@ -752,9 +778,10 @@
   }
 
   function statusFromSizes(sizes) {
-    if (!Array.isArray(sizes) || !sizes.length) return "available";
+    if (!Array.isArray(sizes) || !sizes.length) return "unknown";
     let available = 0;
     let low = 0;
+    let unknown = 0;
 
     sizes.forEach((entry) => {
       const status = normalizeStatus(entry && entry.status);
@@ -763,8 +790,10 @@
         available += 1;
         low += 1;
       }
+      if (status === "unknown") unknown += 1;
     });
 
+    if (unknown > 0) return "unknown";
     if (available === 0) return "out";
     if (low > 0) return "low";
     return "available";
@@ -786,7 +815,7 @@
         image: fallbackImage,
         thumb: typeof imageUtils.getThumbPath === "function" ? imageUtils.getThumbPath(fallbackImage) : fallbackImage,
         thumbFallback: fallbackImage,
-        thumbAvif: typeof imageUtils.getAvifThumbPath === "function" ? imageUtils.getAvifThumbPath(fallbackImage) : "",
+        thumbAvif: "",
         swatchImage: typeof imageUtils.getThumbPath === "function" ? imageUtils.getThumbPath(fallbackImage) : fallbackImage
       }];
     }
@@ -801,8 +830,7 @@
         || (typeof imageUtils.getThumbPath === "function" ? imageUtils.getThumbPath(resolvedImage) : "");
       const thumbFallback = String(entry && entry.thumbFallback || "").trim()
         || resolvedImage;
-      const thumbAvif = String(entry && entry.thumbAvif || "").trim()
-        || (typeof imageUtils.getAvifThumbPath === "function" ? imageUtils.getAvifThumbPath(resolvedImage) : "");
+      const thumbAvif = String(entry && entry.thumbAvif || "").trim();
       return Object.assign({}, entry, {
         key,
         name,
@@ -863,6 +891,12 @@
     const coverThumbFallback = rawThumbnailFallback
       || (colors[0] && colors[0].thumbFallback)
       || coverImage;
+    const saleInfo = typeof pricing.getSaleInfo === "function"
+      ? pricing.getSaleInfo(raw)
+      : {
+          currentPrice: Number((raw && (raw.price || raw.base_price || raw.basePrice)) || 0),
+          originalPrice: Number((raw && (raw.originalPrice || raw.compare_at_price || raw.compareAtPrice)) || 0)
+        };
 
     return {
       id: String((raw && raw.id) || (section + "-" + slugify(name))),
@@ -879,10 +913,11 @@
       thumbFallback: coverThumbFallback || coverThumb || coverImage,
       thumbnail: coverThumb || coverImage,
       thumbnailFallback: coverThumbFallback || coverThumb || coverImage,
-      thumbnailAvif: rawThumbnailAvif || (colors[0] && colors[0].thumbAvif) || (typeof imageUtils.getAvifThumbPath === "function" ? imageUtils.getAvifThumbPath(coverImage) : ""),
+      thumbnailAvif: rawThumbnailAvif || (colors[0] && colors[0].thumbAvif) || "",
       imageMap: rawImageMap,
       images: galleryImages,
-      price: Number((raw && raw.price) || 0),
+      price: saleInfo.currentPrice,
+      originalPrice: saleInfo.originalPrice,
       badge: String((raw && raw.badge) || "").trim(),
       featuredBadge: String((raw && raw.featuredBadge) || "").trim(),
       seasonKey,
@@ -903,7 +938,7 @@
     const response = await fetch(new URL(DATA_URL, window.location.href));
     const text = await response.text();
     const parsed = parseJsonText(text);
-    return Array.isArray(parsed) ? parsed : [];
+    return (Array.isArray(parsed) ? parsed : []).filter((product) => product && product.visible !== false);
   }
 
   function productsByScope(list, scope) {
@@ -1144,6 +1179,8 @@
     if (openBtn && openBtn.dataset.mobileReady !== "1") {
       openBtn.dataset.mobileReady = "1";
       openBtn.setAttribute("aria-label", "Filtrar y ordenar");
+      openBtn.setAttribute("aria-controls", "filters-sidebar");
+      openBtn.setAttribute("aria-expanded", "false");
       openBtn.innerHTML = triggerMarkup;
     }
 
@@ -1156,18 +1193,13 @@
       mobileTrigger.id = "catalog-mobile-filter-trigger";
       mobileTrigger.className = "catalog-mobile-filter-trigger";
       mobileTrigger.setAttribute("aria-label", "Filtrar y ordenar");
+      mobileTrigger.setAttribute("aria-controls", "filters-sidebar");
+      mobileTrigger.setAttribute("aria-expanded", "false");
       mobileTrigger.innerHTML = triggerMarkup;
     }
 
-    if (breadcrumb && breadcrumb.parentNode === heading.parentNode) {
-      if (breadcrumb.nextSibling !== mobileTrigger) {
-        heading.parentNode.insertBefore(mobileTrigger, breadcrumb.nextSibling);
-      }
-      return;
-    }
-
-    if (heading.previousSibling !== mobileTrigger) {
-      heading.parentNode.insertBefore(mobileTrigger, heading);
+    if (heading.nextSibling !== mobileTrigger) {
+      heading.parentNode.insertBefore(mobileTrigger, heading.nextSibling);
     }
   }
 
@@ -1242,6 +1274,11 @@
   }
 
   function sortProductsView() {
+    if (state.sortBy === "recommended" && typeof window.recommendedSort === "function") {
+      state.view = window.recommendedSort(state.view);
+      return;
+    }
+
     state.view.sort(function (a, b) {
       if (state.sortBy === "price-asc") {
         if (a.price !== b.price) return a.price - b.price;
@@ -1456,11 +1493,13 @@
 
       setMainImage(selectedColor, selectedColor && selectedColor.name);
 
-      const tag = document.createElement("span");
-      tag.className = "product-tag";
-      tag.textContent = product.typeLabel || "Producto";
-
-      thumb.appendChild(tag);
+      const badgeLabel = product.badge || product.featuredBadge;
+      if (badgeLabel) {
+        const tag = document.createElement("span");
+        tag.className = "product-tag";
+        tag.textContent = badgeLabel;
+        thumb.appendChild(tag);
+      }
 
       const body = document.createElement("div");
       body.className = "product-body";
@@ -1524,13 +1563,21 @@
 
       const priceRow = document.createElement("div");
       priceRow.className = "price-row";
+      const priceDisplay = typeof pricing.createPriceDisplay === "function"
+        ? pricing.createPriceDisplay(product, {
+            currentClass: "product-price",
+            currentTag: "span"
+          })
+        : null;
 
-      const price = document.createElement("p");
-      price.className = "product-price";
-      price.textContent = formatPrice(product.price);
+      const price = priceDisplay || document.createElement("p");
+      if (!priceDisplay) {
+        price.className = "product-price";
+        price.textContent = formatPrice(product.price);
+      }
 
       const stock = document.createElement("p");
-      const stockInfo = STOCK_META[product.stockStatus] || STOCK_META.available;
+      const stockInfo = STOCK_META[product.stockStatus] || STOCK_META.unknown;
       stock.className = "stock-note " + stockInfo.css;
       stock.textContent = stockInfo.label;
 
@@ -1650,6 +1697,36 @@
     renderGrid();
     renderActiveFilters();
     renderBreadcrumb();
+    syncFilterUrl();
+  }
+
+  function syncFilterUrl() {
+    if (!window.history || typeof window.history.replaceState !== "function") return;
+    const params = new URLSearchParams(window.location.search || "");
+    const filterKeys = [
+      "categories", "categoria", "categorias", "category", "cat",
+      "types", "type", "tipos", "tipo", "seasons", "season", "temporada", "temp",
+      "sections", "section", "secciones", "seccion", "sizes", "size", "talles", "talle",
+      "edad", "edades", "audiencia", "audience", "colors", "color", "colores", "sort", "order"
+    ];
+    filterKeys.forEach((key) => params.delete(key));
+    const mapping = {
+      categories: state.selected.categories,
+      types: state.selected.types,
+      seasons: state.selected.seasons,
+      sections: state.selected.sections,
+      sizes: state.selected.sizes,
+      audience: state.selected.audiences,
+      colors: state.selected.colors
+    };
+    Object.entries(mapping).forEach(([key, values]) => {
+      const list = Array.from(values || []).sort();
+      if (list.length) params.set(key, list.join(","));
+    });
+    if (state.sortBy !== "recommended") params.set("sort", state.sortBy);
+    const query = params.toString();
+    const nextUrl = window.location.pathname + (query ? "?" + query : "") + window.location.hash;
+    window.history.replaceState(window.history.state, "", nextUrl);
   }
 
   function onFilterChange(event) {
@@ -1948,9 +2025,9 @@
     const config = PAGE_CONFIG[state.scope] || PAGE_CONFIG.catalogo;
     const title = document.getElementById("page-title");
     if (title) {
-      if (state.scope === "catalogo") title.textContent = "Catalogo completo ROMIX";
+      if (state.scope === "catalogo") title.textContent = "Catálogo ROMIX";
       else if (state.scope === "novedades") title.textContent = "Novedades destacadas ROMIX";
-      else title.textContent = "Catalogo " + config.title + " ROMIX";
+      else title.textContent = "Catálogo " + config.title + " ROMIX";
     }
 
     document.querySelectorAll(".catalog-nav a[data-scope]").forEach((link) => {
@@ -1965,11 +2042,42 @@
   }
 
   function closeSidebar() {
+    const sidebar = document.getElementById("filters-sidebar");
+    const overlay = document.getElementById("filters-overlay");
+    const wasOpen = document.body.classList.contains("filters-open");
     document.body.classList.remove("filters-open");
+    document.querySelectorAll("#open-filters, #catalog-mobile-filter-trigger").forEach((trigger) => {
+      trigger.setAttribute("aria-expanded", "false");
+    });
+    if (sidebar) {
+      sidebar.setAttribute("aria-hidden", "true");
+      sidebar.removeAttribute("aria-modal");
+      sidebar.removeAttribute("role");
+    }
+    if (overlay) overlay.setAttribute("aria-hidden", "true");
+    if (wasOpen && filterLastFocus && typeof filterLastFocus.focus === "function") {
+      requestAnimationFrame(() => filterLastFocus.focus());
+    }
   }
 
   function openSidebar() {
+    const sidebar = document.getElementById("filters-sidebar");
+    const overlay = document.getElementById("filters-overlay");
+    filterLastFocus = document.activeElement;
     document.body.classList.add("filters-open");
+    document.querySelectorAll("#open-filters, #catalog-mobile-filter-trigger").forEach((trigger) => {
+      trigger.setAttribute("aria-expanded", "true");
+    });
+    if (sidebar) {
+      sidebar.setAttribute("role", "dialog");
+      sidebar.setAttribute("aria-modal", "true");
+      sidebar.setAttribute("aria-hidden", "false");
+    }
+    if (overlay) overlay.setAttribute("aria-hidden", "false");
+    requestAnimationFrame(() => {
+      const close = document.getElementById("close-filters");
+      if (close) close.focus();
+    });
   }
 
   function wireUiEvents() {
@@ -2044,6 +2152,30 @@
       overlay.addEventListener("click", closeSidebar);
     }
 
+    document.addEventListener("keydown", function (event) {
+      if (!document.body.classList.contains("filters-open")) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeSidebar();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const sidebar = document.getElementById("filters-sidebar");
+      if (!sidebar) return;
+      const focusable = Array.from(sidebar.querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'))
+        .filter((element) => !element.hidden && element.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
     window.addEventListener("resize", function () {
       if (window.innerWidth > 960) closeSidebar();
       const nextCompactVariantViewport = isCompactVariantViewport();
@@ -2057,6 +2189,7 @@
   async function init() {
     const scope = document.body && document.body.dataset ? document.body.dataset.catalogScope : "catalogo";
     state.scope = PAGE_CONFIG[scope] ? scope : "catalogo";
+    state.sortBy = readInitialSortKey();
 
     initPageHeader();
     wireUiEvents();
@@ -2065,7 +2198,7 @@
       const raw = await loadProducts();
       const normalized = raw
         .map(normalizeProduct)
-        .filter((item) => item && item.seasonKey !== "verano");
+        .filter(Boolean);
       state.products = productsByScope(normalized, state.scope);
       state.products.forEach((item, index) => {
         item.sortRank = index;

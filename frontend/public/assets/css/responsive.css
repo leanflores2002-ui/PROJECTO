@@ -27,7 +27,7 @@ video {
 }
 
 body {
-  overflow-x: hidden;
+  overflow-x: visible;
   min-height: 100vh;
 }
 
@@ -248,7 +248,7 @@ footer {
     width: 100%;
   }
 
-  .global-search button,
+  .global-search button[type="submit"],
   .global-search input[type="search"] {
     font-size: 0.95rem;
   }

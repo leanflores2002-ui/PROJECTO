@@ -4,6 +4,7 @@
   const DEFAULT_SIZE = 'U';
   const STOCK_UNKNOWN = 'unknown';
   let inventoryMapCache = null;
+  let syncState = { authoritative: false, status: 'idle', error: null, syncedAt: 0 };
 
   function normalize(value) {
     if (!value) return '';
@@ -20,7 +21,7 @@
 
   function sanitizeVariant(entry) {
     if (!entry || typeof entry !== 'object') return null;
-    const productId = String(entry.productId ?? entry.pid ?? entry.id ?? entry.slug ?? '').trim();
+    const productId = String(entry.productId ?? entry.product_id ?? entry.pid ?? entry.slug ?? '').trim();
     const color = String(entry.color ?? entry.colorName ?? DEFAULT_COLOR).trim() || DEFAULT_COLOR;
     const size = String(entry.size ?? entry.talle ?? DEFAULT_SIZE).trim() || DEFAULT_SIZE;
     const stockValue = Number(entry.stock ?? entry.quantity ?? 0);
@@ -72,6 +73,7 @@
   }
 
   function getStock(productId, color, size) {
+    if (!syncState.authoritative) return STOCK_UNKNOWN;
     const map = buildInventoryMap();
     const key = buildKey(productId, color, size);
     const variant = map.get(key);
@@ -96,6 +98,9 @@
     const plan = (Array.isArray(items) ? items : [])
       .map(normalizeUpdateEntry)
       .filter(Boolean);
+    if (!syncState.authoritative) {
+      return { success: true, warnings: ['El stock no fue confirmado por el servidor; no se modificó la caché local.'], inventory: getInventory() };
+    }
     if (!plan.length) {
       return { success: true, warnings: [], inventory: getInventory() };
     }
@@ -129,11 +134,10 @@
     map.forEach((variant, key) => {
       updated.push({ ...variant, stock: stockPlan.get(key) ?? variant.stock });
     });
-    saveInventory(updated);
-    return { success: true, warnings, inventory: updated };
+    return { success: warnings.length === 0, warnings, inventory: updated };
   }
 
-  function mergeUpdates(updatedVariants) {
+  function mergeUpdates(updatedVariants, options) {
     const map = buildInventoryMap();
     (Array.isArray(updatedVariants) ? updatedVariants : []).forEach((variant) => {
       const normalized = sanitizeVariant(variant);
@@ -142,21 +146,41 @@
       map.set(key, normalized);
     });
     saveInventory(Array.from(map.values()));
+    if (options && options.authoritative) {
+      syncState = { authoritative: true, status: 'ready', error: null, syncedAt: Date.now() };
+    }
   }
 
   async function syncFromApi() {
+    syncState = { authoritative: false, status: 'loading', error: null, syncedAt: 0 };
+    if (typeof fetch !== 'function') {
+      syncState = { authoritative: false, status: 'unavailable', error: 'Fetch no disponible', syncedAt: 0 };
+      return { ok: false, error: new Error('Fetch no disponible') };
+    }
     try {
-      const res = await fetch('/api/variants', { cache: 'no-store' });
-      if (!res.ok) return;
+      const signal = typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function'
+        ? AbortSignal.timeout(4000)
+        : undefined;
+      const res = await fetch('/api/variants', { cache: 'no-store', signal });
+      if (!res.ok) throw new Error(`API variants respondió ${res.status}`);
       const list = await res.json();
-      mergeUpdates(list);
-    } catch {}
+      if (!Array.isArray(list)) throw new Error('API variants devolvió un formato inválido');
+      inventoryMapCache = new Map();
+      mergeUpdates(list, { authoritative: true });
+      return { ok: true, count: list.length };
+    } catch (error) {
+      inventoryMapCache = null;
+      syncState = { authoritative: false, status: 'unavailable', error: String(error), syncedAt: 0 };
+      console.warn('[inventory] Stock remoto no disponible; se mostrará disponibilidad a confirmar.', error);
+      return { ok: false, error };
+    }
   }
 
   if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
     window.addEventListener('storage', (event) => {
       if (event && event.key === STORAGE_KEY) {
         inventoryMapCache = null;
+        syncState = { authoritative: false, status: 'idle', error: null, syncedAt: 0 };
       }
     });
   }
@@ -168,5 +192,7 @@
     getStock,
     mergeUpdates,
     syncFromApi,
+    getStatus() { return Object.assign({}, syncState); },
+    STOCK_UNKNOWN,
   };
 })();

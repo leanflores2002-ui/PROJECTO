@@ -317,7 +317,25 @@
     });
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && root.classList.contains("is-open")) closeDrawer();
+      if (!root.classList.contains("is-open")) return;
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeDrawer();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const focusable = Array.from(drawer.querySelectorAll('button:not([disabled]), a[href], input:not([disabled]), [tabindex]:not([tabindex="-1"])'))
+        .filter((element) => !element.hidden && element.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     });
 
     activeDrawer = { root, drawer, backdrop };
@@ -361,7 +379,7 @@
     drawer.setAttribute("aria-hidden", "false");
     root.classList.add("is-open");
     document.body.classList.add("size-guide-drawer-open");
-    window.setTimeout(() => drawer.focus(), 20);
+    window.requestAnimationFrame(() => drawer.focus());
   }
 
   function closeDrawer() {
@@ -371,11 +389,9 @@
     drawer.setAttribute("aria-hidden", "true");
     drawer.inert = true;
     document.body.classList.remove("size-guide-drawer-open");
-    window.setTimeout(() => {
-      if (!root.classList.contains("is-open")) backdrop.hidden = true;
-    }, 220);
+    backdrop.hidden = true;
     if (lastFocus && typeof lastFocus.focus === "function") {
-      window.setTimeout(() => lastFocus.focus(), 20);
+      window.requestAnimationFrame(() => lastFocus.focus());
     }
   }
 

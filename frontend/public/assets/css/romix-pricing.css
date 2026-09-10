@@ -1,0 +1,124 @@
+.romix-price-display {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+  color: #242426;
+  line-height: 1.2;
+}
+
+.romix-price-primary {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.romix-price-current {
+  color: inherit;
+  font-family: "Outfit", "Manrope", sans-serif;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.discount-pill,
+.romix-discount-pill {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  padding: 3px 7px;
+  border-radius: 5px;
+  color: #ffffff;
+  background: #16a34a;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .01em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.romix-price-original {
+  width: fit-content;
+  color: #a6a6a6;
+  font-size: .76rem;
+  font-weight: 600;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  white-space: nowrap;
+}
+
+.romix-price-before {
+  text-decoration: none;
+}
+
+.savings-label,
+.romix-savings-label {
+  width: fit-content;
+  color: #15803d;
+  font-size: .76rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.price-row .romix-price-display {
+  flex: 1 1 auto;
+}
+
+.price-row:has(.romix-price-display--sale) {
+  align-items: flex-start;
+}
+
+.romix-price-display--detail {
+  gap: 6px;
+}
+
+.romix-price-display--detail .romix-price-primary {
+  gap: 10px;
+}
+
+.romix-price-display--detail .romix-discount-pill {
+  min-height: 27px;
+  padding-inline: 8px;
+  font-size: .78rem;
+}
+
+.romix-price-display--detail .romix-price-original,
+.romix-price-display--detail .romix-savings-label {
+  font-size: .84rem;
+}
+
+.romix-price-display--mini {
+  gap: 2px;
+}
+
+.romix-price-display--mini .romix-price-primary {
+  gap: 4px;
+}
+
+.romix-price-display--mini .romix-discount-pill {
+  min-height: 20px;
+  padding: 2px 5px;
+  font-size: .62rem;
+}
+
+.romix-price-display--mini .romix-price-original,
+.romix-price-display--mini .romix-savings-label {
+  font-size: .66rem;
+}
+
+@media (max-width: 640px) {
+  .romix-price-primary {
+    align-items: flex-start;
+  }
+
+  .romix-price-display:not(.romix-price-display--detail) .romix-discount-pill {
+    min-height: 22px;
+    padding-inline: 6px;
+    font-size: .66rem;
+  }
+
+  .romix-price-display:not(.romix-price-display--detail) .romix-price-original,
+  .romix-price-display:not(.romix-price-display--detail) .romix-savings-label {
+    font-size: .69rem;
+  }
+}

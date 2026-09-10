@@ -80,9 +80,98 @@
     nino: 2
   };
 
+  const RECOMMENDED_ORDER = Object.freeze({
+    'media-estacion': Object.freeze(['calzas', 'pantalones', 'camperas']),
+    verano: Object.freeze(['capris', 'ciclistas', 'shorts', 'tops', 'pantalones'])
+  });
+  const RECOMMENDED_SEASON_ORDER = Object.freeze(['media-estacion', 'verano']);
+  const RECOMMENDED_CATEGORY_ALIASES = Object.freeze({
+    capris: Object.freeze(['capri', 'capris']),
+    ciclistas: Object.freeze(['ciclista', 'ciclistas', 'biker', 'bikers']),
+    shorts: Object.freeze(['short', 'shorts']),
+    tops: Object.freeze(['top', 'tops']),
+    pantalones: Object.freeze([
+      'pantalon', 'pantalones', 'jogger', 'joggers', 'babucha', 'babuchas',
+      'recto', 'rectos', 'palazo', 'palazos'
+    ]),
+    calzas: Object.freeze(['calza', 'calzas']),
+    camperas: Object.freeze(['campera', 'camperas'])
+  });
+
   function normalizeText(value){
     const raw = value === null || value === undefined ? '' : String(value);
-    return raw.normalize('NFD').replace(DIACRITICS_RE, '').toLowerCase();
+    return raw.normalize('NFD').replace(DIACRITICS_RE, '').toLowerCase().trim();
+  }
+
+  function normalizeRecommendedSeason(value){
+    const key = normalizeText(value).replace(/[\s_]+/g, '-');
+    if (key.indexOf('media-estacion') >= 0 || key === 'media') return 'media-estacion';
+    if (key.indexOf('verano') >= 0) return 'verano';
+    return key;
+  }
+
+  function containsAlias(text, alias){
+    const normalized = normalizeText(text).replace(/[^a-z0-9]+/g, ' ').trim();
+    const target = normalizeText(alias).replace(/[^a-z0-9]+/g, ' ').trim();
+    if (!normalized || !target) return false;
+    return (' ' + normalized + ' ').indexOf(' ' + target + ' ') >= 0;
+  }
+
+  function categoryFromValue(value){
+    const keys = Object.keys(RECOMMENDED_CATEGORY_ALIASES);
+    for (let i = 0; i < keys.length; i += 1){
+      const category = keys[i];
+      const aliases = RECOMMENDED_CATEGORY_ALIASES[category];
+      for (let j = 0; j < aliases.length; j += 1){
+        if (containsAlias(value, aliases[j])) return category;
+      }
+    }
+    return '';
+  }
+
+  function normalizeRecommendedCategory(product){
+    if (!product || typeof product !== 'object') return '';
+
+    const structuredValues = [
+      product.type,
+      product.category,
+      product.typeKey,
+      product.categoryKey
+    ];
+    for (let i = 0; i < structuredValues.length; i += 1){
+      const category = categoryFromValue(structuredValues[i]);
+      if (category) return category;
+    }
+
+    return categoryFromValue(product.name);
+  }
+
+  function recommendedSeasonForProduct(product){
+    return normalizeRecommendedSeason(product && (product.seasonKey || product.season));
+  }
+
+  function recommendedSort(list){
+    const source = Array.isArray(list) ? list : [];
+    return source
+      .map(function(item, index){
+        const season = recommendedSeasonForProduct(item);
+        const seasonRank = RECOMMENDED_SEASON_ORDER.indexOf(season);
+        const category = normalizeRecommendedCategory(item);
+        const categoryOrder = RECOMMENDED_ORDER[season] || [];
+        const categoryRank = categoryOrder.indexOf(category);
+        return {
+          item: item,
+          index: index,
+          seasonRank: seasonRank < 0 ? RECOMMENDED_SEASON_ORDER.length : seasonRank,
+          categoryRank: categoryRank < 0 ? categoryOrder.length : categoryRank
+        };
+      })
+      .sort(function(a, b){
+        if (a.seasonRank !== b.seasonRank) return a.seasonRank - b.seasonRank;
+        if (a.categoryRank !== b.categoryRank) return a.categoryRank - b.categoryRank;
+        return a.index - b.index;
+      })
+      .map(function(entry){ return entry.item; });
   }
 
   function ruleMatches(text, rule){
@@ -146,4 +235,7 @@
   }
 
   window.applyCatalogRelevanceOrder = applyCatalogRelevanceOrder;
+  window.RECOMMENDED_ORDER = RECOMMENDED_ORDER;
+  window.normalizeRecommendedCategory = normalizeRecommendedCategory;
+  window.recommendedSort = recommendedSort;
 })();

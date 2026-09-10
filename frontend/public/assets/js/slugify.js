@@ -42,40 +42,8 @@
     }
     return copy;
   }
-  function normalizeSeason(value){
-    const raw = fixUtf8(String(value || '')).trim().toLowerCase();
-    if (!raw) return '';
-    try {
-      const normalized = raw.normalize('NFD').replace(/\p{Diacritic}+/gu, '');
-      return normalized.replace(/[^a-z0-9]+/g, '');
-    } catch {
-      return raw.replace(/[^a-z0-9]+/g, '');
-    }
-  }
   function shouldHideProduct(p){
-    if (!p || typeof p !== 'object') return false;
-
-    if (p.hidden === true || p.hide === true || p.oculto === true) return true;
-
-    if (Object.prototype.hasOwnProperty.call(p, 'visible')) {
-      const visible = String(p.visible).toLowerCase().trim();
-      if (visible === 'false' || visible === '0' || visible === 'no') return true;
-    }
-
-    if (Object.prototype.hasOwnProperty.call(p, 'active')) {
-      const active = String(p.active).toLowerCase().trim();
-      if (active === 'false' || active === '0' || active === 'no') return true;
-    }
-
-    const state = String(p.visibility || p.state || p.publish || '').toLowerCase().trim();
-    if (['hidden', 'oculto', 'draft', 'archived', 'inactive', 'inactivo'].includes(state)) {
-      return true;
-    }
-
-    const season = normalizeSeason(p.season || p.seasonKey);
-    if (season.includes('verano')) return true;
-
-    return false;
+    return !p || typeof p !== 'object' || p.visible === false;
   }
 
   function sanitizeList(list){

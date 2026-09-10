@@ -22,9 +22,16 @@
     if (romixFn) return romixFn(fallback);
     return defaultSlugify(fallback);
   }
-  const hideProduct = typeof window.romixShouldHideProduct === 'function'
-    ? window.romixShouldHideProduct
-    : (p => false);
+  function hideProduct(product){
+    if (!product || typeof product !== 'object') return true;
+    if (window.romixProductsStore && typeof window.romixProductsStore.isVisible === 'function') {
+      return !window.romixProductsStore.isVisible(product);
+    }
+    if (typeof window.romixShouldHideProduct === 'function') {
+      return window.romixShouldHideProduct(product);
+    }
+    return product.visible === false;
+  }
   function filterVisibleProducts(list){
     return (Array.isArray(list) ? list : []).filter(p => !hideProduct(p));
   }

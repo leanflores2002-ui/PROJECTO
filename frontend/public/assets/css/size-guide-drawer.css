@@ -84,7 +84,7 @@ body.size-guide-drawer-open {
 .size-guide-drawer-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 4200;
+  z-index: var(--romix-z-overlay, 900);
   background: rgba(18, 13, 17, 0.38);
   backdrop-filter: blur(2px);
   opacity: 0;
@@ -95,7 +95,7 @@ body.size-guide-drawer-open {
 .size-guide-drawer {
   position: fixed;
   inset: 0 0 0 auto;
-  z-index: 4210;
+  z-index: var(--romix-z-modal, 2000);
   width: min(700px, calc(100vw - 28px));
   max-width: 100%;
   background: #ffffff;
