@@ -1,8 +1,32 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
       "source": "/api/:path*",
       "destination": "https://projecto-drth.onrender.com/api/:path*"
+    },
+    {
+      "source": "/images/products/:path*",
+      "destination": "https://projecto-drth.onrender.com/images/products/:path*"
+    },
+    {
+      "source": "/images/thumbs/:path*",
+      "destination": "https://projecto-drth.onrender.com/images/thumbs/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/:path*",
+      "headers": [
+        {
+          "key": "x-vercel-enable-rewrite-caching",
+          "value": "0"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
     }
   ]
 }

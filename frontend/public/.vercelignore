@@ -1,0 +1,9 @@
+# El catálogo histórico tiene cientos de imágenes pesadas.
+# No se suben a cada Deployment de Vercel: frontend/public/vercel.json
+# las resuelve desde el frontend estático servido por Render.
+images/products/**
+images/thumbs/**
+
+# Archivos locales que nunca deben formar parte del deployment.
+.DS_Store
+*.log
