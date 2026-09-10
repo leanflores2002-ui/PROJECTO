@@ -407,6 +407,8 @@ def list_products(
             f"""
             select p.id, p.name, p.slug, p.sku, p.audience, p.season_key, p.status,
                    p.base_price, p.updated_at, c.name as category_name,
+                   (select i.public_url from public.product_images i where i.product_id=p.id
+                    order by i.is_primary desc, i.position, i.created_at limit 1) as image_url,
                    coalesce(sum(v.stock) filter (where v.status = 'active'), 0) as stock
             from public.products p
             left join public.categories c on c.id = p.category_id

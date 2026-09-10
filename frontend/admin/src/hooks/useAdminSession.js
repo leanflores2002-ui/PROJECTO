@@ -11,8 +11,13 @@ export function useAdminSession() {
       return undefined;
     }
     let active = true;
+    let currentToken;
+    let revision = 0;
 
     async function validate(session) {
+      if (session?.access_token === currentToken && currentToken) return;
+      currentToken = session?.access_token;
+      const requestRevision = ++revision;
       if (!session) {
         if (active) setState({ status: 'signed-out', session: null, admin: null, error: null });
         return;
@@ -25,8 +30,9 @@ export function useAdminSession() {
 
       try {
         const admin = await apiRequest('/api/admin/session', { token: session.access_token });
-        if (active) setState({ status: 'authenticated', session, admin, error: null });
+        if (active && requestRevision === revision) setState({ status: 'authenticated', session, admin, error: null });
       } catch (error) {
+        if (!active || requestRevision !== revision) return;
         await supabase.auth.signOut();
         if (active) {
           setState({
@@ -39,9 +45,9 @@ export function useAdminSession() {
       }
     }
 
-    supabase.auth.getSession().then(({ data }) => validate(data.session));
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      validate(session);
+      // INITIAL_SESSION provides initial state; keep the auth callback synchronous.
+      queueMicrotask(() => { if (active) validate(session); });
     });
     return () => {
       active = false;

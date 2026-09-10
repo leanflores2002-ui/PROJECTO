@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { apiRequest } from './lib/api';
 
-export default function Statistics({ token }) {
+export default function Statistics({ token, title = 'Dashboard' }) {
   const [range, setRange] = useState({ days: '30', start: '', end: '' });
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
@@ -28,7 +28,7 @@ export default function Statistics({ token }) {
     low_stock_products: 'Productos con stock bajo', out_of_stock_products: 'Productos agotados', out_of_stock_variants: 'Variantes sin stock' };
   const movementLabels = { incoming: 'Entradas / stock inicial', outgoing: 'Salidas', adjustment: 'Ajustes', order: 'Pedidos reservados', cancellation: 'Cancelaciones / devoluciones' };
   return <div className="page page--statistics">
-    <div className="page-heading"><div><h1>Dashboard</h1><p>Inventario actual y actividad registrada en PostgreSQL.</p></div></div>
+    <div className="page-heading"><div><h1>{title}</h1><p>Inventario actual y actividad registrada.</p></div></div>
     <div className="filters"><label>Período<select value={range.days} onChange={(e) => setRange({ ...range, days: e.target.value })}>
       <option value="1">Hoy</option><option value="7">7 días</option><option value="30">30 días</option><option value="custom">Personalizado</option>
     </select></label>{range.days === 'custom' ? <><label>Desde<input type="date" value={range.start} onChange={(e) => setRange({ ...range, start: e.target.value })} /></label><label>Hasta<input type="date" value={range.end} onChange={(e) => setRange({ ...range, end: e.target.value })} /></label></> : null}</div>
