@@ -43,6 +43,19 @@ def adjustment(shop, **kwargs):
     return {'operation': 'add', 'quantity': 2, 'reason': 'Ingreso proveedor', 'expected_updated_at': version.isoformat(), **kwargs}
 
 
+def test_admin_read_surfaces_and_product_thumbnail(shop):
+    client, _, product_id, _, slug = shop
+    listing = client.get('/api/admin/products', params={'search': slug, 'page_size': 25})
+    assert listing.status_code == 200
+    assert 'image_url' in listing.json()['items'][0]
+    assert client.get('/api/admin/admins').status_code == 200
+    assert client.get('/api/admin/audit-logs').status_code == 200
+    assert client.get('/api/admin/audit-logs?page_size=1000').status_code == 422
+    main.app.dependency_overrides[require_admin] = lambda: AdminPrincipal(product_id, None, 'operator', 'QA')
+    assert client.get('/api/admin/admins').status_code == 403
+    assert client.get('/api/admin/audit-logs').status_code == 403
+
+
 def test_stock_adjustment_movement_and_conflict(shop):
     client, connection, _, variant_id, _ = shop
     payload = adjustment(shop)

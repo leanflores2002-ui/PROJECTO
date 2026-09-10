@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from psycopg.errors import UniqueViolation
 from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
@@ -16,6 +16,24 @@ from .security import AdminPrincipal, require_admin, require_roles
 # This router is mounted inside admin_api.router, which already owns /api/admin.
 # Keep this prefix empty to avoid /api/admin/api/admin/... routes.
 router = APIRouter(tags=["admin"])
+
+
+@router.get('/admins')
+def list_admins(page: int = Query(1, ge=1), page_size: int = Query(25, ge=1, le=100),
+                admin: AdminPrincipal = Depends(require_roles('superadmin', 'admin'))):
+    with database_connection() as connection:
+        return connection.execute('''select user_id, display_name, role, is_active
+            from public.admin_profiles order by user_id limit %s offset %s''',
+            (page_size, (page-1)*page_size)).fetchall()
+
+
+@router.get('/audit-logs')
+def list_audit_logs(page: int = Query(1, ge=1), page_size: int = Query(25, ge=1, le=100),
+                    admin: AdminPrincipal = Depends(require_roles('superadmin', 'admin'))):
+    with database_connection() as connection:
+        return connection.execute('''select id, admin_user_id, action, entity_type, created_at
+            from public.audit_logs order by created_at desc, id desc limit %s offset %s''',
+            (page_size, (page-1)*page_size)).fetchall()
 
 
 class CategoryWrite(BaseModel):
