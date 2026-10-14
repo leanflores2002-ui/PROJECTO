@@ -98,6 +98,17 @@ class ProductWrite(BaseModel):
     price_groups: dict[str, Decimal] = Field(default_factory=dict)
     variants: list[VariantInput] = Field(default_factory=list, max_length=500)
 
+    @field_validator('variants')
+    @classmethod
+    def unique_combinations(cls, variants):
+        seen = set()
+        for variant in variants:
+            key = (variant.color.strip().lower(), variant.size.strip().lower())
+            if key in seen:
+                raise ValueError('Cada color y talle debe aparecer una sola vez')
+            seen.add(key)
+        return variants
+
     @field_validator("price_groups")
     @classmethod
     def validate_price_groups(cls, value: dict[str, Decimal]) -> dict[str, Decimal]:
@@ -384,6 +395,7 @@ def list_products(
     category_id: UUID | None = Query(default=None),
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=25, ge=1, le=100),
+    sort: Literal['updated', 'name', 'price_asc', 'price_desc', 'stock_asc'] = 'updated',
     admin: AdminPrincipal = Depends(require_admin),
 ):
     del admin
@@ -404,6 +416,9 @@ def list_products(
         values.append(category_id)
     where = " and ".join(clauses)
     offset = (page - 1) * page_size
+    order = {'updated':'p.updated_at desc, p.id', 'name':'p.name asc, p.id',
+             'price_asc':'p.base_price asc, p.id', 'price_desc':'p.base_price desc, p.id',
+             'stock_asc':'stock asc, p.id'}[sort]
     with database_connection() as connection:
         total = connection.execute(f"select count(*) as count from public.products p where {where}", values).fetchone()["count"]
         rows = connection.execute(
@@ -418,7 +433,7 @@ def list_products(
             left join public.product_variants v on v.product_id = p.id
             where {where}
             group by p.id, c.name
-            order by p.updated_at desc
+            order by {order}
             limit %s offset %s
             """,
             [*values, page_size, offset],

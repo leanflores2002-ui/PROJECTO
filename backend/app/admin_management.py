@@ -42,19 +42,40 @@ def update_account(payload: AccountUpdate, admin: AdminPrincipal = Depends(requi
 
 
 @router.get('/notifications')
-def notifications(page: int = Query(1, ge=1), admin: AdminPrincipal = Depends(require_admin)):
+def notifications(page: int = Query(1, ge=1), search: str = Query('', max_length=120),
+                  category: Literal['all','products','users','catalog'] = 'all',
+                  unread: bool = False, since: datetime | None = None,
+                  admin: AdminPrincipal = Depends(require_admin)):
+    cutoff = since or datetime(1970,1,1,tzinfo=timezone.utc)
+    if cutoff.tzinfo is None:
+        raise HTTPException(422,'La fecha debe incluir zona horaria')
+    clauses=['(a.details::text ilike %s or coalesce(p.display_name,\'\') ilike %s or a.action ilike %s)']
+    params=[f'%{search.strip()}%']*3
+    if category!='all':
+        groups={'products':['product','variant','stock','product_image'], 'users':['admin'],
+                'catalog':['category','collection','catalog']}
+        clauses.append('a.entity_type = any(%s)');params.append(groups[category])
+    if unread:
+        clauses.append('a.created_at>%s');params.append(cutoff)
+    where=' and '.join(clauses)
     with database_connection() as connection:
-        rows = connection.execute('''select a.id, a.action, a.entity_type, a.entity_id,
+        summary = connection.execute('''select count(*) as total,
+            count(*) filter(where created_at>%s) as unread_count, max(created_at) as latest_at
+            from public.audit_logs''',(cutoff,)).fetchone()
+        rows = connection.execute(f'''select a.id, a.action, a.entity_type, a.entity_id,
             a.details, a.created_at, p.display_name as actor
             from public.audit_logs a left join public.admin_profiles p on p.user_id=a.admin_user_id
-            order by a.created_at desc, a.id desc limit 26 offset %s''', ((page-1)*25,)).fetchall()
-    return {'items': rows[:25], 'hasMore': len(rows)>25, 'page': page}
+            where {where} order by a.created_at desc, a.id desc limit 26 offset %s''',
+            (*params,(page-1)*25)).fetchall()
+    return {'items': rows[:25], 'hasMore': len(rows)>25, 'page': page,
+            'total':summary['total'], 'unreadCount':summary['unread_count'], 'latestAt':summary['latest_at']}
 
 
 class UserInvite(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra='forbid')
     email: str = Field(min_length=5, max_length=254)
     display_name: str = Field(min_length=2, max_length=100)
-    role: Literal['admin', 'operator', 'viewer'] = 'operator'
+    role: Literal['admin', 'operator'] = 'operator'
 
 
 @router.post('/users/invite', status_code=201)

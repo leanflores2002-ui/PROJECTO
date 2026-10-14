@@ -27,6 +27,20 @@ def test_account_cannot_change_role_or_another_user(admin_client):
     assert admin_client.patch('/api/admin/me',json={'display_name':'  '}).status_code == 422
 
 
+def test_admin_filters_reject_invalid_values_before_database_access(admin_client):
+    assert admin_client.get('/api/admin/products?sort=drop_table').status_code == 422
+    assert admin_client.get('/api/admin/notifications?category=unknown').status_code == 422
+    assert admin_client.get('/api/admin/notifications?since=2026-10-01T12:00:00').status_code == 422
+    assert admin_client.post('/api/admin/users/invite',json={'email':'test@example.test','display_name':'  ','role':'operator'}).status_code == 422
+    assert admin_client.post('/api/admin/users/invite',json={'email':'test@example.test','display_name':'Test','role':'viewer'}).status_code == 422
+
+
+def test_duplicate_color_size_is_rejected_before_saving(admin_client):
+    payload={'name':'Prenda','sku':'QA','audience':'mujer','base_price':100,
+             'variants':[{'color':'Negro','size':'M'},{'color':' negro ','size':'m'}]}
+    assert admin_client.post('/api/admin/products',json=payload).status_code == 422
+
+
 def test_account_update_targets_authenticated_user(admin_client,monkeypatch):
     from contextlib import contextmanager, nullcontext
     principal = AdminPrincipal(uuid4(),'owner@example.test','superadmin','Anterior')
