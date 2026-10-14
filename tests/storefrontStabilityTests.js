@@ -143,7 +143,7 @@ async function checkProductsStore() {
     }
   });
   const list = await context.window.romixProductsStore.load({ force: true });
-  assert(calls.length === 1 && calls[0].includes('assets/data/products.json'), 'Static storefront must load JSON without probing an absent API');
+  assert(calls.length === 2 && calls[0] === '/api/products' && calls[1].includes('assets/data/products.json'), 'Admin-managed storefront must prioritize API and recover with JSON when unavailable');
 
   assert(list[0].sizes[0].status === 'unknown', 'Primitive sizes must not invent availability');
   assert(context.window.romixProductsStore.getStatus().source === 'json', 'Fallback source must be observable');
@@ -156,13 +156,13 @@ async function checkProductsStore() {
   assert(emptyContext.window.romixProductsStore.getStatus().source === 'api', 'Empty API response must remain authoritative');
 
   const cachedPayload = JSON.stringify({
-    version: 7,
+    version: 8,
     timestamp: Date.now(),
     source: 'json',
     list: [{ id: 'cached', name: 'Producto cacheado', sizes: ['M'] }]
   });
   const offlineContext = loadScript('frontend/public/assets/js/products-store.js', {
-    sessionStorage: storage({ romixProductsCacheV7: cachedPayload }),
+    sessionStorage: storage({ romixProductsCacheV8: cachedPayload }),
     fetch: async () => { throw new Error('offline'); }
   });
   const cached = await offlineContext.window.romixProductsStore.load({ force: true });

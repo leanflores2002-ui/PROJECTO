@@ -23,6 +23,15 @@ function renderPage(page, sourceDir = templateDir) {
 }
 
 function main() {
+  const configured = String(process.env.ROMIX_API_ORIGIN || '').trim();
+  if (configured) {
+    const url = new URL(configured);
+    if (url.protocol !== 'https:' && !['localhost','127.0.0.1'].includes(url.hostname)) throw new Error('ROMIX_API_ORIGIN must use HTTPS');
+    if (url.pathname !== '/' || url.search || url.hash || url.username || url.password) throw new Error('ROMIX_API_ORIGIN must be an origin without credentials or paths');
+  }
+  fs.writeFileSync(path.join(publicDir,'assets/js/romix-api-config.js'),
+    'window.ROMIX_API_ORIGIN = '+JSON.stringify(configured.replace(/\/$/,''))+';\n'+
+    'window.romixApiUrl = path => (window.ROMIX_API_ORIGIN || "") + path;\n');
   const cssDir = path.join(publicDir, "assets", "css");
   const homeStyles = ["romix-design-system.css", "romix-home-pro.css", "romix-minimal-theme.css", "romix-pricing.css", "romix-header.css"];
   fs.writeFileSync(path.join(cssDir, "romix-home-bundle.css"), homeStyles.map(file => fs.readFileSync(path.join(cssDir, file), "utf8")).join("\n"));
