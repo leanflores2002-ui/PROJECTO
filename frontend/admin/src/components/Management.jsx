@@ -1,8 +1,9 @@
+import { PasswordForm } from './Account';
 import { useEffect, useState } from 'react';
 import { apiRequest } from '../lib/api';
 import { Button } from './ui/button';
 import { Alert, FormField, Loading } from './Feedback';
-import { supabase } from '../lib/supabase';
+
 
 const number = value => Number(value || 0).toLocaleString('es-AR');
 export function TrafficChart({ daily }) {
@@ -46,8 +47,4 @@ export function Users({ token, admin }) {
   return <div className="page"><h1>Usuarios</h1><p>Administradores con acceso al catálogo. La autorización se valida en el servidor.</p><Alert>{error}</Alert>{success?<p role="status">{success}</p>:null}{admin?.role==='superadmin'?<form onSubmit={invite} className="panel editor-card"><h2>Invitar administrador</h2><div className="editor-fields"><FormField label="Nombre"><input required minLength={2} maxLength={100} value={form.display_name} onChange={e=>setForm({...form,display_name:e.target.value})}/></FormField><FormField label="Correo"><input type="email" required value={form.email} onChange={e=>setForm({...form,email:e.target.value})}/></FormField><FormField label="Permisos"><select value={form.role} onChange={e=>setForm({...form,role:e.target.value})}><option value="admin">Administrador</option><option value="operator">Editor de productos</option><option value="viewer">Sólo lectura</option></select></FormField></div><Button disabled={busy} type="submit">{busy?'Enviando…':'Enviar invitación'}</Button></form>:<p>La creación de cuentas está reservada al administrador propietario.</p>}{rows?<section className="panel"><ul className="inventory-products">{rows.map(row=><li key={row.user_id}><strong>{row.display_name||row.user_id}</strong><span>{row.role} · {row.is_active?'Activo':'Inactivo'}</span></li>)}</ul><div className="pagination"><Button variant="outline" disabled={page===1} onClick={()=>setPage(p=>p-1)}>Anterior</Button><span>Página {page}</span><Button variant="outline" disabled={rows.length<25} onClick={()=>setPage(p=>p+1)}>Siguiente</Button></div></section>:!error?<Loading/>:null}</div>;
 }
 
-export function SetPassword() {
-  const [password,setPassword]=useState(''),[error,setError]=useState(''),[done,setDone]=useState(false);
-  async function save(e){e.preventDefault();const {error}=await supabase.auth.updateUser({password});if(error)setError('No se pudo guardar la contraseña.');else setDone(true);}
-  return <main className="page"><h1>Activar mi acceso</h1>{done?<p>Contraseña guardada. <a href="/admin/">Entrar al admin</a></p>:<form className="panel editor-card" onSubmit={save}><Alert>{error}</Alert><FormField label="Nueva contraseña"><input required type="password" minLength={12} autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)}/></FormField><Button type="submit">Guardar contraseña</Button></form>}</main>;
-}
+export function SetPassword() { return <main className="page"><h1>Activar mi acceso</h1><PasswordForm/><a href="/admin/">Entrar al admin</a></main>; }

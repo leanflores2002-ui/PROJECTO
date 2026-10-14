@@ -4,3 +4,4 @@
 @media(max-width:760px){.analytics-metrics{grid-template-columns:repeat(2,1fr);gap:20px}.page-heading{align-items:stretch;flex-direction:column}.analytics-panel{padding:18px}.topbar__tools{gap:4px}.analytics-metrics strong{font-size:25px}}
 
 .editor-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.85fr);gap:24px;align-items:start}.editor-media{position:sticky;top:90px}.image-manager{padding:24px}@media(max-width:1050px){.editor-layout{grid-template-columns:1fr}.editor-media{position:static}}
+@media(max-width:1024px){.sidebar.desktop-sidebar{display:none}}

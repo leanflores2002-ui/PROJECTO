@@ -9,7 +9,7 @@ from zoneinfo import ZoneInfo
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Literal
 from psycopg.types.json import Jsonb
 
@@ -20,6 +20,25 @@ from .security import AdminPrincipal, require_admin, require_roles
 router = APIRouter(prefix='/api/admin', tags=['admin'])
 _cache = {}
 _lock = RLock()
+
+
+class AccountUpdate(BaseModel):
+    model_config = ConfigDict(extra='forbid', str_strip_whitespace=True)
+    display_name: str = Field(min_length=2, max_length=100)
+
+
+@router.patch('/me')
+def update_account(payload: AccountUpdate, admin: AdminPrincipal = Depends(require_admin)):
+    with database_connection() as connection, connection.transaction():
+        row = connection.execute('''update public.admin_profiles set display_name=%s
+            where user_id=%s and is_active=true returning display_name''',
+            (payload.display_name, admin.user_id)).fetchone()
+        if not row:
+            raise HTTPException(403, 'La cuenta no está activa')
+        connection.execute('''insert into public.audit_logs(admin_user_id,action,entity_type,entity_id,details)
+            values(%s,'profile_updated','admin',%s,%s)''',
+            (admin.user_id, admin.user_id, Jsonb({'display_name': row['display_name']})))
+    return {'displayName': row['display_name']}
 
 
 @router.get('/notifications')
