@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <script src="/assets/js/romix-api-config.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- ROMIX:SHELL:CRITICAL:START -->
@@ -742,6 +743,9 @@
       }
 
       function getPriceForSize(product, sizeValue) {
+        const variant = (product.variants || []).find(v => String(v.color).toLowerCase() === String(currentSelectedColor).toLowerCase() && String(v.size) === String(sizeValue));
+        if (variant?.unitPrice != null) return Number(variant.unitPrice);
+        if (variant?.priceOverride != null) return Number(variant.priceOverride);
         const group = getPriceGroupForProductSize(product, sizeValue);
         const base = Number(product.price || 0);
         if (!group || !product.priceByGroup || typeof product.priceByGroup !== 'object') {
@@ -942,6 +946,7 @@
       }
 
       function addCurrentProductToCart() {
+        if (window.ROMIX_PRODUCT_PREVIEW) return null;
         let colorKey = currentSelectedColor || 'Unico';
         let colorId = null;
         const colorActive = document.querySelector('[data-color-option].is-active, [data-color-option].active, [data-color-option].selected');
@@ -1036,7 +1041,7 @@
           return window.romixProductsStore.load({
             preloadedScriptId: 'preloaded-products',
             dataUrl: DATA_URL,
-            useApi: !localStaticPreview
+            useApi: true
           });
         }
         const response = await fetch(new URL(DATA_URL, location.href));
@@ -1734,65 +1739,16 @@
         }
       }
 
-      function buildProductDescription(product){
-        if (hasProductValue(product?.description)) return String(product.description).trim();
-
-        const name = String(product?.name || 'Prenda ROMIX').trim();
-        const haystack = normalizeProductCopy([
-          name,
-          product?.type,
-          product?.section,
-          product?.season,
-          ...(Array.isArray(product?.features) ? product.features : []),
-          ...(product?.specs && typeof product.specs === 'object' ? Object.values(product.specs) : [])
-        ].join(' '));
-        const isKids = /nino|nina|kids|infantil/.test(haystack);
-
-        if (isKids) {
-          return `${name} es una prenda cómoda y práctica para acompañar el movimiento y las actividades de todos los días. Su diseño se integra fácilmente a los conjuntos de la línea ROMIX.`;
-        }
-        if (/calza/.test(haystack)) {
-          const base = `${name} es una opción cómoda y versátil para acompañarte en el día a día. Su diseño se adapta fácilmente a looks deportivos y urbanos y combina con distintas prendas ROMIX.`;
-          return /lycra/.test(haystack)
-            ? `${base} La presencia de lycra aporta elasticidad y libertad de movimiento.`
-            : base;
-        }
-        if (/algodon/.test(haystack)) {
-          return `${name} es una prenda de algodón pensada para el uso cotidiano, con una sensación suave y un diseño fácil de combinar. Una propuesta versátil para acompañarte en distintos momentos del día.`;
-        }
-        if (/buzo/.test(haystack)) {
-          return `${name} es un buzo versátil para sumar una capa cómoda a tus conjuntos diarios. Ideal para combinar con pantalones, calzas o prendas deportivas ROMIX.`;
-        }
-        if (/campera/.test(haystack)) {
-          return `${name} es una campera pensada para completar looks deportivos y urbanos, con un diseño práctico y fácil de combinar. Una capa versátil para acompañarte durante el día.`;
-        }
-        if (/remera|camiseta|top|musculosa/.test(haystack)) {
-          return `${name} es una prenda versátil para acompañar tus actividades y el uso cotidiano, con un diseño simple que permite combinarla fácilmente. Una base cómoda para distintos looks ROMIX.`;
-        }
-        if (/pantalon|jogger|babucha|short|bermuda/.test(haystack)) {
-          return `${name} está pensado para acompañarte con comodidad en tus actividades y en el uso cotidiano. Su diseño versátil se integra fácilmente a conjuntos deportivos y urbanos.`;
-        }
-        return `${name} es una prenda versátil pensada para acompañarte en tus actividades y el uso cotidiano. Su diseño se integra fácilmente a distintas combinaciones deportivas o urbanas.`;
+      function buildProductDescription(product) {
+        const span = document.createElement('span');
+        span.textContent = String(product.description || product.specs?.short_description || '');
+        return span.innerHTML;
       }
 
-      function buildProductFeatureFallbacks(product){
-        if (Array.isArray(product?.features)) {
-          const realFeatures = product.features.filter(hasProductValue).map(value => String(value).trim());
-          if (realFeatures.length) return realFeatures.slice(0, 4);
-        }
-
-        const haystack = normalizeProductCopy([
-          product?.name,
-          product?.type,
-          product?.section,
-          ...(product?.specs && typeof product.specs === 'object' ? Object.values(product.specs) : [])
-        ].join(' '));
-        const fallbacks = [];
-        if (/lycra/.test(haystack)) fallbacks.push('Elasticidad y libertad de movimiento');
-        if (/algodon/.test(haystack)) fallbacks.push('Sensación suave');
-        if (/jogger|rustico|pantalon|babucha/.test(haystack)) fallbacks.push('Pensado para uso diario');
-        if (/calza/.test(haystack)) fallbacks.push('Diseño versátil');
-        return fallbacks.slice(0, 4);
+      function buildProductFeatureFallbacks(product) {
+        return (Array.isArray(product.features) ? product.features : []).filter(Boolean).map(value => {
+          const span = document.createElement('span'); span.textContent = String(value); return span.innerHTML;
+        });
       }
 
       function buildProductAccordionItems(product){
@@ -2916,8 +2872,8 @@
         });
       }
 
-      const productsRequest = loadProducts();
-      const inventoryRequest = !localStaticPreview && window.romixInventory && typeof window.romixInventory.syncFromApi === 'function'
+      const productsRequest = window.ROMIX_PRODUCT_PREVIEW ? Promise.resolve([window.ROMIX_PRODUCT_PREVIEW]) : loadProducts();
+      const inventoryRequest = !window.ROMIX_PRODUCT_PREVIEW && window.romixInventory && typeof window.romixInventory.syncFromApi === 'function'
         ? window.romixInventory.syncFromApi()
         : Promise.resolve({ ok: false });
 
@@ -2928,14 +2884,13 @@
         try {
           const [list] = await Promise.all([productsRequest, inventoryRequest]);
           const safeList = Array.isArray(list) ? list.filter(item => !isHiddenProduct(item)) : [];
-          const product = (serverProduct && !isHiddenProduct(serverProduct))
-            ? serverProduct
-            : findProduct(safeList);
+          const product = window.ROMIX_PRODUCT_PREVIEW || findProduct(safeList) || (serverProduct && !isHiddenProduct(serverProduct) ? serverProduct : null);
           if (!product) {
             showNotFound();
             return;
           }
           renderProduct(product);
+          if (window.ROMIX_PRODUCT_PREVIEW) document.querySelectorAll('#btn-add, #btn-buy').forEach(button => { button.disabled = true; });
           renderFeatures(product);
           scheduleRelatedProducts(safeList, product);
           if (buyParam === '1') {

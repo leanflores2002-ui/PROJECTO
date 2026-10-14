@@ -14,10 +14,18 @@ from urllib.parse import quote, urljoin
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from markupsafe import Markup
+from .admin_api import router as admin_router
+from .public_api import router as public_router, create_public_order, PublicOrder
+from .admin_management import router as management_router
+from .database import database_connection, open_database_pool, close_database_pool
+from .catalog_sync import _build_catalog
+from .inventory_service import InventoryService
+from .product_schemas import ProductDetail
+from .config import get_settings
 
 
 def repo_root() -> Path:
@@ -64,6 +72,9 @@ def slugify(text: str) -> str:
 
 def load_products() -> list[dict]:
     """Carga el listado de productos, reutilizando cache si el archivo no cambia."""
+    if os.getenv("DATABASE_URL"):
+        with database_connection() as connection:
+            return _build_catalog(connection)
     global _products_cache, _products_mtime, _products_json_cache
 
     with _products_lock:
@@ -93,6 +104,11 @@ def load_products() -> list[dict]:
 def products_json() -> str:
     """Devuelve la version en JSON pre-renderizada para inyectar en templates."""
     global _products_json_cache
+    if os.getenv('DATABASE_URL'):
+        try:
+            return script_json(load_products())
+        except HTTPException:
+            return script_json([])
     load_products()
     with _products_lock:
         if _products_json_cache is None:
@@ -350,6 +366,8 @@ async def security_headers(request: Request, call_next):
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "SAMEORIGIN"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    if request.url.path.startswith('/api/'):
+        response.headers['Cache-Control'] = 'no-store'
     preview = any(os.environ.get(key) and os.environ[key] != "production"
                   for key in ("VERCEL_ENV", "CONTEXT"))
     if preview or response.status_code >= 400 or request.url.path.startswith(("/api/", "/docs", "/redoc", "/openapi.json")):
@@ -359,12 +377,12 @@ async def security_headers(request: Request, call_next):
 # Permitir consumir desde el mismo host y uso local
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origin.strip() for origin in os.environ.get(
+    allow_origins=list(dict.fromkeys(get_settings().cors_origins + [origin.strip() for origin in os.environ.get(
         "ROMIX_CORS_ORIGINS", SITE_URL or json.loads((ROOT / "config" / "site.json").read_text())["origin"]
-    ).split(",") if origin.strip()],
+    ).split(",") if origin.strip()])),
     allow_credentials=False,
-    allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 
@@ -376,8 +394,11 @@ def health():
 @app.on_event("startup")
 def warm_products_cache():
     # Precalentamos cache para evitar latencia en las primeras peticiones
-    load_products()
-    load_variants(force=True)
+    if os.getenv("DATABASE_URL"):
+        open_database_pool()
+    else:
+        load_products()
+        load_variants(force=True)
 
 
 @app.get("/api/products")
@@ -553,6 +574,9 @@ def validate_and_reserve(items: List[dict]) -> Tuple[List[dict], List[dict]]:
 
 @app.get("/api/variants")
 def list_variants():
+    if os.getenv("DATABASE_URL"):
+        with database_connection() as connection:
+            return InventoryService.list_stock(connection)
     public_ids = {
         str(product.get("id") or slugify(product.get("name", "")))
         for product in load_products()
@@ -566,6 +590,12 @@ def list_variants():
 
 @app.post("/api/orders")
 def create_order(body: dict):
+    if os.getenv("DATABASE_URL"):
+        try:
+            payload = PublicOrder.model_validate(body)
+        except Exception:
+            raise HTTPException(422, "Pedido inválido: falta request_key o variantes válidas")
+        return create_public_order(payload)
     items = body.get("items") if isinstance(body, dict) else None
     if not items or not isinstance(items, list):
         raise HTTPException(status_code=400, detail="items es requerido")
@@ -573,6 +603,21 @@ def create_order(body: dict):
     order_id = os.urandom(8).hex()
     return {"orderId": order_id, "updatedVariants": updates, "items": order_items}
 
+
+app.include_router(admin_router)
+app.include_router(public_router)
+app.include_router(management_router)
+
+@app.on_event("shutdown")
+def stop_pool():
+    close_database_pool()
+
+ADMIN_DIR = ROOT / "frontend" / "admin" / "dist"
+if ADMIN_DIR.exists():
+    @app.get('/admin/activate', include_in_schema=False)
+    def activate_admin():
+        return FileResponse(ADMIN_DIR / 'index.html')
+    app.mount("/admin", StaticFiles(directory=str(ADMIN_DIR), html=True), name="admin")
 
 # Servir estaticos desde el frontend publico
 app.mount("/", StaticFiles(directory=str(PUBLIC_DIR), html=True), name="static")
