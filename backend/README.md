@@ -9,4 +9,3 @@ Ejemplos de lo que podría incluir:
 
 Hoy la app funciona estáticamente (sin backend). Cuando se decida agregarlo, este directorio separará claramente esa lógica.
 
--
