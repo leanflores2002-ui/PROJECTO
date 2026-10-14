@@ -18,6 +18,34 @@ def test_private_endpoints_require_login():
     client = TestClient(main.app)
     for path in ['/api/admin/notifications', '/api/admin/analytics', '/api/admin/products']:
         assert client.get(path).status_code == 401
+    assert client.patch('/api/admin/me',json={'display_name':'Nombre'}).status_code == 401
+
+
+def test_account_cannot_change_role_or_another_user(admin_client):
+    assert admin_client.patch('/api/admin/me',json={'display_name':'Nombre','role':'superadmin'}).status_code == 422
+    assert admin_client.patch('/api/admin/me',json={'display_name':'Nombre','user_id':str(uuid4())}).status_code == 422
+    assert admin_client.patch('/api/admin/me',json={'display_name':'  '}).status_code == 422
+
+
+def test_account_update_targets_authenticated_user(admin_client,monkeypatch):
+    from contextlib import contextmanager, nullcontext
+    principal = AdminPrincipal(uuid4(),'owner@example.test','superadmin','Anterior')
+    main.app.dependency_overrides[require_admin] = lambda: principal
+    calls=[]
+    class Connection:
+        def transaction(self): return nullcontext()
+        def execute(self,sql,params):
+            calls.append((sql,params))
+            return self
+        def fetchone(self): return {'display_name':'Leandro'}
+    @contextmanager
+    def connection(): yield Connection()
+    monkeypatch.setattr(admin_management,'database_connection',connection)
+    result=admin_client.patch('/api/admin/me',json={'display_name':'  Leandro  '})
+    assert result.status_code == 200
+    assert result.json() == {'displayName':'Leandro'}
+    assert calls[0][1] == ('Leandro',principal.user_id)
+    assert calls[1][1][0:2] == (principal.user_id,principal.user_id)
 
 
 def test_unconfigured_analytics_never_fabricates_metrics(admin_client):
