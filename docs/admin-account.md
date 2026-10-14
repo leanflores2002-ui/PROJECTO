@@ -30,3 +30,13 @@ Validación: 27 pruebas backend, 21 pruebas frontend, lint y build. Navegación 
 - Contraste reforzado, foco visible, controles de 44 px y títulos jerárquicos. El frontend público y las reglas de autorización se mantienen.
 
 Validación del rediseño: 21 pruebas frontend, lint y build. Browser plugin no disponible: se usó Playwright local con API simulada para verificar accesos del panel, ayuda con Escape y retorno de foco, guardado del editor, menú y fichas móviles y Mi cuenta. Se comparó la pantalla con el concepto visual generado; se conservaron textos precisos sobre la conexión pendiente de GA4 en lugar de insinuar que ya hay datos. Los gráficos usan únicamente respuestas del backend en la aplicación real.
+
+## Corrección de imágenes y vista previa
+
+Se encontró en Supabase que las imágenes importadas apuntaban a `.png`, mientras los archivos correspondientes del repositorio estaban en `.webp`. El backend resuelve ese reemplazo solamente cuando el original falta y el archivo WEBP existe. Se conservan las URL externas de Storage y los originales que sí existen. La resolución se aplica a listado, detalle administrativo y catálogo público sin reescribir los registros almacenados.
+
+Sin `VITE_PUBLIC_SITE_URL`, el admin desplegado utiliza el origen actual del frontend para las fotos. En desarrollo local usa la URL del backend. Una URL explícita sigue teniendo prioridad.
+
+La vista previa fallaba porque `about:srcdoc` tiene origen opaco: `location.origin` no proporciona una base HTTP válida. Ahora usa `document.baseURI` en ese modo y conserva las referencias habituales en la página pública. El cliente adapta la base del documento al origen de la tienda; el servidor elimina el módulo opcional que no puede importar desde un marco opaco. El marco continúa aislado, con compras deshabilitadas y almacenamiento temporal sin acceso a la sesión del admin. Se limita también el ancho del modal al viewport móvil.
+
+Validación: 29 pruebas backend, 23 pruebas frontend, lint/build y suites de galería, resolución de imágenes y plantillas públicas. Reproducción antes/después y navegador con el HTML real generado por FastAPI, fotos locales y datos de producto simulados: galería del editor carga, vista previa renderiza título y foto real, botones de compra deshabilitados, sin errores de ejecución. Inspección del modal en escritorio y 390 px. Pendiente desplegar backend y frontend para comprobar el resultado en producción.

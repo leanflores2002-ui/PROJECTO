@@ -32,4 +32,14 @@ assert(productCss.includes('max-width: calc(100vw - 140px)'), 'La imagen desktop
 assert(productCss.includes('max-height: calc(100dvh - 96px)'), 'La imagen mobile debe respetar el viewport');
 assert(productHtml.includes('Math.min(2, value)'), 'El zoom máximo debe ser 2x');
 
+const vm = require('node:vm');
+const absoluteStart = productHtml.indexOf('function toAbsoluteUrl(');
+const absoluteEnd = productHtml.indexOf('function ensureProductImagePreload(', absoluteStart);
+const isolated = { URL, window: { ROMIX_PRODUCT_PREVIEW: {} }, document: { baseURI: 'https://store.example.test/' }, location: { origin: 'null' } };
+vm.createContext(isolated);
+vm.runInContext(productHtml.slice(absoluteStart, absoluteEnd), isolated);
+assert(isolated.toAbsoluteUrl('images/products/calza.webp') === 'https://store.example.test/images/products/calza.webp', 'La vista previa opaca debe resolver fotos sin usar el origen null');
+isolated.window.ROMIX_PRODUCT_PREVIEW = null;
+isolated.location.origin = 'https://public.example.test';
+assert(isolated.toAbsoluteUrl('images/products/calza.webp') === 'https://public.example.test/images/products/calza.webp', 'La página pública debe conservar su origen');
 console.log('productGalleryTests: passed');

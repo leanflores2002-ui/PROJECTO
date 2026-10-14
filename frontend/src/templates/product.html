@@ -491,7 +491,7 @@
         const raw = String(value || '').trim();
         if (!raw) return '';
         if (/^https?:\/\//i.test(raw)) return raw;
-        return new URL(raw.replace(/^\/+/, ''), location.origin + '/').href;
+        return new URL(raw.replace(/^\/+/, ''), (window.ROMIX_PRODUCT_PREVIEW ? new URL(document.baseURI).origin : location.origin) + '/').href;
       }
 
       function ensureProductImagePreload(value) {
@@ -515,12 +515,12 @@
       function buildShareUrl(product) {
         const slug = buildShareSlug(product);
         if (slug) {
-          const url = new URL(`share/${encodeURIComponent(slug)}/`, location.origin + '/');
+          const url = new URL(`share/${encodeURIComponent(slug)}/`, (window.ROMIX_PRODUCT_PREVIEW ? new URL(document.baseURI).origin : location.origin) + '/');
           const version = window.ROMIX_SHARE_VERSIONS && window.ROMIX_SHARE_VERSIONS[slug];
           if (version) url.searchParams.set('v', version);
           return url.href;
         }
-        return new URL(buildHref(product, false), location.origin + '/').href;
+        return new URL(buildHref(product, false), (window.ROMIX_PRODUCT_PREVIEW ? new URL(document.baseURI).origin : location.origin) + '/').href;
       }
 
       function buildShareMessageBody(product) {
@@ -1337,7 +1337,7 @@
         let items = Array.isArray(gallery)
           ? gallery.map(item => item && item.src).filter(Boolean).map(src => {
             try {
-              return new URL(src, window.location.href).href;
+              return new URL(src, window.ROMIX_PRODUCT_PREVIEW ? document.baseURI : window.location.href).href;
             } catch {
               return src;
             }
@@ -1514,7 +1514,7 @@
           items = Array.isArray(nextGallery)
             ? nextGallery.map(item => item && item.src).filter(Boolean).map(src => {
               try {
-                return new URL(src, window.location.href).href;
+                return new URL(src, window.ROMIX_PRODUCT_PREVIEW ? document.baseURI : window.location.href).href;
               } catch {
                 return src;
               }
