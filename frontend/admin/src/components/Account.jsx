@@ -1,3 +1,4 @@
+import { LockKeyhole, UserRound, Save } from 'lucide-react';
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { apiRequest } from '../lib/api';
@@ -26,7 +27,7 @@ export function PasswordForm() {
     } catch {setError('No se pudo cambiar la contraseña. Revisá el código o volvé a iniciar sesión e intentá nuevamente.');}
     finally {setBusy(false);}
   }
-  return <form className="panel editor-card" onSubmit={save}><h2>Cambiar contraseña</h2><Alert>{error}</Alert><p role="status">{message}</p><FormField label="Nueva contraseña"><input required minLength={12} type="password" autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)} disabled={busy}/></FormField><FormField label="Repetir contraseña"><input required minLength={12} type="password" autoComplete="new-password" value={confirmation} onChange={e=>setConfirmation(e.target.value)} disabled={busy}/></FormField><p>Usá al menos 12 caracteres.</p>{needsCode?<FormField label="Código recibido por correo"><input required autoComplete="one-time-code" value={nonce} onChange={e=>setNonce(e.target.value)} disabled={busy}/></FormField>:null}<Button disabled={busy} type="submit">{busy?'Guardando…':'Guardar contraseña'}</Button></form>;
+  return <form className="panel editor-card" onSubmit={save}><h2><LockKeyhole aria-hidden="true"/>Cambiar contraseña</h2><Alert>{error}</Alert><p role="status">{message}</p><FormField label="Nueva contraseña"><input required minLength={12} type="password" autoComplete="new-password" value={password} onChange={e=>setPassword(e.target.value)} disabled={busy}/></FormField><FormField label="Repetir contraseña"><input required minLength={12} type="password" autoComplete="new-password" value={confirmation} onChange={e=>setConfirmation(e.target.value)} disabled={busy}/></FormField><p>Usá al menos 12 caracteres.</p>{needsCode?<FormField label="Código recibido por correo"><input required autoComplete="one-time-code" value={nonce} onChange={e=>setNonce(e.target.value)} disabled={busy}/></FormField>:null}<Button disabled={busy} type="submit">{busy?'Guardando…':'Guardar contraseña'}</Button></form>;
 }
 
 export default function Account({token,admin,onUpdate}) {
@@ -36,5 +37,5 @@ export default function Account({token,admin,onUpdate}) {
     try {const result=await apiRequest('/api/admin/me',{token,method:'PATCH',body:{display_name:name.trim()}});onUpdate(result.displayName);setMessage('Nombre actualizado.');}
     catch(e){setError(e.message||'No se pudo guardar el nombre.');}finally{setBusy(false);}
   }
-  return <div className="page"><h1>Mi cuenta</h1><form className="panel editor-card" onSubmit={save}><h2>Datos de tu cuenta</h2><p>Correo: {admin.email}</p><p>Rol: {admin.role}</p><Alert>{error}</Alert><p role="status">{message}</p><FormField label="Nombre visible"><input required minLength={2} maxLength={100} value={name} onChange={e=>setName(e.target.value)} disabled={busy}/></FormField><Button disabled={busy} type="submit">Guardar nombre</Button></form><PasswordForm/></div>;
+  return <div className="page"><div className="page-heading"><div><h1>Mi cuenta</h1><p>Actualizá tu nombre y cuidá el acceso a tu tienda.</p></div></div><div className="account-columns"><form className="panel editor-card" onSubmit={save}><h2><UserRound aria-hidden="true"/>Datos de tu cuenta</h2><p>Correo: {admin.email}</p><p>Rol: {({superadmin:'Propietario',admin:'Administrador',operator:'Editor de productos',viewer:'Sólo lectura'})[admin.role]||admin.role}</p><Alert>{error}</Alert><p role="status">{message}</p><FormField label="Nombre visible"><input required minLength={2} maxLength={100} value={name} onChange={e=>setName(e.target.value)} disabled={busy}/></FormField><Button disabled={busy} type="submit"><Save aria-hidden="true"/>Guardar nombre</Button></form><PasswordForm/></div></div>;
 }
