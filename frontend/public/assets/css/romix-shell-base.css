@@ -1,0 +1,42 @@
+  *,*::before,*::after{box-sizing:border-box}
+  .romix-announcement{display:flex;align-items:center;justify-content:center;min-height:29px;padding:4px 12px;background:#fff0f6;color:#242426;font:700 10px/1.2 Arial,sans-serif;text-align:center}
+  .romix-announcement strong{color:#f22797;font-weight:800}
+  header[data-romix-shell="header-v1"]{position:relative;z-index:500;background:#fff;border-bottom:1px solid #ece8eb;color:#171317}
+  header[data-romix-shell="header-v1"] .header-row{width:min(1400px,calc(100% - 40px));min-height:72px;margin:0 auto;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:28px}
+  header[data-romix-shell="header-v1"] .brand{display:inline-flex;align-items:center;min-width:0;color:#242326;text-decoration:none;white-space:nowrap}
+  header[data-romix-shell="header-v1"] .site-logo--header{display:block;width:clamp(132px,12vw,184px);height:auto;max-height:52px;object-fit:contain}
+  header[data-romix-shell="header-v1"] .header-actions-left,header[data-romix-shell="header-v1"] .mobile-drawer-header{display:none}
+  header[data-romix-shell="header-v1"] .mega-nav,header[data-romix-shell="header-v1"] .main-nav-wrap{min-width:0}
+  header[data-romix-shell="header-v1"] .main-nav{display:flex;align-items:center;justify-content:center;gap:34px;margin:0;padding:0;list-style:none}
+  header[data-romix-shell="header-v1"] .main-nav a{display:flex;align-items:center;min-height:44px;color:#171317;text-decoration:none;font:700 14px/1 Arial,sans-serif}
+  header[data-romix-shell="header-v1"] .header-icons{display:flex;align-items:center;justify-content:flex-end;gap:4px}
+  header[data-romix-shell="header-v1"] .icon-btn,header[data-romix-shell="header-v1"] .cart-pill{min-width:44px;min-height:44px;border:1px solid transparent;border-radius:8px;background:transparent;color:#171317;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;position:relative}
+  header[data-romix-shell="header-v1"] .icon-btn:hover,header[data-romix-shell="header-v1"] .cart-pill:hover{background:#fff0f6;color:#f72585}
+  header[data-romix-shell="header-v1"] .cart-pill__text{display:none}
+  header[data-romix-shell="header-v1"] .cart-pill__icon{display:inline-flex;align-items:center;justify-content:center}
+  header[data-romix-shell="header-v1"] .icon-badge{position:absolute;top:3px;right:2px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#f72585;color:#fff;font:700 9px/16px Arial,sans-serif;text-align:center}
+  header[data-romix-shell="header-v1"] .search-panel{max-height:0;overflow:hidden;background:#fff}
+  header[data-romix-shell="header-v1"] .search-panel.is-open{max-height:calc(100dvh - 105px)}
+  .site-footer[data-romix-shell="footer-v1"]{background:#242426;color:#fff}
+  .site-footer[data-romix-shell="footer-v1"] .footer-shell{width:min(1400px,calc(100% - 40px));margin:0 auto;padding:48px 0 24px}
+  .site-footer[data-romix-shell="footer-v1"] .footer-top{display:grid;grid-template-columns:minmax(0,1.35fr) repeat(3,minmax(0,.72fr));gap:36px}
+  .site-footer[data-romix-shell="footer-v1"] .site-logo--footer{display:block;width:clamp(158px,14vw,212px);height:auto;max-height:70px;object-fit:contain}
+  .site-footer[data-romix-shell="footer-v1"] a{color:inherit}
+  @media(max-width:900px){
+    header[data-romix-shell="header-v1"] .header-row{width:calc(100% - 16px);height:60px;min-height:60px;grid-template-columns:96px minmax(0,1fr) 96px;grid-template-areas:"left brand actions";gap:12px;padding:0}
+    header[data-romix-shell="header-v1"] .header-actions-left{grid-area:left;display:flex;align-items:center;justify-content:flex-start;gap:0}
+    header[data-romix-shell="header-v1"] .brand{grid-area:brand;justify-self:center}
+    header[data-romix-shell="header-v1"] .site-logo--header{width:clamp(112px,30vw,156px);max-height:42px}
+    header[data-romix-shell="header-v1"] .header-icons{grid-area:actions;display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:96px}
+    header[data-romix-shell="header-v1"] .header-search-desktop,header[data-romix-shell="header-v1"] .header-utility-menu{display:none}
+    header[data-romix-shell="header-v1"] .icon-btn,header[data-romix-shell="header-v1"] .cart-pill{width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:8px;background:transparent;box-shadow:none}
+    header[data-romix-shell="header-v1"] .cart-pill__text{display:none}
+    header[data-romix-shell="header-v1"] .cart-pill__icon{width:auto;height:auto;border:0;border-radius:0;background:transparent;color:currentColor}
+    header[data-romix-shell="header-v1"] .cart-pill .icon-badge{top:-2px;right:-2px;width:17px;height:17px;min-width:17px;padding:0;border-radius:50%;font-size:10px;line-height:17px}
+    header[data-romix-shell="header-v1"] .mega-nav{position:fixed;inset:0 auto 0 0;width:min(88vw,360px);height:100dvh;padding:0 18px 24px;background:#fff;transform:translateX(-105%);overflow-y:auto}
+    body.mobile-nav-open header[data-romix-shell="header-v1"] .mega-nav{transform:translateX(0)}
+    header[data-romix-shell="header-v1"] .main-nav{display:grid;align-items:stretch;gap:2px}
+    header[data-romix-shell="header-v1"] .mobile-drawer-header{display:flex;align-items:center;justify-content:space-between;min-height:68px}
+    header[data-romix-shell="header-v1"] .site-logo--mobile{display:block;width:148px;height:auto;max-height:42px;object-fit:contain}
+    .site-footer[data-romix-shell="footer-v1"] .footer-top{grid-template-columns:1fr}
+  }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ROMIX:SHELL:CRITICAL:START -->
+<link rel="stylesheet" href="assets/css/romix-shell-base.css?v=18" data-romix-shell-critical />
+<!-- ROMIX:SHELL:CRITICAL:END -->
+  <meta name="robots" content="noindex" />
+  <title>ROMIX - Página no encontrada</title>
+  <link rel="icon" href="images/branding/romix-logo-icon.webp" type="image/webp" sizes="180x180" />
+  <link rel="apple-touch-icon" href="images/branding/romix-logo-icon.webp" sizes="180x180" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="assets/css/romix-design-system.css?v=20" />
+  <link rel="stylesheet" href="assets/css/romix-minimal-theme.css?v=19" />
+  <style>
+    .not-found-page { min-height:clamp(420px,62vh,640px); display:grid; place-items:center; padding:48px 16px; background:#fff; }
+    .not-found-card { width:min(100%,560px); text-align:center; display:grid; justify-items:center; gap:16px; }
+    .not-found-icon { color:#F22797; font-family:"Outfit",sans-serif; font-size:clamp(3rem,10vw,5rem); font-weight:900; letter-spacing:-.06em; line-height:1; }
+    .not-found-card h1 { margin:0; color:#242426; font-family:"Outfit","Manrope",sans-serif; font-size:clamp(2rem,7vw,3.5rem); line-height:1.05; letter-spacing:-.035em; }
+    .not-found-card p { margin:0; max-width:42ch; color:#66666b; }
+    .not-found-card a { min-height:48px; display:inline-flex; align-items:center; justify-content:center; padding:0 20px; border-radius:10px; background:var(--romix-pink-readable); color:#fff; font-weight:800; text-decoration:none; }
+  </style>
+  <link rel="stylesheet" href="assets/css/romix-pricing.css?v=19" />
+  <link rel="stylesheet" href="assets/css/romix-header.css?v=20" />
+  <link rel="stylesheet" href="assets/css/romix-footer.css?v=19" />
+  <script defer src="/assets/js/romix-analytics.js?v=1"></script>
+</head>
+<body>
+<!-- ROMIX:INCLUDE:HEADER -->
+  <main class="not-found-page">
+    <section class="not-found-card" aria-labelledby="not-found-title">
+      <span class="not-found-icon" aria-hidden="true">404</span>
+      <h1 id="not-found-title">No encontramos esta página.</h1>
+      <p>La dirección puede haber cambiado o ya no estar disponible.</p>
+      <a class="romix-btn romix-btn--primary romix-btn--lg" href="index.html">Volver al inicio</a>
+    </section>
+  </main>
+
+<!-- ROMIX:INCLUDE:FOOTER -->
+  <script src="assets/js/cart.js?v=19" defer></script>
+  <script src="assets/js/romix-pricing.js?v=19" defer></script>
+  <script src="assets/js/romix-header.js?v=20" defer></script>
+  <romix-toast></romix-toast>
+  <script type="module" src="assets/js/ts/main.js?v=19"></script>
+</body>
+</html>

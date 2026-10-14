@@ -26,12 +26,28 @@
     const size = String(entry.size ?? entry.talle ?? DEFAULT_SIZE).trim() || DEFAULT_SIZE;
     const stockValue = Number(entry.stock ?? entry.quantity ?? 0);
     const stock = Number.isFinite(stockValue) ? Math.max(0, Math.floor(stockValue)) : 0;
-    return { productId, color, size, stock, low_stock_threshold: Number(entry.low_stock_threshold ?? 3) };
+    return { productId, color, size, stock };
+  }
+
+  function loadStorageList() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
   }
 
   function buildInventoryMap() {
     if (inventoryMapCache) return new Map(inventoryMapCache);
     const map = new Map();
+    loadStorageList().forEach((item) => {
+      const variant = sanitizeVariant(item);
+      if (!variant) return;
+      const key = buildKey(variant.productId, variant.color, variant.size);
+      map.set(key, variant);
+    });
     inventoryMapCache = map;
     return map;
   }
@@ -50,15 +66,17 @@
     });
     const list = Array.from(map.values());
     inventoryMapCache = map;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    } catch {}
     return list;
   }
 
   function getStock(productId, color, size) {
-    if (!syncState.authoritative || Date.now() - syncState.syncedAt > 60000) return STOCK_UNKNOWN;
+    if (!syncState.authoritative) return STOCK_UNKNOWN;
     const map = buildInventoryMap();
     const key = buildKey(productId, color, size);
     const variant = map.get(key);
-    if (!variant) return 0;
     if (!variant || !Number.isFinite(Number(variant.stock))) {
       return STOCK_UNKNOWN;
     }
@@ -168,7 +186,6 @@
   }
 
   window.romixInventory = {
-    getThreshold(productId, color, size) { return buildInventoryMap().get(buildKey(productId, color, size))?.low_stock_threshold ?? 3; },
     getInventory,
     saveInventory,
     updateStock,

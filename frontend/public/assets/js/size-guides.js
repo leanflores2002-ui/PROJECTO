@@ -296,7 +296,7 @@
               '<h2 id="size-guide-drawer-title">Gu&iacute;a de talles</h2>' +
               '<p id="size-guide-drawer-subtitle"></p>' +
             '</div>' +
-            '<button type="button" class="size-guide-drawer__x" data-size-guide-close aria-label="Cerrar gu&iacute;a de talles">x</button>' +
+            '<button type="button" class="romix-icon-btn size-guide-drawer__x" data-size-guide-close aria-label="Cerrar gu&iacute;a de talles">' + window.romixIcon("X", { size: "sm" }) + '</button>' +
           '</header>' +
           '<div class="size-guide-drawer__body" id="size-guide-drawer-body"></div>' +
           '<footer class="size-guide-drawer__footer">' +
@@ -364,7 +364,7 @@
           '</div>' +
           renderTable(guide) +
           '<aside class="size-guide-drawer__note">' +
-            '<span class="size-guide-drawer__note-icon" aria-hidden="true">&#9825;</span>' +
+            '<span class="size-guide-drawer__note-icon" aria-hidden="true">' + window.romixIcon("Heart", { size: "sm" }) + '</span>' +
             '<span>' +
               '<strong>Ten&eacute; en cuenta</strong>' +
               '<small>Las medidas son aproximadas y pueden variar seg&uacute;n el modelo y la tela de cada prenda.</small>' +
@@ -399,7 +399,7 @@
     if (!container) return null;
     const guide = getSizeGuideForProduct(product || {});
     container.innerHTML = '' +
-      '<button type="button" class="product-size-guide-trigger" aria-haspopup="dialog">' +
+      '<button type="button" class="romix-btn romix-btn--ghost romix-btn--lg product-size-guide-trigger" aria-haspopup="dialog">' +
         '<span class="product-size-guide-trigger__icon" aria-hidden="true"></span>' +
         '<span class="product-size-guide-trigger__copy">' +
           '<strong>Gu&iacute;a de talles</strong>' +

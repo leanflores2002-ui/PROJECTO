@@ -125,13 +125,17 @@
         right: 10px;
         border: 0;
         background: transparent;
-        width: 28px;
-        height: 28px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         font-size: 20px;
         line-height: 1;
         color: #5f5f5f;
         cursor: pointer;
+      }
+      .romix-cart-added-panel__close svg {
+        width: 20px;
+        height: 20px;
       }
       .romix-cart-added-panel__close:hover {
         background: #f2f2f2;
@@ -241,9 +245,9 @@
     panel.setAttribute('aria-live', 'polite');
     panel.setAttribute('aria-atomic', 'true');
     panel.innerHTML = `
-      <button type="button" class="romix-cart-added-panel__close" aria-label="Cerrar">x</button>
+      <button type="button" class="romix-icon-btn romix-cart-added-panel__close" aria-label="Cerrar">${window.romixIcon("X", { size: "sm" })}</button>
       <div class="romix-cart-added-panel__header">
-        <span class="romix-cart-added-panel__icon" aria-hidden="true">&#10003;</span>
+        <span class="romix-cart-added-panel__icon" aria-hidden="true">${window.romixIcon("Check", { size: "md" })}</span>
         <p class="romix-cart-added-panel__status">Agregado a la bolsa de compra</p>
       </div>
       <div class="romix-cart-added-panel__content">
@@ -256,8 +260,8 @@
         </div>
       </div>
       <div class="romix-cart-added-panel__actions">
-        <a class="romix-cart-added-panel__btn romix-cart-added-panel__btn--secondary" href="cart.html">Ver carrito</a>
-        <a class="romix-cart-added-panel__btn romix-cart-added-panel__btn--primary" href="cart.html#order-btn">Comprar</a>
+        <a class="romix-btn romix-btn--secondary romix-cart-added-panel__btn romix-cart-added-panel__btn--secondary" href="cart.html">Ver carrito</a>
+        <a class="romix-btn romix-btn--primary romix-cart-added-panel__btn romix-cart-added-panel__btn--primary" href="cart.html#order-btn">Comprar</a>
       </div>
     `;
     document.body.appendChild(panel);
@@ -405,12 +409,6 @@
     const newItem = normalizeItem(product);
     if (!newItem) return cart;
 
-    const knownStock = window.romixInventory?.getStock(newItem.productId || newItem.id, newItem.colorName || newItem.color, newItem.talle || newItem.size);
-    const already = cart.find(item => item.key === newItem.key);
-    if (typeof knownStock === 'number' && knownStock < newItem.qty + Number(already?.qty || 0)) {
-      window.dispatchEvent(new CustomEvent('romix:stock-unavailable'));
-      return cart;
-    }
     let addedItem = newItem;
     const existingIndex = cart.findIndex((item) => item.key === newItem.key);
     if (existingIndex >= 0) {
@@ -431,7 +429,10 @@
 
     const saved = saveCart(cart);
     const persistedItem = saved.find((entry) => entry.key === addedItem.key) || addedItem;
-    if (lastSavePersisted) notifyItemAdded(persistedItem);
+    if (lastSavePersisted) {
+      notifyItemAdded(persistedItem);
+      window.dispatchEvent(new CustomEvent("romix:analytics-cart-added", { detail: { item: newItem } }));
+    }
     return saved;
   };
 
@@ -475,11 +476,8 @@
 
   const buildWhatsAppMessage = (cart = getCart()) => {
     if (!Array.isArray(cart) || !cart.length) return '';
-    let total = 0;
     const lines = cart.map((item) => {
       const qty = Number(item.qty ?? item.quantity) || 0;
-      const price = Number(item.price) || 0;
-      total += qty * price;
       const name = decodeCartText(item.name) || 'Producto';
       const type = decodeCartText(item.type);
       const color = decodeCartText(item.colorName ?? item.color);
@@ -493,7 +491,6 @@
       ].filter(Boolean);
       return parts.join(' | ');
     });
-    lines.push('', `Total: $${total.toFixed(2)}`);
     return encodeURIComponent(lines.join('\n'));
   };
 

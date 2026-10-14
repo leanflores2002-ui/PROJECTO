@@ -8,24 +8,16 @@ from html import escape as html_escape
 from pathlib import Path
 from threading import RLock
 import threading
-from contextlib import asynccontextmanager
+import tempfile
 from typing import Dict, List, Tuple
-from urllib.parse import urljoin
+from urllib.parse import quote, urljoin
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-
-from .admin_api import router as admin_router
-from .config import get_settings
-from .database import close_database_pool, database_health, open_database_pool
-from .public_api import router as public_router, create_public_order, PublicOrder
-from .database import database_connection
-from .catalog_sync import _build_catalog
-from .inventory_service import InventoryService
-from .product_schemas import ProductDetail, ProductListItem
+from markupsafe import Markup
 
 
 def repo_root() -> Path:
@@ -43,13 +35,14 @@ DATA_FILE = Path(
 )
 VARIANTS_FILE = ROOT / "backend" / "data" / "product_variants.json"
 templates = Jinja2Templates(directory=str(PUBLIC_DIR))
+SITE_URL = str(os.environ.get("ROMIX_SITE_URL") or json.loads(
+    (ROOT / "config" / "site.json").read_text())["origin"]).strip().rstrip("/")
 
 # Cache en memoria para evitar leer/parsing del JSON en cada request bajo carga
 _products_cache: list[dict] | None = None
 _products_mtime: float | None = None
 _products_json_cache: str | None = None
 _products_lock = RLock()
-BLOCKED_SEASON_KEYS = {"verano"}
 
 # Variantes en memoria
 _variants: Dict[Tuple[str, str, str], dict] = {}
@@ -104,7 +97,18 @@ def products_json() -> str:
     with _products_lock:
         if _products_json_cache is None:
             _products_json_cache = json.dumps(_products_cache or [], ensure_ascii=False)
-        return _products_json_cache
+        return safe_script_json(_products_json_cache)
+
+
+def script_json(value) -> Markup:
+    """JSON for script data, never executable markup or HTML entities."""
+    return safe_script_json(json.dumps(value, ensure_ascii=False))
+
+
+def safe_script_json(raw: str) -> Markup:
+    return Markup(raw.replace("<", "\\u003c")
+                  .replace(">", "\\u003e").replace("&", "\\u0026")
+                  .replace("\u2028", "\\u2028").replace("\u2029", "\\u2029"))
 
 
 def normalize_text(value: str) -> str:
@@ -138,7 +142,10 @@ def season_key(product: dict) -> str:
 
 
 def is_public_product(product: dict) -> bool:
-    return season_key(product) not in BLOCKED_SEASON_KEYS
+    """La temporada describe al producto; `visible` decide si se publica."""
+    if not isinstance(product, dict):
+        return False
+    return product.get("visible", True) is not False
 
 
 def variants_file() -> Path:
@@ -209,10 +216,22 @@ def load_variants(force: bool = False) -> dict:
         return _variants
 
 
-def persist_variants() -> None:
+def persist_variants(payload: list[dict] | None = None) -> None:
     path = variants_file()
-    payload = list(_variants.values())
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    payload = list(_variants.values()) if payload is None else payload
+    # Replace a complete snapshot on the same filesystem; never leave truncated JSON.
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent,
+                                         prefix=".variants-", suffix=".tmp", delete=False) as file:
+            temporary = Path(file.name)
+            json.dump(payload, file, ensure_ascii=False, indent=2)
+            file.flush()
+            os.fsync(file.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
 
 
 def get_variant(product_id: str, color: str, size: str) -> dict | None:
@@ -225,8 +244,34 @@ def absolute_url(request: Request, value: str) -> str:
     if not raw:
         return ""
     if raw.startswith("http://") or raw.startswith("https://"):
-        return raw
-    return urljoin(str(request.base_url), raw.lstrip("/"))
+        return quote(raw, safe=":/?&=#%")
+    base_url = SITE_URL or str(request.base_url).rstrip("/")
+    return quote(urljoin(f"{base_url}/", raw.lstrip("/")), safe=":/?&=#%")
+
+
+def upsert_meta_tag(html_text: str, attr_name: str, attr_value: str, content: str) -> str:
+    pattern = re.compile(
+        rf'<meta\s+[^>]*{attr_name}="{re.escape(attr_value)}"[^>]*content="[^"]*"[^>]*>',
+        re.IGNORECASE,
+    )
+    replacement = f'<meta {attr_name}="{attr_value}" content="{content}">'
+    if pattern.search(html_text):
+        return pattern.sub(replacement, html_text, count=1)
+    insert_at = html_text.find("</head>")
+    if insert_at == -1:
+        return html_text
+    return f'{html_text[:insert_at]}  {replacement}\n{html_text[insert_at:]}'
+
+
+def upsert_canonical_link(html_text: str, href: str) -> str:
+    pattern = re.compile(r'<link\s+rel="canonical"\s+href="[^"]*"\s*/?>', re.IGNORECASE)
+    replacement = f'<link rel="canonical" href="{href}" />'
+    if pattern.search(html_text):
+        return pattern.sub(replacement, html_text, count=1)
+    insert_at = html_text.find("</head>")
+    if insert_at == -1:
+        return html_text
+    return f'{html_text[:insert_at]}  {replacement}\n{html_text[insert_at:]}'
 
 
 def product_share_description(product: dict) -> str:
@@ -252,14 +297,14 @@ def product_share_description(product: dict) -> str:
 def product_share_image(request: Request, product: dict) -> str:
     image = str(product.get("image") or "").strip()
 
-    if not image and isinstance(product.get("images"), dict):
-        image = next(
-            (str(src).strip() for src in product["images"].values() if str(src or "").strip()),
-            "",
-        )
+    images = product.get("images")
+    if not image and isinstance(images, dict):
+        image = next((str(src).strip() for src in images.values() if str(src or "").strip()), "")
+    if not image and isinstance(images, list):
+        image = next((str(src).strip() for src in images if str(src or "").strip()), "")
 
     if not image:
-        image = "images/logo-romix-social-1200x630.png"
+        image = "images/branding/romix-logo-social.webp"
 
     return absolute_url(request, image)
 
@@ -276,92 +321,81 @@ def inject_product_meta(
     safe_description = html_escape(description, quote=True)
     safe_image = html_escape(image_url, quote=True)
     safe_url = html_escape(page_url, quote=True)
-
-    replacements = {
-        '<meta property="og:title" content="ROMIX - Indumentaria Deportiva & Urbana">':
-        f'<meta property="og:title" content="{safe_title}">',
-        '<meta property="og:description" content="Descubri calzas, joggers y outfits deportivos con estilo. Movimiento y estilo para cada dia.">':
-        f'<meta property="og:description" content="{safe_description}">',
-        '<meta property="og:image" content="https://romi-damas.netlify.app/images/logo-romix-social-1200x630.png">':
-        f'<meta property="og:image" content="{safe_image}">',
-        '<meta property="og:url" content="https://romi-damas.netlify.app/">':
-        f'<meta property="og:url" content="{safe_url}">',
-        '<meta name="twitter:title" content="ROMIX - Indumentaria Deportiva & Urbana">':
-        f'<meta name="twitter:title" content="{safe_title}">',
-        '<meta name="twitter:description" content="Descubri calzas, joggers y outfits deportivos con estilo. Movimiento y estilo para cada dia.">':
-        f'<meta name="twitter:description" content="{safe_description}">',
-        '<meta name="twitter:image" content="https://romi-damas.netlify.app/images/logo-romix-social-1200x630.png">':
-        f'<meta name="twitter:image" content="{safe_image}">',
-    }
-
     rendered = html_text
-    for old, new in replacements.items():
-        rendered = rendered.replace(old, new, 1)
+    rendered = re.sub(r"<title>.*?</title>", lambda _: f"<title>{safe_title}</title>", rendered, count=1, flags=re.DOTALL)
+    rendered = upsert_meta_tag(rendered, "name", "description", safe_description)
+    rendered = upsert_meta_tag(rendered, "property", "og:type", "product")
+    rendered = upsert_meta_tag(rendered, "property", "og:site_name", "ROMIX")
+    rendered = upsert_meta_tag(rendered, "property", "og:title", safe_title)
+    rendered = upsert_meta_tag(rendered, "property", "og:description", safe_description)
+    rendered = upsert_meta_tag(rendered, "property", "og:image", safe_image)
+    rendered = upsert_meta_tag(rendered, "property", "og:image:secure_url", safe_image)
+    rendered = upsert_meta_tag(rendered, "property", "og:image:alt", safe_title)
+    rendered = upsert_meta_tag(rendered, "property", "og:url", safe_url)
+    rendered = upsert_meta_tag(rendered, "name", "twitter:card", "summary_large_image")
+    rendered = upsert_meta_tag(rendered, "name", "twitter:title", safe_title)
+    rendered = upsert_meta_tag(rendered, "name", "twitter:description", safe_description)
+    rendered = upsert_meta_tag(rendered, "name", "twitter:image", safe_image)
+    rendered = upsert_meta_tag(rendered, "name", "twitter:url", safe_url)
+    rendered = upsert_canonical_link(rendered, safe_url)
     return rendered
 
 
-settings = get_settings()
-@asynccontextmanager
-async def lifespan(_app: FastAPI):
-    load_products()
-    open_database_pool()
-    try:
-        yield
-    finally:
-        close_database_pool()
+app = FastAPI(title="ROMIX API", version="1.0.0")
 
 
-app = FastAPI(title="ROMIX API", version="1.1.0", lifespan=lifespan)
-
-
-@app.middleware('http')
-async def avoid_stale_business_data(request: Request, call_next):
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
     response = await call_next(request)
-    if request.url.path.startswith('/api/'):
-        response.headers['Cache-Control'] = 'no-store'
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    preview = any(os.environ.get(key) and os.environ[key] != "production"
+                  for key in ("VERCEL_ENV", "CONTEXT"))
+    if preview or response.status_code >= 400 or request.url.path.startswith(("/api/", "/docs", "/redoc", "/openapi.json")):
+        response.headers["X-Robots-Tag"] = "noindex, follow"
     return response
 
-# Los origins se controlan por entorno. En produccion se rechaza explicitamente "*".
+# Permitir consumir desde el mismo host y uso local
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins,
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
+    allow_origins=[origin.strip() for origin in os.environ.get(
+        "ROMIX_CORS_ORIGINS", SITE_URL or json.loads((ROOT / "config" / "site.json").read_text())["origin"]
+    ).split(",") if origin.strip()],
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
 )
 
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "environment": settings.environment, "catalogSource": settings.catalog_source}
+    return {"status": "ok"}
 
 
-@app.get("/api/health/ready")
-def readiness():
-    if not settings.database_url:
-        return {"status": "degraded", "database": "not_configured", "catalog": "json"}
-    if not database_health():
-        raise HTTPException(status_code=503, detail="Database unavailable")
-    return {"status": "ready", "database": "ok", "catalog": settings.catalog_source}
+@app.on_event("startup")
+def warm_products_cache():
+    # Precalentamos cache para evitar latencia en las primeras peticiones
+    load_products()
+    load_variants(force=True)
 
 
-@app.get("/api/products", response_model=list[ProductListItem])
+@app.get("/api/products")
 def get_products(section: str | None = None):
-    with database_connection() as connection:
-        products = _build_catalog(connection)
+    products = load_products()
     if section:
         section = section.strip().lower()
         products = [p for p in products if str(p.get("section", "")).lower() == section]
     return products
 
 
-@app.get("/api/products/{slug}", response_model=ProductDetail)
+@app.get("/api/products/{slug}")
 def get_product(slug: str):
-    with database_connection() as connection:
-        products = _build_catalog(connection, reference=slug)
-    if products:
-        return products[0]
-    raise HTTPException(404, 'Producto no encontrado')
+    products = load_products()
+    for p in products:
+        if slugify(p.get("name", "")) == slug:
+            return p
+    raise HTTPException(status_code=404, detail="Producto no encontrado")
 
 
 @app.get("/api/search")
@@ -396,8 +430,9 @@ def search(q: str):
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request, q: str | None = None):
     return templates.TemplateResponse(
-        "index.html",
-        {
+        request=request,
+        name="index.html",
+        context={
             "request": request,
             "products_json": products_json(),
             "query": q or "",
@@ -408,8 +443,9 @@ def home(request: Request, q: str | None = None):
 @app.get("/catalogo", response_class=HTMLResponse)
 def catalog_page(request: Request, q: str | None = None):
     return templates.TemplateResponse(
-        "catalogo.html",
-        {
+        request=request,
+        name="catalogo.html",
+        context={
             "request": request,
             "products_json": products_json(),
             "query": q or "",
@@ -432,12 +468,18 @@ def product_page(request: Request, slug: str):
     og_title = f"{title_name} | ROMIX"
     og_description = product_share_description(product)
     og_image = product_share_image(request, product)
-    og_url = absolute_url(request, f"product/{slug}")
+    canonical_slug = slugify(product.get("name") or product.get("id") or "producto")
+    id_slug = slugify(str(product.get("id") or ""))
+    if id_slug and id_slug != canonical_slug and not canonical_slug.endswith(f"-{id_slug}"):
+        canonical_slug = f"{canonical_slug}-{id_slug}"
+    product_id = quote(str(product.get("id") or canonical_slug), safe="")
+    product_name = quote(title_name, safe="-_.!~*'()")
+    og_url = absolute_url(request, f"product.html?id={product_id}&slug={canonical_slug}&name={product_name}")
 
     template = templates.get_template("product.html")
     html_content = template.render(
         request=request,
-        product_json=json.dumps(product, ensure_ascii=False),
+        product_json=script_json(product),
         products_json=products_json(),
         slug=slug,
     )
@@ -462,35 +504,39 @@ def ensure_product_exists(product_id: str) -> dict:
 
 
 def validate_and_reserve(items: List[dict]) -> Tuple[List[dict], List[dict]]:
-    """Valida stock y retorna (updates, order_items) sin persistir todavía."""
+    """Validate the entire order and commit one stock snapshot under the process lock."""
+    global _variants
     updates = []
     order_items = []
     with _variants_lock:
         variants = load_variants()
+        quantities = {}
         for it in items:
+            if not isinstance(it, dict):
+                raise HTTPException(status_code=400, detail="Item invalido")
             pid = str(it.get("productId") or "").strip()
             color = it.get("color") or ""
             size = it.get("size") or ""
-            qty = int(it.get("qty") or 0)
-            if not pid or not color or not size or qty <= 0:
+            qty = it.get("qty")
+            if type(qty) is not int or qty <= 0:
+                raise HTTPException(status_code=400, detail="qty debe ser un entero positivo")
+            if not pid or not isinstance(color, str) or not color.strip() or not isinstance(size, str) or not size.strip():
                 raise HTTPException(status_code=400, detail="Item invalido: productId, color, size y qty son obligatorios")
             ensure_product_exists(pid)
             key = (pid, normalize_text(color), normalize_text(size))
             variant = variants.get(key)
             if not variant:
                 raise HTTPException(status_code=400, detail=f"No existe variante para productId={pid}, color={color}, talle={size}")
+            quantities[key] = quantities.get(key, 0) + qty
+        for key, qty in quantities.items():
+            variant = variants[key]
             if variant["stock"] < qty:
                 raise HTTPException(status_code=400, detail=f"Stock insuficiente para {variant['color']} talle {variant['size']}")
-        for it in items:
-            pid = str(it.get("productId"))
-            color = it.get("color")
-            size = it.get("size")
-            qty = int(it.get("qty"))
-            key = (pid, normalize_text(color), normalize_text(size))
-            variant = variants[key]
+        next_variants = {key: dict(variant) for key, variant in variants.items()}
+        for key, qty in quantities.items():
+            pid = key[0]
+            variant = next_variants[key]
             variant["stock"] -= qty
-            if variant["stock"] < 0:
-                variant["stock"] = 0
             updates.append(
                 {
                     "productId": pid,
@@ -500,24 +546,32 @@ def validate_and_reserve(items: List[dict]) -> Tuple[List[dict], List[dict]]:
                 }
             )
             order_items.append({"productId": pid, "color": variant["color"], "size": variant["size"], "qty": qty})
-        persist_variants()
+        persist_variants(list(next_variants.values()))
+        _variants = next_variants
     return updates, order_items
 
 
-@app.get('/api/variants')
+@app.get("/api/variants")
 def list_variants():
-    with database_connection() as connection:
-        return InventoryService.list_stock(connection)
+    public_ids = {
+        str(product.get("id") or slugify(product.get("name", "")))
+        for product in load_products()
+    }
+    return [
+        variant
+        for variant in load_variants().values()
+        if str(variant.get("product_id") or "") in public_ids
+    ]
 
 
-@app.post('/api/orders', status_code=201)
-def create_order(body: PublicOrder):
-    return create_public_order(body)
-
-
-# Rutas nuevas, mantenidas en paralelo durante la migracion para no romper consumidores actuales.
-app.include_router(public_router)
-app.include_router(admin_router)
+@app.post("/api/orders")
+def create_order(body: dict):
+    items = body.get("items") if isinstance(body, dict) else None
+    if not items or not isinstance(items, list):
+        raise HTTPException(status_code=400, detail="items es requerido")
+    updates, order_items = validate_and_reserve(items)
+    order_id = os.urandom(8).hex()
+    return {"orderId": order_id, "updatedVariants": updates, "items": order_items}
 
 
 # Servir estaticos desde el frontend publico

@@ -77,8 +77,8 @@
           <div class="product-price">${price}</div>
           <div class="product-stock-note state-${st}">${label}</div>
           <div class="product-actions">
-            <a href="#" class="btn btn-details">Detalles</a>
-            <button class="btn btn-primary" type="button">Agregar</button>
+            <a href="#" class="btn btn-details romix-btn romix-btn--secondary">Detalles</a>
+            <button class="btn btn-primary romix-btn romix-btn--primary" type="button">Agregar al carrito</button>
           </div>
         </div>
       </div>`;
@@ -105,10 +105,8 @@
         .then(list => filterVisibleProducts(list))
         .catch(()=>[]);
     }
-    const fromApi = ()=> fetch('/api/products?section='+encodeURIComponent(section)).then(r=>r.ok?r.json():Promise.reject());
     const fromFile = ()=> fetch(new URL('assets/data/products.json', location.href)).then(r=>r.json()).then(list => (list||[]).filter(p => String(p.section||'').toLowerCase()===section));
-    return fromApi()
-      .catch(fromFile)
+    return fromFile()
       .then(list => filterVisibleProducts(list))
       .catch(()=>[]);
   }

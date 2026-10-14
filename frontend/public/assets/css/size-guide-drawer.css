@@ -40,7 +40,7 @@ body.size-guide-drawer-open {
   height: 36px;
   flex: 0 0 36px;
   border-radius: 999px;
-  background: #f72585;
+  background: var(--romix-pink);
 }
 
 .product-size-guide-trigger__icon::before {
@@ -139,7 +139,7 @@ body.size-guide-drawer-open {
 .size-guide-drawer__eyebrow {
   display: inline-flex;
   margin-bottom: 8px;
-  color: #f72585;
+  color: var(--romix-pink);
   font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.14em;
@@ -169,11 +169,11 @@ body.size-guide-drawer-open {
 }
 
 .size-guide-drawer__x {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 999px;
   background: #ffffff;
-  color: #f72585;
+  color: var(--romix-pink);
   font-size: 1.25rem;
   line-height: 1;
   box-shadow: 0 10px 22px rgba(232, 62, 140, 0.14);
@@ -220,7 +220,7 @@ body.size-guide-drawer-open {
 
 .size-guide-drawer__intro h3 {
   margin: 0;
-  color: #f72585;
+  color: var(--romix-pink);
   font-size: 0.78rem;
   font-weight: 900;
   letter-spacing: 0.16em;
@@ -292,7 +292,7 @@ body.size-guide-drawer-open {
 
 .size-guide-drawer__table th small {
   margin-top: 3px;
-  color: #f72585;
+  color: var(--romix-pink);
   font-size: 0.7rem;
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -334,7 +334,7 @@ body.size-guide-drawer-open {
   height: 34px;
   border-radius: 999px;
   background: #ffffff;
-  color: #f72585;
+  color: var(--romix-pink);
   font-size: 1rem;
   box-shadow: 0 8px 18px rgba(232, 62, 140, 0.12);
 }
@@ -368,7 +368,7 @@ body.size-guide-drawer-open {
   width: 100%;
   min-height: 52px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #f72585 0%, #ff6fa5 100%);
+  background: linear-gradient(135deg, var(--romix-pink) 0%, var(--romix-pink-soft) 100%);
   color: #ffffff;
   font-size: 1rem;
   box-shadow: 0 12px 24px rgba(247, 37, 133, 0.24);

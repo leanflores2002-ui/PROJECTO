@@ -4,41 +4,13 @@
  */
 :root {
   color-scheme: light;
-  --pink-primary: #F22797;
-  --pink-soft: #F291C7;
-  --ink: #242426;
-  --surface: #FFFFFF;
-  --surface-soft: #F2F2F2;
-  --muted: #A6A6A6;
-  --romix-success: #178653;
-  --romix-danger: #B4233A;
-  --romix-border: rgba(36, 36, 38, .12);
-  --romix-border-strong: rgba(36, 36, 38, .22);
-  --romix-focus: #242426;
-  --romix-shadow-xs: 0 2px 8px rgba(36, 36, 38, .035);
-  --romix-shadow: 0 6px 20px rgba(36, 36, 38, .055);
-  --romix-shadow-hover: 0 8px 24px rgba(36, 36, 38, .07);
-  --romix-radius-sm: 8px;
-  --romix-radius: 10px;
-  --romix-radius-lg: 14px;
-  --romix-max: 1400px;
-  --romix-space-1: 4px;
-  --romix-space-2: 8px;
-  --romix-space-3: 12px;
-  --romix-space-4: 16px;
-  --romix-space-5: 24px;
-  --romix-space-6: 32px;
-  --romix-space-7: 48px;
-  --romix-space-8: 64px;
-  --romix-ease: 180ms ease;
-  --romix-z-content: 1;
-  --romix-z-sticky: 100;
-  --romix-z-header: 500;
-  --romix-z-dropdown: 600;
-  --romix-z-overlay: 900;
-  --romix-z-drawer: 1000;
-  --romix-z-modal: 2000;
-  --romix-z-toast: 3000;
+  /* Legacy names remain available; canonical values live in romix-design-system.css. */
+  --pink-primary: var(--romix-pink);
+  --pink-soft: var(--romix-pink-soft);
+  --ink: var(--romix-ink);
+  --surface: var(--romix-white);
+  --surface-soft: var(--romix-surface-soft);
+  --muted: var(--romix-text-muted);
 }
 
 html {
@@ -54,8 +26,9 @@ body {
   overflow-x: visible;
   color: var(--ink);
   background: var(--surface);
-  font-family: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  line-height: 1.5;
+  font-family: var(--romix-font-body);
+  font-size: var(--romix-text-base);
+  line-height: var(--romix-leading-body);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
@@ -94,19 +67,6 @@ a { color: inherit; }
 }
 .skip-link:focus { top: 12px; }
 
-.emoji-icon,
-.romix-emoji {
-  display: inline-grid;
-  place-items: center;
-  min-width: 1.25em;
-  color: currentColor;
-  font-family: "Segoe UI Symbol", "Arial Unicode MS", sans-serif;
-  font-size: 18px;
-  font-style: normal;
-  line-height: 1;
-  filter: grayscale(1);
-  text-shadow: 0 1px 1px rgba(36, 36, 38, .1);
-}
 
 /* ---------- Shared controls ---------- */
 :where(.btn, .btn-primary, .btn-secondary, .btn-outline, .cta, .help-button, .filters-open-btn, .filters-clear, .filter-more, .active-filters-clear, .sidebar-close) {
@@ -121,7 +81,7 @@ a { color: inherit; }
   color: #fff;
   box-shadow: none;
 }
-:where(.btn-primary, .btn.primary, .cta, .help-button):hover { background: #D91D83; border-color: #D91D83; transform: translateY(-1px); }
+:where(.btn-primary, .btn.primary, .cta, .help-button):hover { background: var(--romix-pink-hover); border-color: var(--romix-pink-hover); transform: translateY(-1px); }
 
 :where(.btn-outline, .btn.outline, .btn-secondary) {
   border: 1px solid var(--romix-border-strong);
@@ -484,15 +444,6 @@ header.romix-shared-header .mega-accessories { border-radius: var(--romix-radius
 .category-item:hover .category-thumb { border-color: rgba(242,39,151,.36); box-shadow: var(--romix-shadow); }
 .category-item span { color: var(--ink); font-size: 13px; letter-spacing: .01em; }
 
-.benefit-strip {
-  border: 1px solid rgba(36,36,38,.08);
-  border-radius: var(--romix-radius-lg);
-  overflow: hidden;
-  background: rgba(36,36,38,.08);
-}
-.benefit-item { min-height: 72px; background: #fff; color: var(--ink); font-size: 14px; }
-.benefit-item .romix-emoji { font-size: 20px; }
-
 .editorial-grid { gap: 16px; }
 .editorial-card { border-radius: var(--romix-radius); box-shadow: none; }
 .editorial-card__copy span { border-radius: var(--romix-radius); }
@@ -514,12 +465,49 @@ header.romix-shared-header .mega-accessories { border-radius: var(--romix-radius
 .stock-note.is-available,
 .stock-note.available,
 .stock-note.success { color: var(--romix-success); }
-.product-favorite { min-width: 44px; width: 44px; height: 44px; border-radius: var(--romix-radius); box-shadow: none; }
 
 .why-grid { border: 0; gap: 1px; background: rgba(36,36,38,.08); }
 .why-item { background: #fff; border-radius: 0; }
 
 .promo-carousel { border-radius: var(--romix-radius-lg); box-shadow: none; }
+
+/* Lucide visual normalization across the storefront. */
+.category-label { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.category-label .romix-icon { color: var(--romix-pink); }
+.editorial-card__arrow {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  display: inline-grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgba(36, 36, 38, .12);
+  border-radius: 50%;
+  background: var(--romix-white);
+  color: var(--romix-ink);
+  transition: color var(--romix-ease), transform var(--romix-ease), border-color var(--romix-ease);
+}
+.editorial-card:hover .editorial-card__arrow { color: var(--romix-pink); border-color: var(--romix-pink-soft); transform: translateY(-1px); }
+.promo-slide__cta { position: absolute; right: 24px; bottom: 24px; z-index: 2; gap: 8px; }
+.catalog-cta { gap: 8px; }
+.product-cta { gap: 8px; width: 100%; min-height: 42px; }
+.why-item__icon {
+  display: inline-grid;
+  width: 60px;
+  height: 60px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--romix-pink-bg);
+  color: var(--romix-pink);
+}
+.why-item__icon .romix-icon { width: 28px; height: 28px; }
+
+@media (max-width: 760px) {
+  .promo-slide__cta { right: 16px; bottom: 16px; min-height: 44px; }
+  .editorial-card__arrow { top: 12px; right: 12px; }
+}
 
 /* ---------- Catalog + category pages ---------- */
 .catalog-page {
@@ -628,7 +616,7 @@ header.romix-shared-header .mega-accessories { border-radius: var(--romix-radius
   font-size: 10px;
   box-shadow: none;
 }
-.product-variants { gap: 7px; margin-bottom: 8px; }
+.product-variants { gap: 7px; margin-bottom: 8px; max-width: 100%; }
 .variant-chip {
   width: 24px;
   height: 24px;
@@ -1126,7 +1114,6 @@ body:has(#root) .cta { min-height: 50px; border-radius: var(--romix-radius); }
     overflow: visible;
     scroll-snap-type: none;
   }
-  .benefit-strip { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .editorial-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
 
   .catalog-page { padding-top: 18px; }
@@ -1196,7 +1183,7 @@ body:has(#root) .cta { min-height: 50px; border-radius: var(--romix-radius); }
   .main-hero-carousel__content { width: min(70vw, 250px); left: 16px; }
   .main-hero-carousel__title { font-size: clamp(44px, 15vw, 62px); }
   .main-hero-carousel__subtitle { font-size: 13px; }
-  #product-grid.grid, .catalog-page .grid { gap-inline: 8px; }
+  #product-grid.grid, .catalog-page .grid { column-gap: 8px; }
   .product-tag { display: none; }
 }
 
@@ -1214,7 +1201,7 @@ body:has(#root) .cta { min-height: 50px; border-radius: var(--romix-radius); }
   .site-header .brand-logo-media { display: none; }
   #product-grid.grid, .catalog-page .grid { grid-template-columns: 1fr; }
   .catalog-page .product-thumb { aspect-ratio: 4 / 5; }
-  .categories-grid, .editorial-grid, .benefit-strip { grid-template-columns: 1fr; }
+  .categories-grid, .editorial-grid { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1229,3 +1216,5 @@ body:has(#root) .cta { min-height: 50px; border-radius: var(--romix-radius); }
 
 
 /* Predictive search is owned by assets/css/romix-header.css. */
+
+.section-eyebrow, .sec-eyebrow { color: #b51664; }

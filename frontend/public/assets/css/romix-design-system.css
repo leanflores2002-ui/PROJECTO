@@ -1,0 +1,306 @@
+/*
+ * ROMIX Design System
+ * Shared tokens and opt-in controls for every storefront page.
+ * Legacy aliases below are compatibility bridges for existing CSS/JS hooks.
+ */
+:root {
+  color-scheme: light;
+
+  /* Brand and semantic colors */
+  --romix-pink: #F22797;
+  --romix-pink-hover: #D91D83;
+  --romix-pink-readable: #C71976;
+  --romix-pink-soft: #F291C7;
+  --romix-pink-bg: #FFF0F6;
+  --romix-ink: #242426;
+  --romix-muted: #6F6D76;
+  --romix-text-muted: var(--romix-muted);
+  --romix-white: #FFFFFF;
+  --romix-surface: #F2F2F2;
+  --romix-surface-soft: #FAFAFA;
+  --romix-border: rgba(36, 36, 38, .12);
+  --romix-border-strong: rgba(36, 36, 38, .22);
+  --romix-success: #178653;
+  --romix-warning: #C66C12;
+  --romix-danger: #B4233A;
+
+  /* Typography scale: Outfit for headings, Manrope for body and UI. */
+  --romix-font-heading: "Outfit", system-ui, sans-serif;
+  --romix-font-body: "Manrope", system-ui, sans-serif;
+  --romix-text-xs: 12px;
+  --romix-text-sm: 14px;
+  --romix-text-base: 16px;
+  --romix-text-lg: 18px;
+  --romix-text-xl: 20px;
+  --romix-heading-sm: clamp(22px, 2vw, 28px);
+  --romix-heading-md: clamp(28px, 3vw, 40px);
+  --romix-heading-lg: clamp(36px, 5vw, 64px);
+  --romix-leading-body: 1.6;
+  --romix-leading-tight: 1.08;
+
+  /* Layout, shape and motion */
+  --romix-radius-sm: 8px;
+  --romix-radius: 10px;
+  --romix-radius-lg: 14px;
+  --romix-pill: 999px;
+  --romix-control-sm: 40px;
+  --romix-control-md: 44px;
+  --romix-control-lg: 50px;
+  --romix-control-height: var(--romix-control-md);
+  --romix-control-height-lg: var(--romix-control-lg);
+  --romix-icon-xs: 16px;
+  --romix-icon-sm: 18px;
+  --romix-icon-md: 20px;
+  --romix-icon-lg: 24px;
+  --romix-icon-xl: 28px;
+  --romix-max: 1400px;
+  --romix-space-1: 4px;
+  --romix-space-2: 8px;
+  --romix-space-3: 12px;
+  --romix-space-4: 16px;
+  --romix-space-5: 24px;
+  --romix-space-6: 32px;
+  --romix-space-7: 48px;
+  --romix-space-8: 64px;
+  --romix-space-9: 80px;
+  --romix-space-10: 96px;
+  --romix-transition: 180ms ease;
+  --romix-ease: var(--romix-transition);
+  --romix-focus-ring: 0 0 0 3px rgba(242, 39, 151, .22);
+  --romix-focus: var(--romix-pink);
+  --romix-shadow-xs: 0 2px 8px rgba(36, 36, 38, .035);
+  --romix-shadow: 0 6px 20px rgba(36, 36, 38, .055);
+  --romix-shadow-hover: 0 8px 24px rgba(36, 36, 38, .07);
+  --romix-z-content: 1;
+  --romix-z-sticky: 100;
+  --romix-z-header: 500;
+  --romix-z-dropdown: 600;
+  --romix-z-overlay: 900;
+  --romix-z-drawer: 1000;
+  --romix-z-modal: 2000;
+  --romix-z-toast: 3000;
+
+  /* Compatibility aliases; use --romix-* in new code. */
+  --pink-primary: var(--romix-pink);
+  --pink-soft: var(--romix-pink-soft);
+  --ink: var(--romix-ink);
+  --surface: var(--romix-white);
+  --surface-soft: var(--romix-surface-soft);
+  --muted: var(--romix-text-muted);
+  --line: var(--romix-border);
+  --line-strong: var(--romix-border-strong);
+}
+
+/* Opt-in button primitives. Existing classes remain supported by page CSS. */
+.romix-btn {
+  display: inline-flex;
+  min-height: var(--romix-control-height);
+  align-items: center;
+  justify-content: center;
+  gap: var(--romix-space-2);
+  padding: 0 var(--romix-space-4);
+  border: 1px solid transparent;
+  border-radius: var(--romix-radius);
+  font: 700 var(--romix-text-sm)/1 var(--romix-font-body);
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background-color var(--romix-ease), border-color var(--romix-ease), color var(--romix-ease), transform var(--romix-ease), box-shadow var(--romix-ease);
+}
+
+.romix-btn:hover { transform: translateY(-1px); }
+.romix-btn:active:not(:disabled):not([aria-disabled="true"]) { transform: translateY(0); filter: brightness(.95); }
+.romix-btn--primary { color: var(--romix-white); background: var(--romix-pink-readable); border-color: var(--romix-pink-readable); }
+.romix-btn--primary:hover { color: var(--romix-white); background: var(--romix-pink-hover); border-color: var(--romix-pink-hover); }
+.romix-btn--secondary { color: var(--romix-ink); background: var(--romix-white); border-color: var(--romix-border-strong); }
+.romix-btn--secondary:hover { color: var(--romix-pink); background: var(--romix-pink-bg); border-color: var(--romix-pink-soft); }
+.romix-btn--outline { color: var(--romix-ink); background: transparent; border-color: var(--romix-ink); }
+.romix-btn--outline:hover { color: var(--romix-pink); background: var(--romix-pink-bg); border-color: var(--romix-pink); }
+.romix-btn--ghost { color: var(--romix-ink); background: transparent; border-color: transparent; }
+.romix-btn--ghost:hover { color: var(--romix-pink); background: var(--romix-pink-bg); }
+.romix-btn--dark { color: var(--romix-white); background: var(--romix-ink); border-color: var(--romix-ink); }
+.romix-btn--dark:hover { color: var(--romix-white); background: #39383B; border-color: #39383B; }
+.romix-btn--danger { color: var(--romix-danger); background: var(--romix-white); border-color: rgba(180, 35, 58, .35); }
+.romix-btn--danger:hover { color: var(--romix-white); background: var(--romix-danger); border-color: var(--romix-danger); }
+
+romix-toast.romix-toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1200;
+  max-width: min(420px, calc(100vw - 48px));
+  padding: 12px 16px;
+  border: 0;
+  border-radius: var(--romix-radius);
+  background: var(--romix-ink);
+  color: var(--romix-white);
+  font: inherit;
+  box-shadow: 0 8px 24px rgba(36, 36, 38, .18);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+romix-toast.romix-toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+romix-toast.romix-toast[hidden] {
+  display: block;
+  visibility: hidden;
+}
+
+romix-toast.romix-toast.romix-toast--success { background: var(--romix-success); }
+romix-toast.romix-toast.romix-toast--error { background: var(--romix-danger); }
+
+@media (max-width: 600px) {
+  romix-toast.romix-toast {
+    left: 16px;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  romix-toast.romix-toast { transition: none; transform: none; }
+}
+.romix-btn--pill { border-radius: var(--romix-pill); }
+.romix-btn--sm { min-height: var(--romix-control-sm); padding-inline: var(--romix-space-3); font-size: var(--romix-text-sm); }
+.romix-btn--md { min-height: var(--romix-control-md); }
+.romix-btn--lg { min-height: var(--romix-control-lg); padding-inline: var(--romix-space-5); }
+.romix-btn:where(:disabled, [aria-disabled="true"]),
+.romix-btn:where(:disabled, [aria-disabled="true"]):hover {
+  color: #99979D;
+  background: #E8E8EA;
+  border-color: #E8E8EA;
+  opacity: .72;
+  cursor: not-allowed;
+  filter: none;
+  transform: none;
+}
+
+.romix-icon-btn {
+  display: inline-grid;
+  width: var(--romix-control-height);
+  height: var(--romix-control-height);
+  min-width: var(--romix-control-height);
+  place-items: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--romix-radius);
+  color: var(--romix-ink);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color var(--romix-ease), border-color var(--romix-ease), color var(--romix-ease), transform var(--romix-ease);
+}
+.romix-icon {
+  display: inline-block;
+  width: var(--romix-icon-md);
+  height: var(--romix-icon-md);
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+.romix-icon--xs { width: var(--romix-icon-xs); height: var(--romix-icon-xs); }
+.romix-icon--sm { width: var(--romix-icon-sm); height: var(--romix-icon-sm); }
+.romix-icon--lg { width: var(--romix-icon-lg); height: var(--romix-icon-lg); }
+.romix-icon--xl { width: var(--romix-icon-xl); height: var(--romix-icon-xl); }
+.romix-icon[data-romix-icon-size="xs"] { width: var(--romix-icon-xs); height: var(--romix-icon-xs); }
+.romix-icon[data-romix-icon-size="sm"] { width: var(--romix-icon-sm); height: var(--romix-icon-sm); }
+.romix-icon[data-romix-icon-size="lg"] { width: var(--romix-icon-lg); height: var(--romix-icon-lg); }
+.romix-icon[data-romix-icon-size="xl"] { width: var(--romix-icon-xl); height: var(--romix-icon-xl); }
+.romix-icon-btn--primary {
+  color: var(--romix-white);
+  background: var(--romix-pink);
+  border-color: var(--romix-pink);
+}
+.romix-icon-btn--primary:hover { color: var(--romix-white); background: var(--romix-pink-hover); border-color: var(--romix-pink-hover); }
+.romix-icon-btn--soft { color: var(--romix-pink); background: var(--romix-pink-bg); border-color: var(--romix-pink-bg); }
+.romix-icon-btn--soft:hover { color: var(--romix-pink-hover); background: var(--romix-pink-soft); border-color: var(--romix-pink-soft); }
+.romix-icon-btn--lg { width: var(--romix-control-lg); height: var(--romix-control-lg); min-width: var(--romix-control-lg); }
+.romix-icon-btn--sm { width: var(--romix-control-sm); height: var(--romix-control-sm); min-width: var(--romix-control-sm); }
+.romix-icon-btn:hover { color: var(--romix-pink-hover); background: var(--romix-pink-bg); transform: translateY(-1px); }
+.romix-icon-btn:active:not(:disabled):not([aria-disabled="true"]) { color: var(--romix-pink); transform: translateY(0); }
+.romix-icon-btn svg { width: 20px; height: 20px; }
+.romix-icon-btn:where(:disabled, [aria-disabled="true"]),
+.romix-icon-btn:where(:disabled, [aria-disabled="true"]):hover {
+  color: #99979D;
+  background: #E8E8EA;
+  border-color: #E8E8EA;
+  opacity: .72;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.romix-btn svg,
+.romix-btn .romix-icon,
+.romix-icon-btn svg,
+.romix-icon-btn .romix-icon { flex-shrink: 0; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.romix-control {
+  min-height: var(--romix-control-height);
+  border: 1px solid var(--romix-border);
+  border-radius: var(--romix-radius);
+  color: var(--romix-ink);
+  background: var(--romix-white);
+  transition: border-color var(--romix-ease), box-shadow var(--romix-ease);
+}
+.romix-control:focus-visible,
+.romix-btn:focus-visible,
+.romix-icon-btn:focus-visible {
+  outline: 2px solid var(--romix-ink);
+  outline-offset: 2px;
+  box-shadow: var(--romix-focus-ring);
+}
+
+/* Shared focus treatment for legacy controls that are still used by the UI. */
+:where(.filters-open-btn, .filters-clear, .filter-more, .active-filters-clear, .sidebar-close, .catalog-load-more-btn, .qty-control button, .share-btn, .zoom-btn, .related-products__nav-btn, .product-accordion__button, .cart-right .remove, .cart-actions-row .btn, .hero-search button, .tab-button, .qty-btn):focus-visible {
+  outline: 2px solid var(--romix-pink);
+  outline-offset: 2px;
+  box-shadow: var(--romix-focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .romix-btn, .romix-icon-btn, .romix-control { transition-duration: 0.01ms; }
+}
+
+/* Shared type and container baseline. Page styles may refine this by scope. */
+html { font-size: 16px; }
+body {
+  color: var(--romix-ink);
+  font-family: var(--romix-font-body);
+  font-size: var(--romix-text-base);
+  line-height: var(--romix-leading-body);
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--romix-font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: var(--romix-leading-tight);
+}
+.romix-container {
+  width: min(var(--romix-max), calc(100% - 48px));
+  margin-inline: auto;
+}
+@media (max-width: 640px) {
+  body { font-size: 15px; }
+  .romix-container { width: calc(100% - 32px); }
+}
+@media (max-width: 380px) {
+  .romix-container { width: calc(100% - 24px); }
+}

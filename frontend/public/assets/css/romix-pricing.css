@@ -2,7 +2,7 @@
   display: grid;
   min-width: 0;
   gap: 3px;
-  color: #242426;
+  color: var(--romix-ink);
   line-height: 1.2;
 }
 
@@ -27,9 +27,9 @@
   min-height: 24px;
   align-items: center;
   padding: 3px 7px;
-  border-radius: 5px;
-  color: #ffffff;
-  background: #16a34a;
+  border-radius: var(--romix-radius-sm);
+  color: var(--romix-white);
+  background: var(--romix-success);
   font-size: .72rem;
   font-weight: 800;
   letter-spacing: .01em;
@@ -39,7 +39,7 @@
 
 .romix-price-original {
   width: fit-content;
-  color: #a6a6a6;
+  color: var(--romix-text-muted);
   font-size: .76rem;
   font-weight: 600;
   text-decoration: line-through;
@@ -54,7 +54,7 @@
 .savings-label,
 .romix-savings-label {
   width: fit-content;
-  color: #15803d;
+  color: var(--romix-success);
   font-size: .76rem;
   font-weight: 700;
   white-space: nowrap;

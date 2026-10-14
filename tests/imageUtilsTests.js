@@ -22,68 +22,73 @@ function loadImageUtils() {
 (function main() {
   const { dom, utils } = loadImageUtils();
   const product = {
-    image: 'images/products/chaleco_polar_con_corderito_hombre_invierno_negro.png',
+    image: 'images/products/chaleco_polar_con_corderito_hombre_invierno_negro.webp',
     images: [
-      'images/products/chaleco_polar_con_corderito_hombre_invierno_negro.png',
-      'images/products/chaleco_polar_con_corderito_hombre_invierno_verde.png'
+      'images/products/chaleco_polar_con_corderito_hombre_invierno_negro.webp',
+      'images/products/chaleco_polar_con_corderito_hombre_invierno_verde.webp'
     ],
     imageMap: {
-      Negro: 'images/products/chaleco_polar_con_corderito_hombre_invierno_negro.png',
-      Verde: 'images/products/chaleco_polar_con_corderito_hombre_invierno_verde.png'
+      Negro: 'images/products/chaleco_polar_con_corderito_hombre_invierno_negro.webp',
+      Verde: 'images/products/chaleco_polar_con_corderito_hombre_invierno_verde.webp'
     },
     colors: [
       { name: 'Negro' },
       { name: 'Verde' }
     ],
-    thumbnailFallback: 'images/thumbs/chaleco_polar_con_corderito_hombre_invierno_negro-thumb.jpg',
-    thumbnail: 'images/thumbs/chaleco_polar_con_corderito_hombre_invierno_negro-thumb.webp',
-    thumbnailAvif: 'images/thumbs/chaleco_polar_con_corderito_hombre_invierno_negro-thumb.avif'
   };
 
   const greenImage = utils.getSafeProductImage(product, 'Verde', 1);
   assert(
-    greenImage === 'images/products/chaleco_polar_con_corderito_hombre_invierno_verde.png',
+    greenImage === 'images/products/chaleco_polar_con_corderito_hombre_invierno_verde.webp',
     'La imagen segura debe priorizar la imagen original del color Verde'
   );
 
   const thumbSources = utils.getSafeProductThumbSources(product, 'Negro', 0);
   assert(
-    thumbSources.includes('images/products/chaleco_polar_con_corderito_hombre_invierno_negro.png'),
-    'Las miniaturas deben caer a la imagen original del producto cuando falta el thumb'
+    thumbSources[0] === 'images/thumbs/chaleco_polar_con_corderito_hombre_invierno_negro.webp',
+    'Las miniaturas deben priorizar el derivado de card cuando no hay thumb explícito'
   );
 
   const greenThumbSet = utils.getProductThumbSet(product, 'Verde');
   assert(
-    greenThumbSet.src === 'images/thumbs/chaleco_polar_con_corderito_hombre_invierno_verde-thumb.webp',
-    'La miniatura de un color seleccionado debe derivarse de la imagen de ese color, no de la miniatura global'
+    greenThumbSet.src === 'images/thumbs/chaleco_polar_con_corderito_hombre_invierno_verde.webp',
+    'La miniatura de un color seleccionado debe usar el derivado de card del color'
   );
 
+  const explicitColorImage = 'images/products/chaleco_verde_canonico.webp';
+  const explicitColorThumb = 'images/thumbs/chaleco_verde_canonico.webp';
+  const explicitColorSet = utils.getProductThumbSet({
+    image: 'images/products/chaleco_default.webp',
+    thumbnail: 'images/thumbs/chaleco_default.webp',
+    colors: [{ name: 'Verde', image: explicitColorImage, thumb: explicitColorThumb }]
+  }, { name: 'Verde', image: explicitColorImage, thumb: explicitColorThumb });
+  assert(explicitColorSet.originalSrc === explicitColorImage, 'originalSrc debe priorizar color.image');
+  assert(explicitColorSet.src === explicitColorThumb, 'src debe priorizar color.thumb sobre color.image');
+
   const productWithColorGalleries = {
-    image: 'images/products/chaleco_negro_1.png',
+    image: 'images/products/chaleco_negro_1.webp',
     colors: [
       {
         name: 'Negro',
         images: [
-          'images/products/chaleco_negro_1.png',
-          'images/products/chaleco_negro_2.png'
+          'images/products/chaleco_negro_1.webp',
+          'images/products/chaleco_negro_2.webp'
         ]
       },
       {
         name: 'Verde olivo',
         slug: 'verde-olivo',
         imagenes: [
-          'images/products/chaleco_verde_1.png',
-          'images/products/chaleco_verde_2.png'
-        ],
-        thumbnail: 'images/thumbs/chaleco_verde_1-thumb.webp'
+          'images/products/chaleco_verde_1.webp',
+          'images/products/chaleco_verde_2.webp'
+        ]
       }
-    ],
-    thumbnail: 'images/thumbs/chaleco_negro_1-thumb.webp'
+    ]
   };
 
   const resolvedColors = utils.resolveProductColorEntries(productWithColorGalleries);
   assert(
-    resolvedColors[1].image === 'images/products/chaleco_verde_1.png',
+    resolvedColors[1].image === 'images/products/chaleco_verde_1.webp',
     'El color debe usar la primera imagen de su propio array como imagen principal'
   );
   assert(
@@ -91,7 +96,7 @@ function loadImageUtils() {
     'Cada color debe conservar su propio array de imagenes sin mezclar miniaturas'
   );
   assert(
-    utils.getColorImage(productWithColorGalleries, 'Verde olivo') === 'images/products/chaleco_verde_1.png',
+    utils.getColorImage(productWithColorGalleries, 'Verde olivo') === 'images/products/chaleco_verde_1.webp',
     'La busqueda por nombre de color debe resolver su primera imagen exacta'
   );
 
@@ -99,20 +104,20 @@ function loadImageUtils() {
   utils.applyImageWithFallback(
     img,
     [
-      'images/thumbs/chaleco_polar_con_corderito_hombre_invierno_negro-thumb.webp',
-      'images/products/chaleco_polar_con_corderito_hombre_invierno_negro.png'
+      'images/products/chaleco_polar_con_corderito_hombre_invierno_negro.webp',
+      'images/does-not-exist.webp'
     ],
     'Chaleco ROMIX',
     { placeholder: 'images/placeholder-product.png' }
   );
   assert(
-    img.getAttribute('src') === 'images/thumbs/chaleco_polar_con_corderito_hombre_invierno_negro-thumb.webp',
-    'El primer intento debe usar la ruta inicial pedida'
+    img.getAttribute('src') === 'images/products/chaleco_polar_con_corderito_hombre_invierno_negro.webp',
+    'El primer intento debe usar la imagen canónica'
   );
   img.onerror();
   assert(
-    img.getAttribute('src') === 'images/products/chaleco_polar_con_corderito_hombre_invierno_negro.png',
-    'Al fallar el thumb debe usar la imagen original como fallback'
+    img.getAttribute('src') === 'images/does-not-exist.webp',
+    'La cadena de fallback debe conservar la siguiente fuente explícita'
   );
   img.onerror();
   assert(

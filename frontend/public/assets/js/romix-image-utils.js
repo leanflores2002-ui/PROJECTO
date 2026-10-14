@@ -13,7 +13,7 @@
   const LOGO_HEIGHT = 829;
   const PRODUCTS_DIR = "images/products/";
   const THUMBS_DIR = "images/thumbs/";
-  const MOBILE_DIR = "images/mobile/";
+  const SWATCHES_DIR = "images/swatches/";
 
   function normalizeColorKey(value) {
     const raw = String(value || "").trim();
@@ -71,47 +71,26 @@
 
   function getThumbPath(imagePath) {
     const normalized = cleanPath(imagePath);
-    if (!normalized) return "";
-    if (/^data:/i.test(normalized)) return normalized;
-    if (normalized.includes(THUMBS_DIR)) {
-      return hasThumbSuffix(normalized)
-        ? replaceExtension(normalized, "webp")
-        : appendSuffixBeforeExtension(normalized, "-thumb", "webp");
-    }
-    if (normalized.includes(PRODUCTS_DIR)) {
-      return appendSuffixBeforeExtension(normalized.replace(PRODUCTS_DIR, THUMBS_DIR), "-thumb", "webp");
-    }
-    return appendSuffixBeforeExtension(normalized, "-thumb", "webp");
+    if (!normalized || /^data:/i.test(normalized)) return normalized;
+    if (normalized.indexOf(THUMBS_DIR) === 0 || normalized.indexOf(SWATCHES_DIR) === 0) return normalized;
+    if (normalized.indexOf(PRODUCTS_DIR) !== 0) return normalized;
+    return THUMBS_DIR + basename(normalized).replace(/\.(png|jpe?g|avif|webp)$/i, ".webp");
   }
 
   function getAvifThumbPath(imagePath) {
-    const normalized = cleanPath(imagePath);
-    if (!normalized) return "";
-    if (/^data:/i.test(normalized)) return normalized;
-    if (normalized.includes(THUMBS_DIR)) {
-      return hasThumbSuffix(normalized)
-        ? replaceExtension(normalized, "avif")
-        : appendSuffixBeforeExtension(normalized, "-thumb", "avif");
-    }
-    if (normalized.includes(PRODUCTS_DIR)) {
-      return appendSuffixBeforeExtension(normalized.replace(PRODUCTS_DIR, THUMBS_DIR), "-thumb", "avif");
-    }
-    return appendSuffixBeforeExtension(normalized, "-thumb", "avif");
+    return getThumbPath(imagePath);
   }
 
   function getMobileImagePath(imagePath) {
+    return cleanPath(imagePath);
+  }
+
+  function getSwatchPath(imagePath) {
     const normalized = cleanPath(imagePath);
-    if (!normalized) return "";
-    if (/^data:/i.test(normalized)) return normalized;
-    if (normalized.includes(MOBILE_DIR)) {
-      return hasMobileSuffix(normalized)
-        ? replaceExtension(normalized, "webp")
-        : appendSuffixBeforeExtension(normalized, "-mobile", "webp");
-    }
-    if (normalized.includes(PRODUCTS_DIR)) {
-      return appendSuffixBeforeExtension(normalized.replace(PRODUCTS_DIR, MOBILE_DIR), "-mobile", "webp");
-    }
-    return appendSuffixBeforeExtension(normalized, "-mobile", "webp");
+    if (!normalized || /^data:/i.test(normalized)) return normalized;
+    if (normalized.indexOf(SWATCHES_DIR) === 0) return normalized;
+    if (normalized.indexOf(PRODUCTS_DIR) !== 0) return normalized;
+    return SWATCHES_DIR + basename(normalized).replace(/\.(png|jpe?g|avif|webp)$/i, ".webp");
   }
 
   function toThumbPath(value) {
@@ -332,26 +311,27 @@
       : findProductColor(product, color);
     const mainImage = getColorImage(colorEntry || color, product) || getProductMainImage(product);
     const hasColorEntry = !!colorEntry;
-    const explicitThumb = cleanPath((colorEntry && (colorEntry.thumb || colorEntry.thumbnail)) || (!hasColorEntry && product && (product.thumbnail || product.thumb)));
+    const explicitColorImage = cleanPath(colorEntry && colorEntry.image);
+    const explicitThumbValue = cleanPath((colorEntry && (colorEntry.thumb || colorEntry.thumbnail)) || (!hasColorEntry && product && (product.thumbnail || product.thumb)));
+    const explicitThumb = getThumbPath(explicitThumbValue);
     const explicitFallback = cleanPath((colorEntry && (colorEntry.thumbFallback || colorEntry.thumbnailFallback)) || (!hasColorEntry && product && (product.thumbnailFallback || product.thumbFallback)));
     const explicitAvif = cleanPath((colorEntry && (colorEntry.thumbAvif || colorEntry.thumbnailAvif)) || (!hasColorEntry && product && product.thumbnailAvif));
     const explicitThumbExt = extension(explicitThumb);
-    const thumbFallback = explicitThumb && explicitThumbExt && explicitThumbExt !== "avif"
-      ? explicitThumb
-      : "";
-    const fallbackSrc = explicitFallback || mainImage;
-    const derivedThumb = mainImage ? getThumbPath(mainImage) : "";
-    const productThumb = cleanPath(product && (product.thumbnail || product.thumb));
-    const primarySrc = thumbFallback || derivedThumb || fallbackSrc || mainImage || productThumb;
+    const thumbFallback = explicitThumb && explicitThumbExt && explicitThumbExt !== "avif" ? explicitThumb : "";
+    const productThumb = getThumbPath(cleanPath(product && (product.thumbnail || product.thumb)));
+    const generatedThumb = getThumbPath(mainImage);
+    const fallbackSrc = thumbFallback || explicitFallback || productThumb || generatedThumb || mainImage;
+    const primarySrc = thumbFallback || explicitFallback || productThumb || generatedThumb || mainImage;
     const explicitWebp = explicitThumbExt === "webp" ? explicitThumb : "";
     const explicitAvifSrc = extension(explicitAvif) === "avif" ? explicitAvif : "";
 
     return {
       src: primarySrc || fallbackSrc || mainImage,
       fallbackSrc: fallbackSrc || mainImage,
-      webpSrc: explicitWebp,
-      avifSrc: explicitAvifSrc,
-      originalSrc: mainImage
+      webpSrc: explicitColorImage ? "" : explicitWebp,
+      avifSrc: explicitColorImage ? "" : explicitAvifSrc,
+      originalSrc: explicitColorImage || mainImage,
+      sources: uniqueSources([thumbFallback, explicitFallback, productThumb, generatedThumb, mainImage])
     };
   }
 
@@ -397,9 +377,10 @@
     push(normalized);
 
     const ext = extension(normalized);
-    if (normalized.includes(THUMBS_DIR) || hasThumbSuffix(normalized)) {
+    if (normalized.includes(THUMBS_DIR) || normalized.includes(SWATCHES_DIR) || hasThumbSuffix(normalized)) {
       const originalBase = normalized
         .replace(THUMBS_DIR, PRODUCTS_DIR)
+        .replace(SWATCHES_DIR, PRODUCTS_DIR)
         .replace(/-thumb(?=\.[^./]+$)/i, "");
       [
         originalBase,
@@ -452,15 +433,15 @@
     const colorEntry = findProductColor(product, colorName);
     const baseSources = getSafeProductImageSources(product, colorName, index);
     const thumbCandidates = [
-      cleanPath(colorEntry && (colorEntry.thumbAvif || colorEntry.thumbnailAvif)),
-      cleanPath(colorEntry && (colorEntry.thumb || colorEntry.thumbnail)),
-      cleanPath(colorEntry && (colorEntry.thumbFallback || colorEntry.thumbnailFallback)),
+      getThumbPath(cleanPath(colorEntry && (colorEntry.thumbAvif || colorEntry.thumbnailAvif))),
+      getThumbPath(cleanPath(colorEntry && (colorEntry.thumb || colorEntry.thumbnail))),
+      getThumbPath(cleanPath(colorEntry && (colorEntry.thumbFallback || colorEntry.thumbnailFallback))),
       baseSources.map(function (source) { return getAvifThumbPath(source); }),
       baseSources.map(function (source) { return getThumbPath(source); }),
       baseSources,
-      cleanPath(product.thumbnailAvif),
-      cleanPath(product.thumbnail || product.thumb),
-      cleanPath(product.thumbnailFallback || product.thumbFallback)
+      getThumbPath(cleanPath(product.thumbnailAvif)),
+      getThumbPath(cleanPath(product.thumbnail || product.thumb)),
+      getThumbPath(cleanPath(product.thumbnailFallback || product.thumbFallback))
     ];
 
     const expanded = [];
@@ -520,6 +501,43 @@
     return img;
   }
 
+  function loadImageResource(src) {
+    const normalized = cleanPath(src);
+    if (!normalized || typeof Image !== "function") return Promise.resolve(false);
+
+    return new Promise(function (resolve) {
+      const probe = new Image();
+      let settled = false;
+      const finish = function (success) {
+        if (settled) return;
+        settled = true;
+        probe.onload = null;
+        probe.onerror = null;
+        resolve(!!success);
+      };
+
+      probe.onload = function () { finish(true); };
+      probe.onerror = function () { finish(false); };
+      try {
+        probe.src = normalized;
+      } catch (_error) {
+        finish(false);
+        return;
+      }
+
+      if (probe.complete && probe.naturalWidth > 0) finish(true);
+      if (typeof probe.decode === "function") {
+        Promise.resolve(probe.decode()).then(function () {
+          finish(true);
+        }).catch(function () {
+          if (probe.complete) finish(probe.naturalWidth > 0);
+        });
+      } else if (probe.complete) {
+        finish(probe.naturalWidth > 0);
+      }
+    });
+  }
+
   function applyImageAttributes(img, options) {
     if (!img || !options) return img;
     if (options.alt != null) img.alt = String(options.alt);
@@ -565,12 +583,13 @@
     return { picture, img };
   }
 
-  window.romixImageUtils = {
+  const api = {
     cleanPath,
     basename,
     extension,
     replaceExtension,
     getThumbPath,
+    getSwatchPath,
     getAvifThumbPath,
     getMobileImagePath,
     toThumbPath,
@@ -588,6 +607,7 @@
     getSafeProductImage,
     getSafeProductThumbSources,
     getSafeProductThumb,
+    loadImageResource,
     applyImageWithFallback,
     createPicture,
     dimensions: {
@@ -599,4 +619,6 @@
       logo: { width: LOGO_WIDTH, height: LOGO_HEIGHT }
     }
   };
+  if (typeof module === "object" && module.exports) module.exports = api;
+  if (typeof window !== "undefined") window.romixImageUtils = api;
 })();

@@ -30,7 +30,7 @@
   function createCard(product) {
     const card = document.createElement('a');
     card.className = 'promo-card';
-    card.href = 'novedades.html';
+    card.href = 'catalogo.html?view=novedades';
     card.setAttribute('aria-label', product && product.name ? product.name : 'Ver novedades');
 
     const media = document.createElement('div');

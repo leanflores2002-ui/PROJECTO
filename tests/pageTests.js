@@ -22,9 +22,6 @@ const axe = require('axe-core');
 
 const IGNORED_AXE_RULES = new Set(['document-title', 'html-has-lang']);
 const pages = [
-  { name: 'Mujer', file: path.join(__dirname, '..', 'frontend', 'public', 'mujer.html') },
-  { name: 'Hombre', file: path.join(__dirname, '..', 'frontend', 'public', 'hombre.html') },
-  { name: 'Niños', file: path.join(__dirname, '..', 'frontend', 'public', 'ninos.html') },
   { name: 'Catálogo', file: path.join(__dirname, '..', 'frontend', 'public', 'catalogo.html') }
 ];
 

@@ -36,9 +36,9 @@
   };
 
   const POPULAR_SEARCHES = [
-    { label: "Mujer", href: "mujer.html" },
-    { label: "Hombre", href: "hombre.html" },
-    { label: "Ni\u00f1os", href: "ninos.html" },
+    { label: "Mujer", href: "/mujer/" },
+    { label: "Hombre", href: "/hombre/" },
+    { label: "Ni\u00f1os", href: "/ninos/" },
     { label: "Calzas", href: "catalogo.html?tipo=calzas&q=calzas" },
     { label: "Remeras", href: "catalogo.html?tipo=remeras&q=remeras" },
     { label: "Pantalones", href: "catalogo.html?tipo=pantalones&q=pantalones" },
@@ -192,12 +192,13 @@
     const imageUtils = window.romixImageUtils || {};
     if (typeof imageUtils.getProductMainImage === "function") {
       const main = imageUtils.getProductMainImage(product);
+      if (main && typeof imageUtils.getThumbPath === "function") return imageUtils.getThumbPath(main);
       if (main) return main;
     }
     if (typeof imageUtils.getThumbPath === "function" && product && product.image) {
       return imageUtils.getThumbPath(product.image);
     }
-    return (product && (product.thumbnail || product.thumb || product.image || (Array.isArray(product.images) && product.images[0]))) || "images/logo-romix.png";
+    return (product && (product.thumbnail || product.thumb || product.image || (Array.isArray(product.images) && product.images[0]))) || "images/optimized/branding/romix-logo-360.webp";
   }
 
   function ensureProducts() {
@@ -216,10 +217,8 @@
         .catch(() => []);
     }
 
-    const tryApi = () => fetch("/api/products").then((response) => response.ok ? response.json() : Promise.reject());
-    const tryFile = () => fetch(new URL("assets/data/products.json", location.href)).then((response) => response.json());
-    return tryApi()
-      .catch(tryFile)
+    const tryFile = () => fetch(new URL("assets/data/products.json", document.baseURI || location.href)).then((response) => response.json());
+    return tryFile()
       .then((data) => {
         PRODUCTS = sanitizeProducts(data || []);
         return PRODUCTS;
@@ -632,7 +631,7 @@
     input.setAttribute("placeholder", "Encontr\u00e1 lo que busc\u00e1s");
 
     const submit = form.querySelector('button[type="submit"]');
-    if (submit) submit.classList.add("romix-search-submit");
+    if (submit) submit.classList.add("romix-search-submit", "romix-btn", "romix-btn--primary");
 
     const panel = form.closest(".search-panel") || document.getElementById("header-search");
     let shell = form.querySelector(".romix-search-shell");
@@ -642,7 +641,7 @@
       shell.innerHTML = '' +
         '<div class="romix-search-input-wrap">' +
           '<span class="romix-search-icon" aria-hidden="true"></span>' +
-          '<button class="romix-search-clear" type="button" aria-label="Limpiar b&uacute;squeda" hidden><span aria-hidden="true">&times;</span></button>' +
+          '<button class="romix-icon-btn romix-search-clear" type="button" aria-label="Limpiar b&uacute;squeda" hidden>' + window.romixIcon("X", { size: "sm" }) + '</button>' +
         '</div>' +
         '<button class="romix-search-cancel" type="button" aria-label="Cerrar b&uacute;squeda">Cancelar</button>' +
         '<p class="romix-search-status" id="romix-search-status" role="status" aria-live="polite" aria-atomic="true"></p>' +
@@ -701,7 +700,7 @@
       event.preventDefault();
       const query = input.value.trim();
       if (!query) return;
-      location.href = buildCatalogUrl({ q: query });
+      location.href = new URL(buildCatalogUrl({ q: query }), document.baseURI).href;
     });
 
     document.addEventListener("click", (event) => {

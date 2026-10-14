@@ -5,6 +5,9 @@
   const SIZE_BASE = ["1", "2", "3", "4", "5", "6"];
   const imageUtils = window.romixImageUtils || {};
   const pricing = window.romixPricing || {};
+  const iconMarkup = (name, options) => typeof window.romixIcon === "function"
+    ? window.romixIcon(name, options)
+    : "";
   const cardImageSize = imageUtils.dimensions && imageUtils.dimensions.productCard
     ? imageUtils.dimensions.productCard
     : { width: 720, height: 960 };
@@ -15,7 +18,7 @@
     hombre: { title: "Hombre", label: "Hombre" },
     ninos: { title: "Niños", label: "Niños" },
     novedades: { title: "Novedades", label: null },
-    catalogo: { title: "Catalogo", label: null }
+    catalogo: { title: "Catálogo", label: null }
   };
 
   const SECTION_OPTIONS = [
@@ -60,20 +63,12 @@
     out: { label: "Sin stock", css: "status-out" }
   };
 
-  const COLOR_DEFINITIONS = [
-    { key: "multicolor", label: "Multicolor", hex: "#f7c948", aliases: ["multicolor", "estampado", "estampada", "print", "floreado"] },
-    { key: "negro", label: "Negro", hex: "#000000", aliases: ["negro", "black", "hex", "name"] },
-    { key: "blanco", label: "Blanco", hex: "#ffffff", aliases: ["blanco", "white"] },
-    { key: "azul", label: "Azul", hex: "#007bff", aliases: ["azul", "azul jaspeado", "azul oscuro", "azul marino", "francia"] },
-    { key: "rosa", label: "Rosa", hex: "#ff69b4", aliases: ["rosa", "fucsia"] },
-    { key: "verde", label: "Verde", hex: "#28a745", aliases: ["verde", "verde jaspeado"] },
-    { key: "rojo", label: "Rojo", hex: "#dc3545", aliases: ["rojo", "rojo jaspeado"] },
-    { key: "morado", label: "Violeta", hex: "#6f42c1", aliases: ["violeta", "morado", "purpura"] },
-    { key: "naranja", label: "Naranja", hex: "#fd7e14", aliases: ["naranja"] },
-    { key: "amarillo", label: "Amarillo", hex: "#ffc107", aliases: ["amarillo"] },
-    { key: "marron", label: "Marron", hex: "#795548", aliases: ["marron", "chocolate", "caqui"] },
-    { key: "gris", label: "Gris", hex: "#adb5bd", aliases: ["gris", "gris jaspeado", "gris oscuro", "gris medio"] },
-    { key: "otros", label: "Otros", hex: "#b9b2b8", aliases: [] }
+  const MULTICOLOR_PATTERN = /(estampad[oa]|print|floread[oa]|multicolor)/i;
+  const MULTICOLOR_SWATCH = "conic-gradient(from 20deg, #ef476f, #ffd166, #06d6a0, #118ab2, #8338ec, #ef476f)";
+  const COLOR_FILTER_ORDER = [
+    "negro", "blanco", "gris-oscuro", "gris", "gris-melange", "azul-marino", "azul", "celeste",
+    "verde", "rojo", "bordo", "rosa", "fucsia", "lila", "violeta", "beige", "arena", "camel",
+    "tostado", "naranja", "mostaza", "multicolor"
   ];
 
   const RAW_COLOR_FALLBACK_HEX = {
@@ -101,6 +96,7 @@
 
   const state = {
     scope: "catalogo",
+    catalogView: { mode: "catalogo", sectionKeys: [] },
     products: [],
     view: [],
     compactVariantViewport: window.innerWidth <= 768,
@@ -117,7 +113,8 @@
       categories: new Set(),
       types: new Set(),
       seasons: new Set(),
-      sizes: new Set()
+      sizes: new Set(),
+      sale: new Set()
     },
     optionLabels: {
       audiences: new Map(),
@@ -130,6 +127,8 @@
     },
     showAllColors: false,
     showAllSizes: false,
+    priceMin: "",
+    priceMax: "",
     sizeValues: [],
     visibleCount: window.innerWidth <= 768 ? 8 : 12
   };
@@ -172,29 +171,15 @@
     return stripAccents(value).toLowerCase().trim();
   }
 
-  function resolveColorDefinitionByKey(key) {
-    return COLOR_DEFINITIONS.find((entry) => entry.key === key) || COLOR_DEFINITIONS[COLOR_DEFINITIONS.length - 1];
+  function compareFilterValues(a, b) {
+    return String(a).localeCompare(String(b), "es", { numeric: true, sensitivity: "base" });
   }
 
   function normalizeColorToFilterKey(value) {
-    const key = normalizeText(value);
-    if (!key) return "otros";
-
-    if (key.includes("estamp") || key.includes("print") || key.includes("floread") || key.includes("multicolor")) {
-      return "multicolor";
-    }
-
-    for (const definition of COLOR_DEFINITIONS) {
-      if (!Array.isArray(definition.aliases) || !definition.aliases.length) continue;
-      const match = definition.aliases.some((alias) => {
-        const aliasKey = normalizeText(alias);
-        if (!aliasKey) return false;
-        return key === aliasKey || key.includes(aliasKey);
-      });
-      if (match) return definition.key;
-    }
-
-    return "otros";
+    const key = normalizeText(value).replace(/\s+/g, " ");
+    if (!key) return "";
+    if (MULTICOLOR_PATTERN.test(key)) return "multicolor";
+    return key.replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
   }
 
   function setOptionLabel(group, value, label) {
@@ -218,6 +203,7 @@
   function getActiveFilters() {
     const result = [];
     Object.keys(state.selected).forEach((group) => {
+      if (group === "sale") return;
       state.selected[group].forEach((value) => {
         result.push({
           group,
@@ -226,6 +212,15 @@
         });
       });
     });
+    if (state.priceMin !== "") {
+      result.push({ group: "price_min", value: state.priceMin, label: "Precio desde " + formatPrice(state.priceMin) });
+    }
+    if (state.priceMax !== "") {
+      result.push({ group: "price_max", value: state.priceMax, label: "Precio hasta " + formatPrice(state.priceMax) });
+    }
+    if (state.selected.sale.has("1")) {
+      result.push({ group: "sale", value: "1", label: "Ofertas" });
+    }
     return result;
   }
 
@@ -260,11 +255,7 @@
   }
 
   function normalizeSection(value) {
-    const key = normalizeText(value);
-    if (["mujer", "mujeres", "dama", "damas"].includes(key)) return "mujer";
-    if (["hombre", "hombres", "caballero", "caballeros"].includes(key)) return "hombre";
-    if (["ninos", "ninas", "nino", "nina", "ninos y ninas", "nino y nina"].includes(key)) return "ninos";
-    return key || "catalogo";
+    return window.romixCatalogSections.normalizeSection(value);
   }
 
   function sectionLabel(sectionKey) {
@@ -334,6 +325,42 @@
     return "";
   }
 
+  function resolveCatalogView() {
+    const category = document.body?.dataset.categoryPage;
+    if (["mujer", "hombre", "ninos"].includes(category)) {
+      return { mode: "section", scope: category, sectionKeys: [category] };
+    }
+    let params = null;
+    try {
+      params = new URLSearchParams(window.location.search || "");
+    } catch (_error) {
+      params = new URLSearchParams();
+    }
+
+    const requestedView = normalizeText(params.get("view") || "");
+    if (requestedView === "novedades") {
+      return { mode: "novedades", scope: "novedades", sectionKeys: [] };
+    }
+
+    const requestedSections = readInitialSectionFilterKeys();
+    if (requestedSections.length === 1) {
+      return { mode: "section", scope: requestedSections[0], sectionKeys: requestedSections };
+    }
+    if (requestedSections.length > 1) {
+      return { mode: "catalogo", scope: "catalogo", sectionKeys: requestedSections };
+    }
+
+    const legacyScope = document.body && document.body.dataset
+      ? normalizeText(document.body.dataset.catalogScope || "")
+      : "";
+    const scope = PAGE_CONFIG[legacyScope] ? legacyScope : "catalogo";
+    return {
+      mode: scope === "novedades" ? "novedades" : (scope === "catalogo" ? "catalogo" : "section"),
+      scope,
+      sectionKeys: scope === "catalogo" || scope === "novedades" ? [] : [scope]
+    };
+  }
+
   function normalizeAudienceFilterValue(value) {
     const key = normalizeText(value);
     if (key === "nino" || key === "nina") return key;
@@ -389,6 +416,28 @@
     };
     const normalized = aliases[requested] || requested;
     return SORT_OPTIONS.some((entry) => entry.key === normalized) ? normalized : "recommended";
+  }
+
+  function readInitialPriceValue(key) {
+    let params = null;
+    try {
+      params = new URLSearchParams(window.location.search || "");
+    } catch (_error) {
+      return "";
+    }
+    const raw = params.get(key);
+    if (raw == null || String(raw).trim() === "") return "";
+    const value = Number(raw);
+    return Number.isFinite(value) && value >= 0 ? String(value) : "";
+  }
+
+  function hasInitialQueryFlag(key, expected) {
+    try {
+      const value = normalizeText(new URLSearchParams(window.location.search || "").get(key) || "");
+      return value === normalizeText(expected);
+    } catch (_error) {
+      return false;
+    }
   }
 
   function readInitialSearchAnyTokens() {
@@ -592,6 +641,11 @@
     const requestedTypes = readInitialTypeFilterKeys();
     const requestedSeasons = readInitialSeasonFilterKeys();
     const requestedSizes = readInitialSizeFilterKeys();
+    const requestedSale = hasInitialQueryFlag("sale", "1") || normalizeText(readInitialSearchQuery()) === "oferta";
+    state.priceMin = readInitialPriceValue("price_min");
+    state.priceMax = readInitialPriceValue("price_max");
+
+    if (requestedSale) state.selected.sale.add("1");
 
     if (requestedAudiences.length) {
       const audienceKey = requestedAudiences[0];
@@ -601,7 +655,8 @@
 
     if (state.scope === "catalogo" && requestedSections.length) {
       const availableSections = new Set(SECTION_OPTIONS.map((option) => option.key));
-      requestedSections.forEach((key) => {
+      const sectionKeys = state.catalogView.sectionKeys.length ? state.catalogView.sectionKeys : requestedSections;
+      sectionKeys.forEach((key) => {
         if (availableSections.has(key)) state.selected.sections.add(key);
       });
     }
@@ -654,9 +709,10 @@
 
   function applyInitialSearchFromQuery() {
     const searchQuery = readInitialSearchQuery();
-    state.searchQueryRaw = searchQuery;
-    state.searchQueryNorm = normalizeText(searchQuery);
-    state.searchTokens = tokenizeSearch(searchQuery);
+    const isOfferQuery = normalizeText(searchQuery) === "oferta";
+    state.searchQueryRaw = isOfferQuery ? "" : searchQuery;
+    state.searchQueryNorm = isOfferQuery ? "" : normalizeText(searchQuery);
+    state.searchTokens = isOfferQuery ? [] : tokenizeSearch(searchQuery);
     state.searchAnyTokens = readInitialSearchAnyTokens();
     state.searchExcludeTokens = readInitialSearchExcludeTokens();
   }
@@ -814,9 +870,9 @@
         hex: "#dddddd",
         image: fallbackImage,
         thumb: typeof imageUtils.getThumbPath === "function" ? imageUtils.getThumbPath(fallbackImage) : fallbackImage,
+        swatch: typeof imageUtils.getSwatchPath === "function" ? imageUtils.getSwatchPath(fallbackImage) : fallbackImage,
         thumbFallback: fallbackImage,
-        thumbAvif: "",
-        swatchImage: typeof imageUtils.getThumbPath === "function" ? imageUtils.getThumbPath(fallbackImage) : fallbackImage
+        thumbAvif: ""
       }];
     }
 
@@ -828,6 +884,10 @@
         : String(entry && entry.image || "").trim()) || fallbackImage;
       const thumb = String(entry && entry.thumb || "").trim()
         || (typeof imageUtils.getThumbPath === "function" ? imageUtils.getThumbPath(resolvedImage) : "");
+      const explicitSwatch = String(entry && (entry.swatch || entry.swatchImage) || "").trim();
+      const swatch = explicitSwatch
+        ? (typeof imageUtils.getSwatchPath === "function" ? imageUtils.getSwatchPath(explicitSwatch) : explicitSwatch)
+        : (typeof imageUtils.getSwatchPath === "function" ? imageUtils.getSwatchPath(resolvedImage) : thumb);
       const thumbFallback = String(entry && entry.thumbFallback || "").trim()
         || resolvedImage;
       const thumbAvif = String(entry && entry.thumbAvif || "").trim();
@@ -837,9 +897,9 @@
         hex: entry && entry.hex ? entry.hex : (RAW_COLOR_FALLBACK_HEX[key] || "#d9d4da"),
         image: resolvedImage,
         thumb,
+        swatch,
         thumbFallback,
-        thumbAvif,
-        swatchImage: thumb || resolvedImage
+        thumbAvif
       });
     });
   }
@@ -923,19 +983,27 @@
       seasonKey,
       featured: !!(raw && raw.featured === true),
       colors,
-      filterColorKeys: filterColorKeys.length ? filterColorKeys : ["otros"],
+      filterColorKeys,
       sizes,
+      stockByColor: raw && raw.stockByColor && typeof raw.stockByColor === "object" ? raw.stockByColor : null,
+      inventory: raw && raw.inventory && typeof raw.inventory === "object" ? raw.inventory : null,
       stockStatus: baseStock || statusFromSizes(sizes)
     };
+  }
+
+  function isProductOffer(product) {
+    if (!product) return false;
+    const badge = normalizeText(product.badge || product.featuredBadge || "");
+    return badge === "oferta" || badge.includes("oferta") || (Number(product.originalPrice) > Number(product.price));
   }
 
   async function loadProducts() {
     if (window.romixProductsStore && typeof window.romixProductsStore.load === "function") {
       const data = await window.romixProductsStore.load();
-      return Array.isArray(data) ? data : [];
+      return Array.isArray(data) ? data.filter((product) => product && product.visible !== false) : [];
     }
 
-    const response = await fetch(new URL(DATA_URL, window.location.href));
+    const response = await fetch(new URL(DATA_URL, document.baseURI));
     const text = await response.text();
     const parsed = parseJsonText(text);
     return (Array.isArray(parsed) ? parsed : []).filter((product) => product && product.visible !== false);
@@ -961,24 +1029,60 @@
   function collectColorOptions(list) {
     const map = new Map();
     list.forEach((product) => {
-      const keys = Array.isArray(product.filterColorKeys) ? product.filterColorKeys : [];
-      keys.forEach((key) => {
-        const definition = resolveColorDefinitionByKey(key);
-        if (!map.has(definition.key)) {
-          map.set(definition.key, {
-            key: definition.key,
-            name: definition.label,
-            hex: definition.hex,
-            count: 0
+      const colors = Array.isArray(product && product.colors) ? product.colors : [];
+      colors.forEach((color) => {
+        const name = String(color && (color.name || color.value) || "").trim();
+        const key = normalizeColorToFilterKey(name);
+        if (!key) return;
+
+        if (!map.has(key)) {
+          map.set(key, {
+            key,
+            count: 0,
+            names: new Map(),
+            hexes: new Map()
           });
         }
-        map.get(definition.key).count += 1;
+
+        const option = map.get(key);
+        option.count += 1;
+        option.names.set(name, (option.names.get(name) || 0) + 1);
+        const hex = String(color && color.hex || "").trim();
+        if (hex) option.hexes.set(hex, (option.hexes.get(hex) || 0) + 1);
       });
     });
 
-    return Array.from(map.values()).sort((a, b) => {
+    return Array.from(map.values()).map((option) => {
+      const displayName = option.key === "multicolor"
+        ? "Multicolor"
+        : Array.from(option.names.entries()).sort((a, b) => {
+            if (b[1] !== a[1]) return b[1] - a[1];
+            return a[0].localeCompare(b[0], "es", { sensitivity: "base" });
+          })[0][0];
+      const hex = Array.from(option.hexes.entries()).sort((a, b) => {
+        if (b[1] !== a[1]) return b[1] - a[1];
+        return a[0].localeCompare(b[0]);
+      })[0];
+      const swatch = option.key === "multicolor"
+        ? MULTICOLOR_SWATCH
+        : (hex ? hex[0] : (RAW_COLOR_FALLBACK_HEX[normalizeText(displayName)] || "#d9d4da"));
+      return {
+        key: option.key,
+        name: displayName,
+        hex: hex ? hex[0] : "",
+        swatch,
+        count: option.count
+      };
+    }).sort((a, b) => {
+      const aOrder = COLOR_FILTER_ORDER.indexOf(a.key);
+      const bOrder = COLOR_FILTER_ORDER.indexOf(b.key);
+      if (aOrder !== bOrder) {
+        if (aOrder === -1) return 1;
+        if (bOrder === -1) return -1;
+        return aOrder - bOrder;
+      }
       if (b.count !== a.count) return b.count - a.count;
-      return a.name.localeCompare(b.name, "es", { sensitivity: "base" });
+      return a.name.localeCompare(b.name, "es", { sensitivity: "base" }) || a.key.localeCompare(b.key);
     });
   }
 
@@ -1055,7 +1159,7 @@
 
   function addToCart(product, selectedColor) {
     if (!window.romixCart || typeof window.romixCart.addToCart !== "function") {
-      window.location.href = detailUrl(product);
+      window.location.href = new URL(detailUrl(product), document.baseURI).href;
       return;
     }
 
@@ -1103,7 +1207,7 @@
       const button = document.createElement("button");
       button.id = "catalog-load-more-btn";
       button.type = "button";
-      button.className = "catalog-load-more-btn";
+      button.className = "catalog-load-more-btn romix-btn romix-btn--secondary romix-btn--lg";
       button.addEventListener("click", function () {
         state.visibleCount = Math.min(state.visibleCount + getLoadMoreStep(), state.view.length);
         renderGrid();
@@ -1127,7 +1231,7 @@
     controls.wrap.hidden = remaining <= 0;
     controls.button.hidden = remaining <= 0;
     const step = getLoadMoreStep();
-    controls.button.textContent = remaining > step ? "Ver " + step + " mas" : "Ver mas";
+    controls.button.textContent = remaining > step ? "Ver " + step + " más" : "Ver más";
   }
 
   function buildSortSelect(id, extraClassName) {
@@ -1162,18 +1266,10 @@
     if (!openBtn && !heading) return;
 
     const triggerMarkup =
-      '<span class="filters-open-btn-icon" aria-hidden="true">' +
-        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none">' +
-          '<path d="M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>' +
-          '<path d="M7 12H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>' +
-          '<path d="M10 17H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>' +
-        '</svg>' +
-      '</span>' +
+      '<span class="filters-open-btn-icon" aria-hidden="true">' + iconMarkup("SlidersHorizontal", { size: "sm" }) + '</span>' +
       '<span class="filters-open-btn-text">Filtrar y ordenar</span>' +
       '<span class="filters-open-btn-chevron" aria-hidden="true">' +
-        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none">' +
-          '<path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>' +
-        '</svg>' +
+        iconMarkup("ChevronDown", { size: "sm" }) +
       '</span>';
 
     if (openBtn && openBtn.dataset.mobileReady !== "1") {
@@ -1191,7 +1287,7 @@
       mobileTrigger = document.createElement("button");
       mobileTrigger.type = "button";
       mobileTrigger.id = "catalog-mobile-filter-trigger";
-      mobileTrigger.className = "catalog-mobile-filter-trigger";
+      mobileTrigger.className = "catalog-mobile-filter-trigger romix-btn romix-btn--outline";
       mobileTrigger.setAttribute("aria-label", "Filtrar y ordenar");
       mobileTrigger.setAttribute("aria-controls", "filters-sidebar");
       mobileTrigger.setAttribute("aria-expanded", "false");
@@ -1313,7 +1409,7 @@
         wrapper.appendChild(select);
 
         const openBtn = document.getElementById("open-filters");
-        if (openBtn && openBtn.parentElement === topBar) topBar.insertBefore(wrapper, openBtn);
+        if (openBtn && Array.from(topBar.children).includes(openBtn)) topBar.insertBefore(wrapper, openBtn);
         else topBar.appendChild(wrapper);
       }
 
@@ -1352,7 +1448,6 @@
     const grid = document.getElementById("product-grid");
     if (!grid) return;
     const allowVariantPreview = state.scope === "catalogo" || state.scope === "mujer" || state.scope === "hombre" || state.scope === "ninos" || state.scope === "novedades";
-    const variantPreviewLimit = isCompactVariantViewport() ? 3 : 4;
     grid.innerHTML = "";
 
     if (!state.view.length) {
@@ -1385,14 +1480,14 @@
 
       card.addEventListener("click", function (event) {
         if (isInteractiveTarget(event.target)) return;
-        window.location.href = productDetailUrl;
+        window.location.href = new URL(productDetailUrl, document.baseURI).href;
       });
 
       card.addEventListener("keydown", function (event) {
         if (isInteractiveTarget(event.target)) return;
         if (event.key !== "Enter" && event.key !== " ") return;
         event.preventDefault();
-        window.location.href = productDetailUrl;
+        window.location.href = new URL(productDetailUrl, document.baseURI).href;
       });
 
       const thumb = document.createElement("div");
@@ -1442,33 +1537,57 @@
         picture.insertBefore(source, imgTag || null);
       }
 
-      function setMainImage(colorOption, colorName) {
-        const nextSet = resolveThumbSet(product, colorOption);
-        image.onerror = function onImageError() {
-          image.onerror = null;
-          syncPictureSource("image/avif", "");
-          syncPictureSource("image/webp", "");
-          if (nextSet.originalSrc && image.src !== nextSet.originalSrc) {
-            image.src = nextSet.originalSrc;
-            image.alt = colorName ? (product.name + " - " + colorName) : product.name;
-            thumb.classList.add("is-loaded");
-            return;
-          }
-          if (image.src !== defaultThumbSet.fallbackSrc) {
-            image.src = defaultThumbSet.fallbackSrc;
-            image.alt = product.name;
-            thumb.classList.add("is-loaded");
-            return;
-          }
-          image.src = PLACEHOLDER;
-          image.alt = product.name;
-          thumb.classList.add("is-loaded");
-        };
+      let variantRequestId = 0;
 
-        syncPictureSource("image/avif", nextSet.avifSrc);
-        syncPictureSource("image/webp", nextSet.webpSrc);
-        image.src = nextSet.src;
-        image.alt = colorName ? (product.name + " - " + colorName) : product.name;
+      function preloadCardImage(src) {
+        if (typeof imageUtils.loadImageResource === "function") {
+          return imageUtils.loadImageResource(src);
+        }
+        return Promise.resolve(!!String(src || "").trim());
+      }
+
+      function cardImageCandidates(colorOption, nextSet, previousVisibleSrc, allowPlaceholder) {
+        const values = [
+          colorOption && (colorOption.thumb || colorOption.thumbnail),
+          nextSet && nextSet.src,
+          nextSet && nextSet.fallbackSrc,
+          colorOption && colorOption.image,
+          product && product.image,
+          previousVisibleSrc,
+          defaultThumbSet && defaultThumbSet.fallbackSrc
+        ];
+        if (allowPlaceholder) values.push(PLACEHOLDER);
+        const seen = new Set();
+        return values.map((value) => String(value || "").trim()).filter((value) => {
+          if (!value || seen.has(value)) return false;
+          seen.add(value);
+          return true;
+        });
+      }
+
+      async function setMainImage(colorOption, colorName) {
+        const requestId = ++variantRequestId;
+        const nextSet = resolveThumbSet(product, colorOption);
+        const hasVisibleImage = thumb.classList.contains("is-loaded");
+        const previousVisibleSrc = hasVisibleImage ? String(image.currentSrc || image.src || "").trim() : "";
+        const candidates = cardImageCandidates(colorOption, nextSet, previousVisibleSrc, !hasVisibleImage);
+
+        for (const candidate of candidates) {
+          const loaded = await preloadCardImage(candidate);
+          if (requestId !== variantRequestId) return;
+          if (!loaded) continue;
+
+          const appliedSet = candidate === nextSet.src
+            ? nextSet
+            : thumbSetFromSources(candidate, candidate, "");
+          syncPictureSource("image/avif", appliedSet.avifSrc);
+          syncPictureSource("image/webp", appliedSet.webpSrc);
+          image.src = appliedSet.src || candidate;
+          image.alt = colorName ? (product.name + " - " + colorName) : product.name;
+          thumb.classList.add("is-loaded");
+          return;
+        }
+        // A failed variant must leave the already visible image untouched.
       }
 
       image.addEventListener("load", function () {
@@ -1491,7 +1610,9 @@
         thumb.appendChild(picture);
       }
 
-      setMainImage(selectedColor, selectedColor && selectedColor.name);
+      setMainImage(selectedColor, selectedColor && selectedColor.name).catch(function (error) {
+        console.warn("No se pudo cargar la imagen del producto", product.id, error);
+      });
 
       const badgeLabel = product.badge || product.featuredBadge;
       if (badgeLabel) {
@@ -1505,50 +1626,60 @@
       body.className = "product-body";
 
       if (allowVariantPreview && Array.isArray(product.colors) && product.colors.length > 0) {
-        const variants = document.createElement("div");
-        variants.className = "product-variants";
-        const visibleColors = product.colors.slice(0, variantPreviewLimit);
+        const variantControls = [];
+        const visibleThumbs = product.colors.slice(0, 4);
 
-        visibleColors.forEach((color, index) => {
+        function activateVariant(index, color) {
+          selectedColor = color;
+          variantControls.forEach((control) => {
+            const active = Number(control.dataset.variantIndex) === index;
+            control.classList.toggle("is-active", active);
+            control.setAttribute("aria-pressed", active ? "true" : "false");
+          });
+          setMainImage(color, color.name).catch(function (error) {
+            console.warn("No se pudo cargar la imagen de la variante", product.id, color.name, error);
+          });
+        }
+
+        const thumbs = document.createElement("div");
+        thumbs.className = "product-variant-thumbs";
+        thumbs.setAttribute("aria-label", "Miniaturas de variantes");
+
+        visibleThumbs.forEach((color, index) => {
           const button = document.createElement("button");
           button.type = "button";
-          button.className = "variant-chip" + (index === 0 ? " is-active" : "");
-          button.setAttribute("aria-label", "Seleccionar color " + color.name);
+          button.className = "product-variant-thumb" + (index === 0 ? " is-active" : "");
+          button.setAttribute("aria-label", "Ver variante " + color.name);
           button.setAttribute("aria-pressed", index === 0 ? "true" : "false");
-          button.title = color.name;
-          button.dataset.colorName = color.name;
-          button.dataset.colorIndex = String(index);
-          button.style.backgroundColor = color.hex || "#efecf3";
-          if (color.swatchImage) {
-            button.style.backgroundImage = "url('" + String(color.swatchImage).replace(/'/g, "%27") + "')";
-          }
-          button.classList.add("variant-chip--color");
+          button.title = "Ver variante " + color.name;
+          button.dataset.variantIndex = String(index);
+          const preview = document.createElement("img");
+          preview.src = String(color.swatch || color.thumb || color.thumbnail || color.image || "").trim();
+          preview.alt = "Variante " + color.name;
+          preview.loading = "lazy";
+          preview.decoding = "async";
+          preview.addEventListener("error", function () {
+            const fallback = String(color.image || "").trim();
+            if (fallback && preview.src !== fallback) preview.src = fallback;
+          });
+          button.appendChild(preview);
           button.addEventListener("click", function (event) {
             event.preventDefault();
             event.stopPropagation();
-            selectedColor = color;
-            variants.querySelectorAll(".variant-chip").forEach((chip) => {
-              chip.classList.remove("is-active");
-              chip.setAttribute("aria-pressed", "false");
-            });
-            button.classList.add("is-active");
-            button.setAttribute("aria-pressed", "true");
-            thumb.classList.remove("is-loaded");
-            setMainImage(color, color.name);
+            activateVariant(index, color);
           });
-
-          variants.appendChild(button);
+          thumbs.appendChild(button);
+          variantControls.push(button);
         });
 
-        if (product.colors.length > visibleColors.length) {
+        if (product.colors.length > visibleThumbs.length) {
           const more = document.createElement("span");
-          more.className = "variant-more";
-          more.textContent = "+" + (product.colors.length - visibleColors.length);
-          more.setAttribute("aria-label", "Hay " + (product.colors.length - visibleColors.length) + " colores adicionales");
-          variants.appendChild(more);
+          more.className = "product-variant-more variant-more";
+          more.textContent = "+" + (product.colors.length - visibleThumbs.length);
+          more.setAttribute("aria-label", "Hay " + (product.colors.length - visibleThumbs.length) + " variantes adicionales");
+          thumbs.appendChild(more);
         }
-
-        body.appendChild(variants);
+        body.appendChild(thumbs);
       }
 
       const name = document.createElement("p");
@@ -1587,6 +1718,12 @@
       body.appendChild(name);
       body.appendChild(meta);
       body.appendChild(priceRow);
+
+      const detailsLink = document.createElement("a");
+      detailsLink.className = "catalog-cta romix-btn romix-btn--outline romix-btn--sm";
+      detailsLink.href = productDetailUrl;
+      detailsLink.innerHTML = iconMarkup("Eye", { size: "sm" }) + "<span>Detalles</span>";
+      body.appendChild(detailsLink);
 
       card.appendChild(thumb);
       card.appendChild(body);
@@ -1635,6 +1772,10 @@
       if (!hasSize) return false;
     }
 
+    const price = Number(product.price);
+    if (state.priceMin !== "" && (!Number.isFinite(price) || price < Number(state.priceMin))) return false;
+    if (state.priceMax !== "" && (!Number.isFinite(price) || price > Number(state.priceMax))) return false;
+    if (state.selected.sale.has("1") && !isProductOffer(product)) return false;
     if (!matchesSearchQuery(product)) return false;
 
     return true;
@@ -1678,11 +1819,11 @@
 
       const remove = document.createElement("button");
       remove.type = "button";
-      remove.className = "active-filter-chip-remove";
+      remove.className = "active-filter-chip-remove romix-icon-btn";
       remove.dataset.group = item.group;
       remove.dataset.value = item.value;
       remove.setAttribute("aria-label", "Quitar filtro " + item.label);
-      remove.textContent = "X";
+      remove.innerHTML = iconMarkup("X", { size: "sm" });
 
       chip.appendChild(text);
       chip.appendChild(remove);
@@ -1707,7 +1848,8 @@
       "categories", "categoria", "categorias", "category", "cat",
       "types", "type", "tipos", "tipo", "seasons", "season", "temporada", "temp",
       "sections", "section", "secciones", "seccion", "sizes", "size", "talles", "talle",
-      "edad", "edades", "audiencia", "audience", "colors", "color", "colores", "sort", "order"
+      "edad", "edades", "audiencia", "audience", "colors", "color", "colores", "sort", "order",
+      "price_min", "price_max", "sale", "stock"
     ];
     filterKeys.forEach((key) => params.delete(key));
     const mapping = {
@@ -1720,10 +1862,24 @@
       colors: state.selected.colors
     };
     Object.entries(mapping).forEach(([key, values]) => {
-      const list = Array.from(values || []).sort();
+      const list = Array.from(values || []).sort(compareFilterValues);
       if (list.length) params.set(key, list.join(","));
     });
+
+    ["sections", "section", "secciones", "seccion"].forEach((key) => params.delete(key));
+    if (state.catalogView.mode === "novedades") {
+      params.set("view", "novedades");
+    } else if (state.catalogView.mode === "section") {
+      if (!document.body.dataset.categoryPage) params.set("sections", state.scope);
+    } else if (state.selected.sections.size) {
+      params.set("sections", Array.from(state.selected.sections).sort(compareFilterValues).join(","));
+    }
+
     if (state.sortBy !== "recommended") params.set("sort", state.sortBy);
+    if (state.priceMin !== "") params.set("price_min", state.priceMin);
+    if (state.priceMax !== "") params.set("price_max", state.priceMax);
+    if (state.selected.sale.has("1")) params.set("sale", "1");
+    if (!state.selected.sale.has("1") && normalizeText(params.get("q") || "") === "oferta") params.delete("q");
     const query = params.toString();
     const nextUrl = window.location.pathname + (query ? "?" + query : "") + window.location.hash;
     window.history.replaceState(window.history.state, "", nextUrl);
@@ -1756,14 +1912,29 @@
   function resetFilters() {
     Object.keys(state.selected).forEach((key) => state.selected[key].clear());
     state.showAllSizes = false;
+    state.priceMin = "";
+    state.priceMax = "";
     document.querySelectorAll(".filters-sidebar input[data-group]").forEach((input) => {
       input.checked = false;
     });
+    renderPriceFilters();
     renderSizeFilters();
     applyFilters();
   }
 
   function removeActiveFilter(group, value) {
+    if (group === "price_min") {
+      state.priceMin = "";
+      renderPriceFilters();
+      applyFilters();
+      return;
+    }
+    if (group === "price_max") {
+      state.priceMax = "";
+      renderPriceFilters();
+      applyFilters();
+      return;
+    }
     if (!group || !state.selected[group]) return;
     const safeValue = String(value || "");
     state.selected[group].delete(safeValue);
@@ -1797,7 +1968,7 @@
     button.classList.toggle("is-hidden", !hasMore);
     if (!hasMore) return;
 
-    button.textContent = showAll ? "Ver menos" : "+ Ver mas";
+    button.textContent = showAll ? "Ver menos" : "Ver más";
   }
 
   function renderColorFilters() {
@@ -1817,13 +1988,17 @@
       input.dataset.group = "colors";
       input.value = option.key;
       input.checked = state.selected.colors.has(option.key);
+      input.setAttribute("aria-label", "Filtrar por " + option.name);
 
       const dot = document.createElement("span");
       dot.className = "color-dot";
-      dot.style.background = option.hex;
+      dot.style.background = option.swatch;
+      dot.setAttribute("aria-hidden", "true");
 
       const text = document.createElement("span");
       text.textContent = option.name;
+      label.title = option.name;
+      label.setAttribute("aria-label", option.name);
       setOptionLabel("colors", option.key, option.name);
 
       label.appendChild(input);
@@ -1833,6 +2008,17 @@
     });
 
     toggleExtraOptions("colors", state.showAllColors);
+  }
+
+  function renderPriceFilters() {
+    const minInput = document.getElementById("price-min");
+    const maxInput = document.getElementById("price-max");
+    const error = document.getElementById("price-filter-error");
+    if (minInput) minInput.value = state.priceMin;
+    if (maxInput) maxInput.value = state.priceMax;
+    const saleInput = document.querySelector('.filters-sidebar input[data-group="sale"]');
+    if (saleInput) saleInput.checked = state.selected.sale.has("1");
+    if (error) error.hidden = true;
   }
 
   function renderCategoryFilters() {
@@ -1893,7 +2079,14 @@
   function renderSectionFilters() {
     const container = document.getElementById("section-options");
     const group = document.getElementById("section-filter-group");
-    if (!container || !group || state.scope !== "catalogo") return;
+    if (!container || !group) return;
+
+    const showSectionFilter = state.scope === "catalogo";
+    group.hidden = !showSectionFilter;
+    if (!showSectionFilter) {
+      container.innerHTML = "";
+      return;
+    }
 
     container.innerHTML = "";
     state.optionLabels.sections.clear();
@@ -2024,11 +2217,10 @@
   function initPageHeader() {
     const config = PAGE_CONFIG[state.scope] || PAGE_CONFIG.catalogo;
     const title = document.getElementById("page-title");
-    if (title) {
-      if (state.scope === "catalogo") title.textContent = "Catálogo ROMIX";
-      else if (state.scope === "novedades") title.textContent = "Novedades destacadas ROMIX";
-      else title.textContent = "Catálogo " + config.title + " ROMIX";
+    if (title && !document.body.dataset.categoryPage) {
+      title.textContent = state.scope === "catalogo" ? "Catálogo ROMIX" : config.title;
     }
+    if (!document.body.dataset.categoryPage) document.title = "ROMIX - " + (state.scope === "catalogo" ? "Catálogo" : config.title);
 
     document.querySelectorAll(".catalog-nav a[data-scope]").forEach((link) => {
       const active = link.dataset.scope === state.scope;
@@ -2101,6 +2293,35 @@
 
     const clearBtn = document.getElementById("clear-filters");
     if (clearBtn) clearBtn.addEventListener("click", resetFilters);
+
+    const applyPrice = document.getElementById("apply-price-filter");
+    const minPriceInput = document.getElementById("price-min");
+    const maxPriceInput = document.getElementById("price-max");
+    const commitPriceFilter = function () {
+      const minRaw = String(minPriceInput && minPriceInput.value || "").trim();
+      const maxRaw = String(maxPriceInput && maxPriceInput.value || "").trim();
+      const min = minRaw === "" ? "" : Number(minRaw);
+      const max = maxRaw === "" ? "" : Number(maxRaw);
+      const error = document.getElementById("price-filter-error");
+      if ((min !== "" && (!Number.isFinite(min) || min < 0)) || (max !== "" && (!Number.isFinite(max) || max < 0)) || (min !== "" && max !== "" && min > max)) {
+        if (error) error.hidden = false;
+        return;
+      }
+      state.priceMin = min === "" ? "" : String(min);
+      state.priceMax = max === "" ? "" : String(max);
+      if (error) error.hidden = true;
+      applyFilters();
+    };
+    if (applyPrice) applyPrice.addEventListener("click", commitPriceFilter);
+    [minPriceInput, maxPriceInput].forEach((input) => {
+      if (!input) return;
+      input.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          commitPriceFilter();
+        }
+      });
+    });
 
     const activeFiltersClearBtn = document.getElementById("active-filters-clear");
     if (activeFiltersClearBtn) activeFiltersClearBtn.addEventListener("click", resetFilters);
@@ -2187,8 +2408,8 @@
   }
 
   async function init() {
-    const scope = document.body && document.body.dataset ? document.body.dataset.catalogScope : "catalogo";
-    state.scope = PAGE_CONFIG[scope] ? scope : "catalogo";
+    state.catalogView = resolveCatalogView();
+    state.scope = state.catalogView.scope;
     state.sortBy = readInitialSortKey();
 
     initPageHeader();
@@ -2207,14 +2428,21 @@
       applyInitialSearchFromQuery();
       applyInitialFiltersFromQuery();
 
-      renderColorFilters();
-      renderSectionFilters();
-      renderCategoryFilters();
-      renderSeasonFilters();
-      renderSizeFilters();
-      applyFilters();
+    renderColorFilters();
+    renderSectionFilters();
+    renderCategoryFilters();
+    renderSeasonFilters();
+    renderSizeFilters();
+    renderPriceFilters();
+    applyFilters();
     } catch (error) {
       const grid = document.getElementById("product-grid");
+      if (document.body.dataset.categoryPage && grid?.querySelector('.product-card')) {
+        const summary = document.getElementById('products-summary');
+        if (summary) summary.textContent = 'Los filtros no están disponibles por ahora. Podés abrir los productos del listado.';
+        console.warn('[romix-catalog] Se conserva el listado generado.', error);
+        return;
+      }
       if (grid) {
         grid.innerHTML = "";
         const empty = document.createElement("div");

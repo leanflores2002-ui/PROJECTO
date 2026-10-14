@@ -1,14 +1,15 @@
 const fs = require('fs');
 const path = require('path');
-const { JSDOM, ResourceLoader, VirtualConsole } = require('jsdom');
-
-class LocalResourceLoader extends ResourceLoader {
+const { JSDOM, ResourceLoader } = require('jsdom');
+// Load the real storefront assets without requiring a server on privileged port 80.
+class StorefrontResources extends ResourceLoader {
   fetch(url) {
     const parsed = new URL(url);
-    if (parsed.hostname !== 'localhost') return null;
-    const localPath = path.join(__dirname, '..', 'frontend', 'public', parsed.pathname.replace(/^\//, ''));
-    if (!fs.existsSync(localPath) || fs.statSync(localPath).isDirectory()) return null;
-    return Promise.resolve(fs.readFileSync(localPath));
+    if (parsed.origin !== 'http://localhost') return null;
+    const publicDir = path.resolve(__dirname,'../frontend/public');
+    const file = path.resolve(publicDir,'.'+decodeURIComponent(parsed.pathname));
+    if (!file.startsWith(publicDir+path.sep) || !fs.existsSync(file)) return null;
+    return Promise.resolve(fs.readFileSync(file));
   }
 }
 
@@ -17,38 +18,28 @@ async function prepareCartDom(cartItems) {
   const events = [];
   const dom = new JSDOM(html, {
     runScripts: 'dangerously',
-    resources: new LocalResourceLoader(),
-    virtualConsole: new VirtualConsole(),
+    resources: new StorefrontResources(),
     url: 'http://localhost/',
     beforeParse(window) {
       window.localStorage.setItem('cart', JSON.stringify(cartItems));
       window.alert = () => {};
-      window.fetch = async (url, options) => {
-        if (url === '/api/variants') return { ok:true, json:async () => [] };
-        const payload=JSON.parse(options.body);
-        if (!payload.request_key || payload.items.some(item => 'price' in item)) throw new Error('Invalid request contract');
-        return { ok:true, json:async () => ({ reference:'QA-1', updatedVariants:[], items:cartItems.map(item => ({...item,qty:item.quantity})) }) };
-      };
       window.open = (url, target) => {
-        events.push({ url, target });
-        return { opener: null };
+        const entry = { url, target };
+        events.push(entry);
+        return { opener: null, location: { set href(value) { entry.url = value; } } };
       };
     }
   });
 
   await new Promise(resolve => {
-    const fallback = setTimeout(resolve, 2500);
     if (dom.window.document.readyState === 'complete') {
-      clearTimeout(fallback);
       resolve();
     } else {
-      dom.window.addEventListener('load', () => {
-        clearTimeout(fallback);
-        resolve();
-      }, { once: true });
+      dom.window.addEventListener('load', () => resolve(), {once:true});
     }
   });
 
+  await new Promise(resolve => setImmediate(resolve));
   return { dom, events };
 }
 
@@ -83,10 +74,7 @@ function assert(condition, message) {
   ];
 
   const { dom, events } = await prepareCartDom(cart);
-  const orderButton = dom.window.document.getElementById('order-btn');
-  assert(orderButton, 'Order button should exist');
-  orderButton.click();
-  await new Promise(resolve => setTimeout(resolve, 50));
+  dom.window.orderCartWhatsApp();
   assert(events.length === 1, 'orderCartWhatsApp should open WhatsApp once');
 
   const url = new URL(events[0].url);
@@ -97,7 +85,8 @@ function assert(condition, message) {
   assert(message.includes('Color: Azul Intenso'), 'Color should be decoded');
   assert(message.includes('Talle: 2'), 'Numeric size must appear in the message');
   assert(message.includes('Talle: 4'), 'All cart entries must show their sizes');
-  assert(message.includes('Total: $25900.00'), 'Total must be included');
+  assert(!message.includes('Total:') && !message.includes('$'), 'WhatsApp orders must not include prices or a total');
+  assert(message.includes('Cant: 1') && message.includes('Cant: 2'), 'Requested quantities must be preserved');
   assert(!message.includes('Talle: U'), 'Fallback size marker should not leak into the message');
 
   dom.window.close();

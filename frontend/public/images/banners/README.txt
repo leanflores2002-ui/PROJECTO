@@ -1,8 +1,6 @@
 Banner principal (home)
 
-Para cambiar las fotos del carrusel principal, reemplaza estos archivos:
-- banner-1.png
-- banner-2.png
+Para cambiar la foto del carrusel principal, reemplaza este archivo:
 - banner-3.png
 
 Ruta: frontend/public/images/banners/

@@ -1,19 +1,11 @@
-# Backend ROMIX
+# Backend
 
-FastAPI conserva las rutas y vistas públicas existentes y agrega una API administrativa separada.
+Espacio reservado para una API o servicios de servidor en el futuro.
 
-- API heredada compatible: `/api/products`, `/api/products/{slug}`, `/api/search`, `/api/variants`, `/api/orders`.
-- API pública nueva: `/api/public/orders` (PostgreSQL, transaccional).
-- API admin protegida: `/api/admin/*`.
-- Health checks: `/api/health` y `/api/health/ready`.
+Ejemplos de lo que podría incluir:
+- `server.js` o `app.py` para un servidor HTTP.
+- Integración con base de datos o planillas.
+- Endpoints para carrito/pedidos.
 
-Desarrollo:
+Hoy la app funciona estáticamente (sin backend). Cuando se decida agregarlo, este directorio separará claramente esa lógica.
 
-```bash
-python -m venv .venv
-pip install -r backend/requirements-dev.txt
-uvicorn backend.app.main:app --reload --port 8000
-pytest backend/tests -q
-```
-
-El catalogo y stock se consultan desde PostgreSQL. Ver [arquitectura de stock](../docs/STOCK_ARCHITECTURE.md) y [flujo de producto](../docs/PRODUCT_DATA_FLOW.md). El JSON queda como fallback de presentacion, sin disponibilidad autoritativa.

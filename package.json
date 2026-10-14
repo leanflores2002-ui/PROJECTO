@@ -7,10 +7,33 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "node tests/pageTests.js && node tests/cartOrderTests.js && node tests/colorNameTests.js && node tests/imageUtilsTests.js",
+    "pretest": "node scripts/sync-storefront-shells.js",
+    "build": "node scripts/generate-share-pages.js",
+    "test:templates": "node tests/storefrontTemplateTests.js",
+    "test": "node tests/storefrontTemplateTests.js && node tests/catalogSyncTests.js && node tests/pageTests.js && node tests/romixIconButtonTests.js && node tests/catalogRouteTests.js && node tests/catalogFilterTests.js && node tests/cardVariantTests.js && node tests/productGalleryTests.js && node tests/salePricingTests.js && node tests/cartOrderTests.js && node tests/colorNameTests.js && node tests/seasonVisibilityTests.js && node tests/recommendedOrderTests.js && node tests/storefrontStabilityTests.js && node tests/sharePreviewTests.js && node tests/productImageResolverTests.js && node tests/imageUtilsTests.js && node tests/mediaStorageTests.js && node tests/shareSecurityTests.js && node tests/seoTests.js && node tests/categoryPagesTests.js",
+    "test:buttons": "node tests/romixIconButtonTests.js",
+    "test:season-backend": "python tests/season_visibility_backend_tests.py",
+    "test:share-backend": "python tests/product_share_backend_tests.py",
+    "test:share": "node tests/sharePreviewTests.js",
+    "test:media": "node tests/mediaStorageTests.js",
+    "test:security": "node tests/shareSecurityTests.js",
+    "test:seo": "node tests/seoTests.js && node tests/categoryPagesTests.js",
+    "test:orders": "python -m pytest backend/tests/test_orders.py -q -p no:cacheprovider",
+    "audit:storage": "node scripts/measure-storage.js",
+    "audit:product-media": "node scripts/audit-product-media.js",
+    "optimize:products": "node scripts/optimize-product-images.js",
+    "optimize:storefront": "node scripts/optimize-storefront-images.js",
+    "storage:migration:dry-run": "node scripts/catalog-media.js",
+    "check:products": "node scripts/check-products.js",
+    "compact:products": "node scripts/compact-products.js --write",
+    "compact:products:preview": "node scripts/compact-products.js",
     "sync:price-groups": "node scripts/addPriceByGroupPlaceholder.js",
     "generate:share-pages": "node scripts/generate-share-pages.js",
-    "generate:images": "node scripts/generate-images.js"
+    "generate:icons": "node scripts/generate-romix-icons.js",
+    "sync:shells": "node scripts/sync-storefront-shells.js",
+    "build:ts": "tsc -p tsconfig.json",
+    "check:ts": "tsc -p tsconfig.json --noEmit",
+    "test:performance": "node tests/productDerivativeTests.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +50,9 @@
   "devDependencies": {
     "axe-core": "^4.11.0",
     "jsdom": "^27.3.0",
-    "sharp": "^0.34.4"
+    "lucide": "^0.468.0",
+    "playwright": "^1.63.0",
+    "sharp": "^0.35.4",
+    "typescript": "^7.0.2"
   }
 }

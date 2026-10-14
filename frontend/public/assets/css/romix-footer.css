@@ -1,11 +1,11 @@
 .site-footer[data-romix-shell="footer-v1"] {
   --romix-footer-max: 1400px;
-  --romix-footer-bg: #242426;
-  --romix-footer-text: #ffffff;
+  --romix-footer-bg: var(--romix-ink);
+  --romix-footer-text: var(--romix-white);
   --romix-footer-muted: rgba(255, 255, 255, 0.68);
   --romix-footer-subtle: rgba(255, 255, 255, 0.54);
   --romix-footer-line: rgba(255, 255, 255, 0.13);
-  --romix-footer-accent: #f72585;
+  --romix-footer-accent: var(--romix-pink);
   margin-top: clamp(32px, 4vw, 56px);
   border: 0;
   background: var(--romix-footer-bg);
@@ -28,7 +28,7 @@
 .site-footer[data-romix-shell="footer-v1"] .footer-shell {
   width: min(var(--romix-footer-max), calc(100% - 48px));
   margin: 0 auto;
-  padding: 52px 0 24px;
+  padding: var(--romix-space-7) 0 var(--romix-space-4);
   display: grid;
   gap: 36px;
 }
@@ -51,32 +51,21 @@
   align-items: center;
   justify-self: start;
   gap: 14px;
-  min-height: 64px;
+  min-height: 70px;
 }
 
-.site-footer[data-romix-shell="footer-v1"] .footer-logo-media,
-.site-footer[data-romix-shell="footer-v1"] .footer-logo-media img {
+.site-footer[data-romix-shell="footer-v1"] .site-logo--footer {
   display: block;
-  width: 64px;
-  height: 64px;
-}
-
-.site-footer[data-romix-shell="footer-v1"] .footer-logo-media img {
+  width: clamp(158px, 14vw, 212px);
+  height: auto;
+  max-height: 70px;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 0;
 }
 
 .site-footer[data-romix-shell="footer-v1"] .footer-logo-copy {
   display: grid;
   gap: 5px;
-}
-
-.site-footer[data-romix-shell="footer-v1"] .footer-logo-copy strong {
-  color: #ffffff;
-  font-family: "Outfit", "Manrope", sans-serif;
-  font-size: 1.55rem;
-  font-weight: 900;
-  line-height: 1;
 }
 
 .site-footer[data-romix-shell="footer-v1"] .footer-logo-copy span {
@@ -137,11 +126,11 @@
   gap: 15px;
 }
 
-.site-footer[data-romix-shell="footer-v1"] .footer-column h4 {
+.site-footer[data-romix-shell="footer-v1"] .footer-column h2 {
   margin: 0;
   color: #ffffff;
   font-family: "Outfit", "Manrope", sans-serif;
-  font-size: 0.82rem;
+  font-size: var(--romix-text-sm);
   font-weight: 800;
   letter-spacing: 0.08em;
   line-height: 1.3;
