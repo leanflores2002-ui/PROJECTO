@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, UploadCloud } from 'lucide-react';
+import { ArrowLeft, ArrowRight, UploadCloud, Images } from 'lucide-react';
 import { toast } from 'sonner';
 import { apiRequest, uploadImages } from '../lib/api';
 import { config } from '../config';
@@ -71,7 +71,7 @@ export default function ImageManager({ token, product, onSync, onBusy, onPending
     },'Imagen subida');
   }
   const lastImage=images.length<=1&&product.status==='published';
-  return <section className="panel image-manager"><h2>Imágenes del producto</h2><p>Las acciones de la galería se guardan inmediatamente.</p><Alert>{error}</Alert>
+  return <section className="panel image-manager"><h2><Images aria-hidden="true"/>Imágenes del producto</h2><p>Elegí la imagen principal que se verá en la tienda. Los cambios de la galería se guardan al completar cada acción.</p><Alert>{error}</Alert>
     {active ? <><button type="button" className="primary-image" onClick={()=>showImage(active)} aria-label="Ver imagen seleccionada"><img src={imageUrl(active.public_url)} alt={active.alt_text||product.name} /><span>{active.is_primary?'Imagen principal':'Imagen de galería'}</span></button>
       <div className="gallery-thumbnails" aria-label="Galería">{images.map((image,index)=><button type="button" key={image.id} aria-label={`Seleccionar imagen ${index+1}${image.is_primary?', principal':''}`} aria-pressed={active.id===image.id} onClick={()=>setSelected(image.id)}><img alt="" src={imageUrl(image.public_url)} /></button>)}</div>
       <div className="image-actions"><Button variant="outline" onClick={()=>showImage(active)}>Ver</Button><Button variant="outline" disabled={busy||active.is_primary} onClick={()=>run(()=>apiRequest(`/api/public/admin/product-images/${active.id}/primary`,{token,method:'POST'}),'Imagen principal actualizada')}>Hacer principal</Button><Button variant="outline" disabled={busy||queue.length>0} onClick={()=>{setReplacement(active);picker.current.click();}}>Reemplazar</Button><Button variant="destructive" disabled={busy||lastImage} onClick={()=>remove(active)}>Eliminar</Button></div>

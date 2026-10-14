@@ -1,9 +1,9 @@
-import ChangeDetails from './ChangeDetails';
-import { BarChart3, Bell, UserPlus, CircleCheck, Users as UsersIcon, FileText } from 'lucide-react';
+
+import { BarChart3 } from 'lucide-react';
 import { PasswordForm } from './Account';
 import { useEffect, useState } from 'react';
 import { apiRequest } from '../lib/api';
-import { Button } from './ui/button';
+
 import { Alert, FormField, Loading } from './Feedback';
 
 
@@ -34,21 +34,7 @@ export function Analytics({ token, compact=false, productId }) {
   </section>;
 }
 
-const actions={profile_updated:'Actualizó su perfil',superadmin_bootstrap:'Activó el acceso del propietario',create:'Creó',update:'Actualizó',delete:'Eliminó',invite:'Invitó',reorder:'Reordenó',adjust:'Ajustó',set_primary:'Cambió la imagen principal de',upload:'Agregó imágenes a','product.created':'Creó','product.updated':'Actualizó','product.images_reordered':'Reordenó imágenes de','stock.adjusted':'Ajustó el stock de','variant.created':'Agregó una variante a','variant.status_changed':'Cambió el estado de'};
-export function Notifications({ token, compact=false, onRead }) {
-  const Heading=compact?'h2':'h1';
-  const [data,setData]=useState(null),[page,setPage]=useState(1),[error,setError]=useState('');
-  useEffect(()=>{const c=new AbortController();apiRequest(`/api/admin/notifications?page=${page}`,{token,signal:c.signal}).then(setData).catch(e=>{if(e.name!=='AbortError')setError(e.message);});return()=>c.abort();},[token,page]);
-  return <section className={compact?'panel':'page'}><div className="page-heading"><Heading><Bell aria-hidden="true"/>{compact?'Últimos cambios':'Notificaciones'}</Heading>{!compact?<Button variant="outline" onClick={()=>onRead?.(data?.items?.[0]?.created_at)} disabled={!data?.items?.length}><CircleCheck aria-hidden="true"/>Marcar como leídas</Button>:null}</div><p>Historial compartido de productos, imágenes, precios, stock y usuarios. Se registra después de guardar.</p><Alert>{error}</Alert>{!data&&!error?<Loading/>:null}<ul className="activity-list">{data?.items.slice(0,compact?5:25).map(row=><li key={row.id}><div><strong>{row.actor||'Administrador'} · {actions[row.action]||row.action} {({product:'producto',variant:'variante',admin:'cuenta',stock:'stock',product_image:'imagen'})[row.entity_type]||row.entity_type}</strong><p>{new Date(row.created_at).toLocaleString('es-AR')}</p>{row.details?.name?<p>{row.details.name}</p>:null}<details><summary>Ver cambio</summary><ChangeDetails details={row.details}/><small>Referencia: {row.entity_id}</small></details></div></li>)}</ul>{data&&!data.items.length?<div className="friendly-empty"><span className="empty-icon"><FileText aria-hidden="true"/></span><h2>Todavía no hay cambios registrados.</h2><p>Cuando guardes un producto o ajustes el stock, vas a ver el cambio acá.</p></div>:null}{!compact?<div className="pagination"><Button variant="outline" disabled={page===1} onClick={()=>setPage(p=>p-1)}>Anterior</Button><span>Página {page}</span><Button variant="outline" disabled={!data?.hasMore} onClick={()=>setPage(p=>p+1)}>Siguiente</Button></div>:null}</section>;
-}
-
-export function Users({ token, admin }) {
-  const [rows,setRows]=useState(null),[error,setError]=useState(''),[success,setSuccess]=useState(''),[busy,setBusy]=useState(false),[page,setPage]=useState(1);
-  const [form,setForm]=useState({email:'',display_name:'',role:'operator'});
-  async function refresh(){setRows(await apiRequest(`/api/admin/admins?page=${page}&page_size=25`,{token}));}
-  useEffect(()=>{const c=new AbortController();apiRequest(`/api/admin/admins?page=${page}&page_size=25`,{token,signal:c.signal}).then(setRows).catch(e=>{if(e.name!=='AbortError')setError(e.message);});return()=>c.abort();},[token,page]);
-  async function invite(e){e.preventDefault();setBusy(true);setError('');setSuccess('');try{await apiRequest('/api/admin/users/invite',{token,method:'POST',body:form});setSuccess('Invitación enviada. La persona recibirá un enlace para crear su contraseña.');setForm({email:'',display_name:'',role:'operator'});await refresh();}catch(e){setError(e.message);}finally{setBusy(false);}}
-  return <div className="page"><div className="page-heading"><div><h1><UsersIcon aria-hidden="true"/>Usuarios</h1><p>Invitá a tu equipo y consultá quién tiene acceso al admin.</p></div></div><Alert>{error}</Alert>{success?<p role="status">{success}</p>:null}{admin?.role==='superadmin'?<form onSubmit={invite} className="panel editor-card"><h2><UserPlus aria-hidden="true"/>Invitar administrador</h2><p>La persona recibirá un correo para crear su contraseña y entrar al admin.</p><div className="editor-fields"><FormField label="Nombre"><input required minLength={2} maxLength={100} value={form.display_name} onChange={e=>setForm({...form,display_name:e.target.value})}/></FormField><FormField label="Correo"><input type="email" required value={form.email} onChange={e=>setForm({...form,email:e.target.value})}/></FormField><FormField label="Permisos"><select value={form.role} onChange={e=>setForm({...form,role:e.target.value})}><option value="admin">Administrador</option><option value="operator">Editor de productos</option><option value="viewer">Sólo lectura</option></select></FormField></div><Button disabled={busy} type="submit"><UserPlus aria-hidden="true"/>{busy?'Enviando…':'Enviar invitación'}</Button></form>:<p>La creación de cuentas está reservada al administrador propietario.</p>}{rows?<section className="panel"><ul className="inventory-products">{rows.map(row=><li key={row.user_id}><strong>{row.display_name||row.user_id}</strong><span>{({superadmin:'Propietario',admin:'Administrador',operator:'Editor de productos',viewer:'Sólo lectura'})[row.role]||row.role} · {row.is_active?'Activo':'Inactivo'}</span></li>)}</ul><div className="pagination"><Button variant="outline" disabled={page===1} onClick={()=>setPage(p=>p-1)}>Anterior</Button><span>Página {page}</span><Button variant="outline" disabled={rows.length<25} onClick={()=>setPage(p=>p+1)}>Siguiente</Button></div></section>:!error?<Loading/>:null}</div>;
-}
+export { default as Notifications } from './ActivityFeed';
+export { default as Users } from './TeamUsers';
 
 export function SetPassword() { return <main className="page"><h1>Activar mi acceso</h1><PasswordForm/><a href="/admin/">Entrar al admin</a></main>; }

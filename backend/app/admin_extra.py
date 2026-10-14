@@ -20,11 +20,14 @@ router = APIRouter(tags=["admin"])
 
 @router.get('/admins')
 def list_admins(page: int = Query(1, ge=1), page_size: int = Query(25, ge=1, le=100),
+                search: str = Query('', max_length=120),
                 admin: AdminPrincipal = Depends(require_roles('superadmin', 'admin'))):
     with database_connection() as connection:
-        return connection.execute('''select user_id, display_name, role, is_active
-            from public.admin_profiles order by user_id limit %s offset %s''',
-            (page_size, (page-1)*page_size)).fetchall()
+        return connection.execute('''select p.user_id, p.display_name, p.role, p.is_active, u.email
+            from public.admin_profiles p join auth.users u on u.id=p.user_id
+            where (p.display_name ilike %s or u.email ilike %s)
+            order by p.display_name, p.user_id limit %s offset %s''',
+            (f'%{search.strip()}%',f'%{search.strip()}%',page_size, (page-1)*page_size)).fetchall()
 
 
 @router.get('/audit-logs')
