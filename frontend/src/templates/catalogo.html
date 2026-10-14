@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ROMIX:SHELL:CRITICAL:START -->
+<link rel="stylesheet" href="assets/css/romix-shell-base.css?v=18" data-romix-shell-critical />
+<!-- ROMIX:SHELL:CRITICAL:END -->
+  <title>ROMIX - Catálogo</title>
+  <meta name="description" content="Explorá todo el catálogo de ROMIX: ropa para mujer, hombre y niños." />
+  <link rel="canonical" href="%%ROMIX_SITE_ORIGIN%%/catalogo.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="ROMIX" />
+  <meta property="og:locale" content="es_AR" />
+  <meta property="og:title" content="ROMIX - Catálogo" />
+  <meta property="og:description" content="Explorá todo el catálogo de ROMIX: ropa para mujer, hombre y niños." />
+  <meta property="og:image" content="%%ROMIX_SITE_ORIGIN%%/images/branding/romix-logo-social.webp" />
+  <meta property="og:image:alt" content="Logo ROMIX" />
+  <meta property="og:url" content="%%ROMIX_SITE_ORIGIN%%/catalogo.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ROMIX - Catálogo" />
+  <meta name="twitter:description" content="Explorá todo el catálogo de ROMIX: ropa para mujer, hombre y niños." />
+  <meta name="twitter:image" content="%%ROMIX_SITE_ORIGIN%%/images/branding/romix-logo-social.webp" />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<noscript>
+</noscript>
+  <link rel="preload" as="fetch" href="assets/data/products.json" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="assets/css/romix-design-system.css?v=20" />
+  <link rel="stylesheet" href="assets/css/romix-catalog-pages.css?v=21" />
+  <link rel="icon" href="images/branding/romix-logo-icon.webp" type="image/webp" sizes="180x180" />
+  <link rel="apple-touch-icon" href="images/branding/romix-logo-icon.webp" sizes="180x180" />
+  <link rel="stylesheet" href="assets/css/romix-pricing.css?v=19" />
+  <link rel="stylesheet" href="assets/css/romix-header.css?v=20" />
+  <link rel="stylesheet" href="assets/css/romix-footer.css?v=19" />
+  <script defer src="/assets/js/romix-analytics.js?v=1"></script>
+</head>
+<body data-catalog-scope="catalogo">
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
+<!-- ROMIX:INCLUDE:HEADER -->
+
+  <div id="filters-overlay" class="filters-overlay" aria-hidden="true"></div>
+
+  <main id="main-content" class="catalog-page">
+    <h1 id="page-title" class="catalog-heading">Cat&aacute;logo ROMIX</h1>
+    <!-- ROMIX:CATEGORY:INTRO -->
+    <nav class="catalog-nav" aria-label="Catálogos por sección"><a href="catalogo.html" data-scope="catalogo">Todo el catálogo</a> · <a href="/mujer/" data-scope="mujer">Mujer</a> · <a href="/hombre/" data-scope="hombre">Hombre</a> · <a href="/ninos/" data-scope="ninos">Niños</a></nav>
+    <noscript><p class="catalog-noscript" role="status">El catálogo interactivo necesita JavaScript. También podés consultar productos y disponibilidad por WhatsApp desde el pie de página.</p></noscript>
+
+    <div class="catalog-layout">
+      <aside id="filters-sidebar" class="filters-sidebar" aria-label="Filtros">
+        <div class="filters-head">
+          <div class="filters-title-wrap">
+            <h2 class="filters-title">FILTROS</h2>
+            <span class="filters-line" aria-hidden="true"></span>
+          </div>
+          <button id="close-filters" type="button" class="sidebar-close" aria-label="Cerrar filtros">
+            <span data-romix-icon="X" data-romix-icon-size="sm"></span>
+            Cerrar
+          </button>
+        </div>
+        <div class="filters-scroll">
+        <section class="filters-group mobile-sort-group" aria-labelledby="mobile-sort-title">
+          <h3 id="mobile-sort-title" class="mobile-sort-title">ORDENAR</h3>
+          <select id="products-sort-mobile" class="products-sort-select mobile-sort-select" aria-label="Ordenar productos" data-sort-control="true">
+            <option value="recommended" selected>Recomendados</option>
+            <option value="price-asc">Menor a mayor precio</option>
+            <option value="price-desc">Mayor a menor precio</option>
+          </select>
+        </section>
+
+        <button id="clear-filters" type="button" class="filters-clear romix-btn romix-btn--ghost">
+          <span data-romix-icon="RotateCcw" data-romix-icon-size="sm"></span>
+          Limpiar todo
+        </button>
+
+        <section class="filters-group" aria-labelledby="filters-category-title">
+          <h3 id="filters-category-title">CATEGOR&Iacute;AS</h3>
+          <div id="category-options" class="filter-list"></div>
+        </section>
+
+        <section class="filters-group" id="price-filter-group" aria-labelledby="filters-price-title">
+          <h3 id="filters-price-title"><span class="filter-heading-icon" aria-hidden="true"><span data-romix-icon="Tag" data-romix-icon-size="sm"></span></span>PRECIO</h3>
+          <div class="filter-price-range">
+            <label for="price-min"><span>Precio m&iacute;nimo</span><input id="price-min" type="number" min="0" inputmode="numeric" placeholder="$ m&iacute;nimo" /></label>
+            <span class="filter-price-range__dash" aria-hidden="true">&mdash;</span>
+            <label for="price-max"><span>Precio m&aacute;ximo</span><input id="price-max" type="number" min="0" inputmode="numeric" placeholder="$ m&aacute;ximo" /></label>
+            <button id="apply-price-filter" type="button" class="romix-btn romix-btn--secondary romix-btn--sm">Aplicar</button>
+          </div>
+          <p id="price-filter-error" class="filter-helper" role="alert" hidden>El m&aacute;ximo debe ser mayor o igual al m&iacute;nimo.</p>
+        </section>
+
+        <section class="filters-group" aria-labelledby="filters-season-title">
+          <h3 id="filters-season-title">TEMPORADA</h3>
+          <div id="season-options" class="filter-list"></div>
+        </section>
+
+        <section class="filters-group" id="section-filter-group" aria-labelledby="filters-section-title">
+          <h3 id="filters-section-title">SECCI&Oacute;N</h3>
+          <div id="section-options" class="filter-list"></div>
+        </section>
+
+        <section class="filters-group" id="size-filter-group" aria-labelledby="filters-size-title">
+          <h3 id="filters-size-title">TALLES</h3>
+          <p id="size-helper" class="filter-helper" hidden>Seleccioná una sección para ver los talles disponibles</p>
+          <div id="size-options" class="size-grid"></div>
+          <button id="size-more-btn" class="filter-more romix-btn romix-btn--ghost" type="button">Ver más</button>
+        </section>
+
+        <section class="filters-group" aria-labelledby="filters-colors-title">
+          <h3 id="filters-colors-title">COLORES</h3>
+          <div id="color-options" class="filter-list"></div>
+          <button id="color-more-btn" class="filter-more romix-btn romix-btn--ghost" type="button">Ver más</button>
+        </section>
+
+        <section class="filters-group" id="sale-filter-group" aria-labelledby="filters-sale-title">
+          <h3 id="filters-sale-title"><span class="filter-heading-icon" aria-hidden="true"><span data-romix-icon="Tag" data-romix-icon-size="sm"></span></span>OFERTAS</h3>
+          <label class="filter-option"><input type="checkbox" data-group="sale" value="1" /><span>Solo productos en oferta</span></label>
+        </section>
+
+        </div>
+      </aside>
+
+      <section class="products-wrap" aria-label="Listado de productos">
+        <div class="products-top">
+          <p id="products-summary" class="products-summary">Cargando catálogo...</p>
+          <label class="products-sort" for="products-sort">
+            <span class="products-sort-label">Ordenar por</span>
+            <select id="products-sort" class="products-sort-select" aria-label="Ordenar productos" data-sort-control="true">
+              <option value="recommended" selected>Recomendados</option>
+              <option value="price-asc">Menor a mayor precio</option>
+              <option value="price-desc">Mayor a menor precio</option>
+            </select>
+          </label>
+          <button id="open-filters" type="button" class="filters-open-btn romix-btn romix-btn--outline">
+            <span data-romix-icon="SlidersHorizontal" data-romix-icon-size="sm"></span>
+            Filtros
+          </button>
+        </div>
+
+        <section id="active-filters-bar" class="active-filters-bar is-empty" aria-label="Filtros activos" aria-live="polite" hidden>
+          <div class="active-filters-header">
+            <p id="active-filters-title" class="active-filters-title">Filtros activos (0)</p>
+            <button id="active-filters-clear" type="button" class="active-filters-clear romix-btn romix-btn--ghost" disabled>Limpiar</button>
+          </div>
+          <div id="active-filters-list" class="active-filters-list"></div>
+        </section>
+
+        <div id="product-grid" class="grid" aria-live="polite"><!-- ROMIX:CATEGORY:PRODUCTS --></div>
+      </section>
+    </div>
+  </main>
+
+<!-- ROMIX:INCLUDE:FOOTER -->
+
+  <div id="catalog-toast" class="catalog-toast" aria-live="polite" role="status"></div>
+
+  <script src="assets/js/romix-image-utils.js?v=20" defer></script>
+  <script src="assets/js/catalog-sections.js?v=1" defer></script>
+  <script src="assets/js/cart.js?v=19" defer></script>
+  <script src="assets/js/romix-pricing.js?v=19" defer></script>
+  <script src="assets/js/products-store.js?v=20" defer></script>
+  <script src="assets/js/catalog-relevance-order.js?v=19" defer></script>
+  <script src="assets/js/romix-catalog-pages.js?v=20" defer></script>
+  <script src="assets/js/romix-header.js?v=20" defer></script>
+  <romix-toast></romix-toast>
+  <script type="module" src="assets/js/ts/main.js?v=19"></script>
+</body>
+</html>
+

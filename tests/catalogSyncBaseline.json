@@ -1,0 +1,1292 @@
+[
+  {
+    "index": 0,
+    "name": "Calza termica lycra chupin dama",
+    "immutableHash": "9fefdaf8:abda2d0c"
+  },
+  {
+    "index": 1,
+    "name": "Calza termica jaspeada saplex chupin dama",
+    "immutableHash": "a1084aed:5b273830"
+  },
+  {
+    "index": 2,
+    "name": "Calza termica lycra recta dama",
+    "immutableHash": "30502d2:9d9eca8e"
+  },
+  {
+    "index": 3,
+    "name": "Calza termica jaspeado saplex recta dama",
+    "immutableHash": "43037abf:15873f3f"
+  },
+  {
+    "index": 4,
+    "name": "Calza termica oxford dama",
+    "immutableHash": "4a33af0:62a7f43a"
+  },
+  {
+    "index": 5,
+    "name": "Calza con piel adentro dama",
+    "immutableHash": "e79336d:e5dcb095"
+  },
+  {
+    "index": 6,
+    "name": "Calza termica doble cintura chupin dama",
+    "immutableHash": "bf5cd796:e4f6fa7b"
+  },
+  {
+    "index": 7,
+    "name": "Pantalon Jogger Térmico Lycra",
+    "immutableHash": "8f37c2bf:c9298039"
+  },
+  {
+    "index": 8,
+    "name": "Pantalon jogger termica jaspeado dama",
+    "immutableHash": "fba4e147:6cdb7354"
+  },
+  {
+    "index": 9,
+    "name": "Pantalon algodon rustico recto frizado dama",
+    "immutableHash": "439c298c:949424e8"
+  },
+  {
+    "index": 10,
+    "name": "Babucha premium frizado algodon dama",
+    "immutableHash": "8b4f72dd:5a8862c6"
+  },
+  {
+    "index": 11,
+    "name": "Palazo Morley Lanilla dama",
+    "immutableHash": "c958134f:4208649d"
+  },
+  {
+    "index": 12,
+    "name": "Campera termica jaspeado saplex dama",
+    "immutableHash": "d467c773:e3b71ab3"
+  },
+  {
+    "index": 13,
+    "name": "Campera polar corto con corderito",
+    "immutableHash": "ecc7eb79:26e9164e"
+  },
+  {
+    "index": 14,
+    "name": "Campera largo polar con corderito",
+    "immutableHash": "337f01d9:ea83e50"
+  },
+  {
+    "index": 15,
+    "name": "Maxibuzo Frizado algodon sin capucha dama",
+    "immutableHash": "b2736c91:1c3740b7"
+  },
+  {
+    "index": 16,
+    "name": "Maxibuzo Frizado algodon con capucha dama",
+    "immutableHash": "ebb482e5:17f1b2e2"
+  },
+  {
+    "index": 17,
+    "name": "Pantalon algodon frizado premium hombre",
+    "immutableHash": "db420f0f:1a2bb6cd"
+  },
+  {
+    "index": 18,
+    "name": "Babucha frizado algodon premium hombre",
+    "immutableHash": "e8b0cb21:46fd646c"
+  },
+  {
+    "index": 19,
+    "name": "Campera algodon frizado hombre",
+    "immutableHash": "11174c0c:1a2e7070"
+  },
+  {
+    "index": 20,
+    "name": "Campera corderoy con corderito hombre",
+    "immutableHash": "e13f090d:63c8eb8a"
+  },
+  {
+    "index": 21,
+    "name": "Maxibuzo Frizado algodon con capucha hombre",
+    "immutableHash": "bc1b6b1c:5482db2b"
+  },
+  {
+    "index": 22,
+    "name": "Maxibuzo Frizado algodon sin capucha hombre",
+    "immutableHash": "c36101c3:da24ff1a"
+  },
+  {
+    "index": 23,
+    "name": "Camiseta termica dama",
+    "immutableHash": "a546ad8:1b2f5b28"
+  },
+  {
+    "index": 24,
+    "name": "Camiseta termica hombre",
+    "immutableHash": "202fde2:b550f102"
+  },
+  {
+    "index": 25,
+    "name": "Calza termica liso Niña",
+    "immutableHash": "4eecd8b0:3a595bee"
+  },
+  {
+    "index": 26,
+    "name": "Calza termica jaspeado Niña",
+    "immutableHash": "b847a54a:b34709b6"
+  },
+  {
+    "index": 27,
+    "name": "Pantalon jogger fibrana liso",
+    "immutableHash": "8c3b389c:1b965211",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ]
+  },
+  {
+    "index": 28,
+    "name": "Pantalon jogger fibrana estampado",
+    "immutableHash": "25d869ec:69ec8bc4",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ]
+  },
+  {
+    "index": 29,
+    "name": "Pantalon recto fibrana",
+    "immutableHash": "151b033:294114d8",
+    "sizes": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 30,
+    "name": "Palazo fibrana liso",
+    "immutableHash": "8e658d7e:3b61872c",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 31,
+    "name": "Palazo fibrana estampado",
+    "immutableHash": "4cdae26e:f378d9ab",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 32,
+    "name": "Palazo CEY",
+    "immutableHash": "c82687e0:231b6ab5",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 33,
+    "name": "Capri lycra",
+    "immutableHash": "a1f491fe:a1d56da6"
+  },
+  {
+    "index": 34,
+    "name": "Capri algodon c/lycra",
+    "immutableHash": "ecbb2beb:b535474a"
+  },
+  {
+    "index": 35,
+    "name": "Capri jaspeado saplex",
+    "immutableHash": "c008096d:5b472191"
+  },
+  {
+    "index": 36,
+    "name": "Capri lycra combinado",
+    "immutableHash": "a98f4200:b6c15ca5"
+  },
+  {
+    "index": 37,
+    "name": "Capri lycra estampado",
+    "immutableHash": "78eb049c:e8c79715"
+  },
+  {
+    "index": 38,
+    "name": "Capri fibrana",
+    "immutableHash": "2714de88:d5b2834d",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ]
+  },
+  {
+    "index": 39,
+    "name": "Capri fibrana estampado",
+    "immutableHash": "2edd4f1c:bc99bdf8",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ]
+  },
+  {
+    "index": 40,
+    "name": "Capri modal",
+    "immutableHash": "82c6340c:c6dbe0e9"
+  },
+  {
+    "index": 41,
+    "name": "Capri algodon morley liviano",
+    "immutableHash": "a725961c:d7ae53d8"
+  },
+  {
+    "index": 42,
+    "name": "Capri CEY",
+    "immutableHash": "8ed2152e:55716e",
+    "sizes": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ]
+  },
+  {
+    "index": 43,
+    "name": "Bermuda fibrana liso",
+    "immutableHash": "dc695d3a:745d07f0",
+    "sizes": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ]
+  },
+  {
+    "index": 44,
+    "name": "Bermuda fibrana estampado",
+    "immutableHash": "84b753e3:572f6a28",
+    "sizes": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ]
+  },
+  {
+    "index": 45,
+    "name": "Short lycra tiro alto",
+    "immutableHash": "5faa071d:92d2c02"
+  },
+  {
+    "index": 46,
+    "name": "Short algodon c/lycra tiro alto",
+    "immutableHash": "4ddb3378:3f75eef"
+  },
+  {
+    "index": 47,
+    "name": "Short jaspeado saplex tiro alto",
+    "immutableHash": "26642af0:5cc9b89"
+  },
+  {
+    "index": 48,
+    "name": "Short lycra estampado",
+    "immutableHash": "a025200a:f39a440a"
+  },
+  {
+    "index": 49,
+    "name": "Short modal",
+    "immutableHash": "e485524a:95050e72"
+  },
+  {
+    "index": 50,
+    "name": "Short algodon morley",
+    "immutableHash": "4b19e4a4:86cec680"
+  },
+  {
+    "index": 51,
+    "name": "Short lycra morley",
+    "immutableHash": "c8fdb071:c88c78c1"
+  },
+  {
+    "index": 52,
+    "name": "Pollera short morley lycra c/bolsillo",
+    "immutableHash": "d5c880c4:7650b40d",
+    "sizes": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ]
+  },
+  {
+    "index": 53,
+    "name": "Pollera short lycra c/bolsillo",
+    "immutableHash": "af76733c:e9200d34",
+    "sizes": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ]
+  },
+  {
+    "index": 54,
+    "name": "Ciclista lycra",
+    "immutableHash": "44b9a9d6:4ab1bedf"
+  },
+  {
+    "index": 55,
+    "name": "Ciclista algodon con lycra",
+    "immutableHash": "6b1c071e:f25a3f7d"
+  },
+  {
+    "index": 56,
+    "name": "Ciclista jaspeado saplex",
+    "immutableHash": "9d6510f2:5a5cde59"
+  },
+  {
+    "index": 57,
+    "name": "Ciclista lycra estampado",
+    "immutableHash": "94af1431:3ee86dc7"
+  },
+  {
+    "index": 58,
+    "name": "Ciclista lycra morley",
+    "immutableHash": "f4050dc1:be1359f6"
+  },
+  {
+    "index": 59,
+    "name": "Ciclista lycra combinado",
+    "immutableHash": "105b08e:cdee06ff"
+  },
+  {
+    "index": 60,
+    "name": "Ciclista lycra arrugada",
+    "immutableHash": "3c21aa4e:e8c9a4e7"
+  },
+  {
+    "index": 61,
+    "name": "Remera lycra dry deportiva dama",
+    "immutableHash": "af7c5c3b:6ce01ce1",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 62,
+    "name": "Remera Lycra Dama",
+    "immutableHash": "4af3ee00:58df7b58",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ]
+  },
+  {
+    "index": 63,
+    "name": "Remera Lycra jaspeado Dama",
+    "immutableHash": "be050c66:24158d6e",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 64,
+    "name": "Remera manga larga morley viscosa",
+    "immutableHash": "db408fe5:a57c4a26",
+    "sizes": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 65,
+    "name": "Remera algodon Jaspeado Dama",
+    "immutableHash": "e70cc9cd:9a008055",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 66,
+    "name": "Remera algodon jaspeado combinado dama",
+    "immutableHash": "68806855:7bc5ffc7",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 67,
+    "name": "Remera viscosa morley corte princesa",
+    "immutableHash": "4e5f703:919b4c4f",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 68,
+    "name": "Musculosa viscosa morley",
+    "immutableHash": "56449e66:bfe0855f",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 69,
+    "name": "Musculosa lycra dry fit dama",
+    "immutableHash": "ecd4f058:2ba801f7",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 70,
+    "name": "Musculosa lycra dry cuadrille dama",
+    "immutableHash": "92659bc5:9cd63185",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 71,
+    "name": "Musculosa con tira modal",
+    "immutableHash": "cc2f09e4:b77ea6f3"
+  },
+  {
+    "index": 72,
+    "name": "Sudadera set dry fit dama",
+    "immutableHash": "db377f0f:7d2b94c",
+    "sizes": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 73,
+    "name": "Camisola fibrana dama",
+    "immutableHash": "2b71f79c:578ba1b2",
+    "sizes": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ]
+  },
+  {
+    "index": 74,
+    "name": "Top lycra liso y jaspeado dama",
+    "immutableHash": "562a780e:5aa90ad2"
+  },
+  {
+    "index": 75,
+    "name": "Top lycra estampado dama",
+    "immutableHash": "ed42dda8:70135b01"
+  },
+  {
+    "index": 76,
+    "name": "Top lycra gofrada dama",
+    "immutableHash": "dbacdd0a:b891dc77"
+  },
+  {
+    "index": 77,
+    "name": "Top lycra morley dama",
+    "immutableHash": "f0548f5:fbd8dc77"
+  },
+  {
+    "index": 78,
+    "name": "Babucha rustico con lycra hombre",
+    "immutableHash": "39ea1e46:a5b08883"
+  },
+  {
+    "index": 79,
+    "name": "Babucha lycra jogger jaspeado hombre",
+    "immutableHash": "e8c0f14c:17f160b",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 80,
+    "name": "Babucha termica jogger jaspeado hombre",
+    "immutableHash": "dd257433:141d89c1"
+  },
+  {
+    "index": 81,
+    "name": "Babucha lycra jogger hombre",
+    "immutableHash": "d19b70a:a0e40c80",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 82,
+    "name": "Babucha lycra termica jogger hombre",
+    "immutableHash": "58f3a015:88f8ee9f"
+  },
+  {
+    "index": 83,
+    "name": "Pantalon rustico con cierre en bolsillos hombre",
+    "immutableHash": "ff4e3b6b:2d7319a7"
+  },
+  {
+    "index": 84,
+    "name": "Pantalon algodon frizado con cierre en bolsillos hombre",
+    "immutableHash": "2c9e8573:871ac27"
+  },
+  {
+    "index": 85,
+    "name": "Campera jaspeado saplex hombre",
+    "immutableHash": "30d1852a:1b369d68",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 86,
+    "name": "Campera lycra hombre",
+    "immutableHash": "6e22ccfc:b5e85d22",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 87,
+    "name": "Campera lycra termica hombre",
+    "immutableHash": "a0892cd:615cedef"
+  },
+  {
+    "index": 88,
+    "name": "Campera termica jaspeado saplex hombre",
+    "immutableHash": "931889cc:4d10a10a"
+  },
+  {
+    "index": 89,
+    "name": "Campera rustico hombre",
+    "immutableHash": "563cc621:a27252bb",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 90,
+    "name": "Bermuda rustico hombre",
+    "immutableHash": "75bdaf1a:21717f2d",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 91,
+    "name": "Bermuda lycra hombre",
+    "immutableHash": "e9750e11:4345eec6",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 92,
+    "name": "Bermuda lycra jaspeado saplex hombre",
+    "immutableHash": "aad85fad:ba730c64",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 93,
+    "name": "Remera deportivo dry hombre",
+    "immutableHash": "63285f79:ad92593e",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 94,
+    "name": "Remera oversize algodon peinado",
+    "immutableHash": "8cba168e:2b65666f"
+  },
+  {
+    "index": 95,
+    "name": "Remera algodon peinado hombre",
+    "immutableHash": "475679cc:f646a2e6"
+  },
+  {
+    "index": 96,
+    "name": "Remera oversize algodon peinado chico",
+    "immutableHash": "e78706b3:b3a9aecb",
+    "sizes": [
+      "6",
+      "8",
+      "10",
+      "12",
+      "14",
+      "16"
+    ]
+  },
+  {
+    "index": 97,
+    "name": "Remera algodon molino hombre",
+    "immutableHash": "1b01a803:f7954512"
+  },
+  {
+    "index": 98,
+    "name": "Buzo rustico con lycra hombre",
+    "immutableHash": "8d50c17e:9f3a3ce7",
+    "sizes": [
+      "2",
+      "4",
+      "5"
+    ]
+  },
+  {
+    "index": 99,
+    "name": "Buzo rustico con lycra dama",
+    "immutableHash": "a460f5a7:58e7d808",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 100,
+    "name": "Calza lycra nena",
+    "immutableHash": "7d87b254:d8b41b4d"
+  },
+  {
+    "index": 101,
+    "name": "Calza jaspeado saplex nena",
+    "immutableHash": "19c0c981:97719841"
+  },
+  {
+    "index": 102,
+    "name": "Calza algodon con lycra Niña",
+    "immutableHash": "3e89d755:f4dbae3f"
+  },
+  {
+    "index": 103,
+    "name": "Ciclista lycra liso nena",
+    "immutableHash": "c090f5cd:b466c1d1",
+    "sizes": [
+      "6",
+      "8",
+      "10",
+      "12",
+      "14",
+      "16"
+    ]
+  },
+  {
+    "index": 104,
+    "name": "Ciclista jaspeado saplex nena",
+    "immutableHash": "3cf369e2:7c13c5f3",
+    "sizes": [
+      "6",
+      "8",
+      "10",
+      "12",
+      "14",
+      "16"
+    ]
+  },
+  {
+    "index": 105,
+    "name": "Ciclista algodon con lycra nena",
+    "immutableHash": "69f05b6a:33ec7668",
+    "sizes": [
+      "6",
+      "8",
+      "10",
+      "12",
+      "14",
+      "16"
+    ]
+  },
+  {
+    "index": 106,
+    "name": "Top lycra liso y jaspeado nena",
+    "immutableHash": "d3a2359:5c194a7c"
+  },
+  {
+    "index": 107,
+    "name": "Top lycra estampado nena",
+    "immutableHash": "aa0de81e:766eb2a3"
+  },
+  {
+    "index": 108,
+    "name": "Bermuda algodon rustico Niño",
+    "immutableHash": "ea3743c:71d53c2e",
+    "sizes": [
+      "6",
+      "8",
+      "10",
+      "12",
+      "14",
+      "16"
+    ]
+  },
+  {
+    "index": 109,
+    "name": "Pantalon algodon rustico chico",
+    "immutableHash": "7d99c88d:8a964944"
+  },
+  {
+    "index": 110,
+    "name": "Short algodon rustico chico",
+    "immutableHash": "3c33581f:ac11d56a"
+  },
+  {
+    "index": 111,
+    "name": "Camiseta termica de nena",
+    "immutableHash": "960eed24:ea0b2407"
+  },
+  {
+    "index": 112,
+    "name": "Camiseta termica de Niño",
+    "immutableHash": "b7597e5f:a1b708b8"
+  },
+  {
+    "index": 113,
+    "name": "Pantalon frizado algodon premium Niño recto",
+    "immutableHash": "fa5f033f:2da1ab8e"
+  },
+  {
+    "index": 114,
+    "name": "Campera frizada algodon Niño",
+    "immutableHash": "10870773:575810c"
+  },
+  {
+    "index": 115,
+    "name": "Campera algodon frizada de Niña",
+    "immutableHash": "3d96c5f8:a1ee1783"
+  },
+  {
+    "index": 116,
+    "name": "Babucha jogger algodon rustico cargo dama",
+    "immutableHash": "359c4515:6ea37746"
+  },
+  {
+    "index": 117,
+    "name": "Babucha modal con puño",
+    "immutableHash": "200c98a4:66a43aed"
+  },
+  {
+    "index": 118,
+    "name": "Calza algodon c/lycra chupin",
+    "immutableHash": "b6fc8cf9:fd8818c3",
+    "sizes": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 119,
+    "name": "Calza lycra recta",
+    "immutableHash": "d2364475:2110b1b",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 120,
+    "name": "Calza algodon c/lycra recta",
+    "immutableHash": "549ab923:7207bd47",
+    "sizes": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 121,
+    "name": "Calza gofrada lycra dama",
+    "immutableHash": "fbcec34d:8baa0316"
+  },
+  {
+    "index": 122,
+    "name": "Calza lycra arrugado",
+    "immutableHash": "393aa9d4:75a69bd0"
+  },
+  {
+    "index": 123,
+    "name": "Calza lycra chupin",
+    "immutableHash": "178bbf38:492650b3"
+  },
+  {
+    "index": 124,
+    "name": "Calza lycra combinada",
+    "immutableHash": "719db27d:e87a1771"
+  },
+  {
+    "index": 125,
+    "name": "Calza lycra doble cintura",
+    "immutableHash": "c080ceac:ed252d98"
+  },
+  {
+    "index": 126,
+    "name": "Calza lycra doble cintura jaspeado",
+    "immutableHash": "3c8f3e67:9fbfbabd"
+  },
+  {
+    "index": 127,
+    "name": "Calza lycra estampado",
+    "immutableHash": "3e79879a:83a5661d"
+  },
+  {
+    "index": 128,
+    "name": "Calza lycra frunce levanta cola",
+    "immutableHash": "b003bb97:6751e473"
+  },
+  {
+    "index": 129,
+    "name": "Calza lycra morley dama",
+    "immutableHash": "f68673ab:e501784f",
+    "sizes": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ]
+  },
+  {
+    "index": 130,
+    "name": "Calza oxford",
+    "immutableHash": "ead19e2:550a3c05"
+  },
+  {
+    "index": 131,
+    "name": "Calza oxford jaspeado saplex",
+    "immutableHash": "80799ee4:e92d4c90",
+    "sizes": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 132,
+    "name": "Calza oxford lycra morley dama",
+    "immutableHash": "ad77fbd7:c3691748",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 133,
+    "name": "Calza saplex jaspeado chupin",
+    "immutableHash": "ae91a50e:dcdf3a80"
+  },
+  {
+    "index": 134,
+    "name": "Calza saplex jaspeado recta",
+    "immutableHash": "fb38a11b:c1db208b",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 135,
+    "name": "Campera jaspeado saplex dama",
+    "immutableHash": "ea30b9bf:281872fd",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 136,
+    "name": "Campera lycra",
+    "immutableHash": "51342939:1fb9518e",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 137,
+    "name": "Campera lycra estampado",
+    "immutableHash": "1e8559cc:46144c92",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 138,
+    "name": "Campera lycra morley",
+    "immutableHash": "59a73e2:e7aef7ed",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 139,
+    "name": "Campera modal",
+    "immutableHash": "eef43166:9bd75b3a",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 140,
+    "name": "Campera rustico con lycra dama",
+    "immutableHash": "b32bb847:ab0435ae",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ]
+  },
+  {
+    "index": 141,
+    "name": "Campera oversize algodon rustico",
+    "immutableHash": "d63608d2:d9cbe4b7"
+  },
+  {
+    "index": 142,
+    "name": "Campera premium algodon frizado dama",
+    "immutableHash": "b060b193:6c4c9035"
+  },
+  {
+    "index": 143,
+    "name": "Campera termica lycra dama",
+    "immutableHash": "83b2e7ff:4d19a1a"
+  },
+  {
+    "index": 144,
+    "name": "Campera jersey con piel",
+    "immutableHash": "4f3416a6:4e777aca"
+  },
+  {
+    "index": 145,
+    "name": "Pantalon jogger de lycra dama",
+    "immutableHash": "d3b79ceb:c3f1d938"
+  },
+  {
+    "index": 146,
+    "name": "Pantalon jogger de lycra jaspeado dama",
+    "immutableHash": "ec61e8b1:44875e2e"
+  },
+  {
+    "index": 147,
+    "name": "Pantalon jogger rustico c/lycra dama",
+    "immutableHash": "c5ad5e40:17e65b62"
+  },
+  {
+    "index": 148,
+    "name": "Pantalon modal con tira",
+    "immutableHash": "802c6757:ffcc1682"
+  },
+  {
+    "index": 149,
+    "name": "Pantalon morley liviano dama",
+    "immutableHash": "70bf0731:81076a1c",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 150,
+    "name": "Pantalon rustico recto dama",
+    "immutableHash": "f3e3036e:6247e689",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 151,
+    "name": "Pantalon Recto CEY",
+    "immutableHash": "d32805f0:5c01b0ab",
+    "sizes": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  {
+    "index": 152,
+    "name": "Cuello polar con corderito dama",
+    "immutableHash": "da58389c:59a3a375"
+  },
+  {
+    "index": 153,
+    "name": "Cuello polar con corderito",
+    "immutableHash": "ddcb0f05:e2306b9f"
+  },
+  {
+    "index": 154,
+    "name": "Chaleco inflable dama",
+    "immutableHash": "c3cffcc:d51c24c5"
+  },
+  {
+    "index": 155,
+    "name": "Chaleco polar con corderito hombre",
+    "immutableHash": "4f5c2422:6d24017e"
+  },
+  {
+    "index": 156,
+    "name": "Chaleco polar con corderito oversize dama",
+    "immutableHash": "eb77d56b:791b1412"
+  }
+]

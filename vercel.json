@@ -1,0 +1,23 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {"source": "/mujer.html", "destination": "/mujer/", "permanent": true},
+    {"source": "/hombre.html", "destination": "/hombre/", "permanent": true},
+    {"source": "/ninos.html", "destination": "/ninos/", "permanent": true}
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {"key": "X-Content-Type-Options", "value": "nosniff"},
+        {"key": "X-Frame-Options", "value": "SAMEORIGIN"},
+        {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "missing": [{"type": "host", "value": "romix-ropas.vercel.app"}],
+      "headers": [{"key": "X-Robots-Tag", "value": "noindex, follow"}]
+    }
+  ]
+}

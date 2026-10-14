@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES2020",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "rootDir": "frontend/src",
+    "outDir": "frontend/public/assets/js/ts",
+    "removeComments": false,
+    "sourceMap": false,
+    "noEmitOnError": true
+  },
+  "include": [
+    "frontend/src/**/*.ts"
+  ]
+}

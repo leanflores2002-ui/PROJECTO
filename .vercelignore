@@ -1,0 +1,37 @@
+﻿# Development-only files; keep backend, build scripts and runtime assets until
+# the remote Root Directory / Output Directory configuration is verified.
+.git/
+.github/
+node_modules/
+.storage-tools/
+tests/
+docs/
+test-results/
+playwright-report/
+coverage/
+screenshots/
+storage-audit-*.json
+storage-audit-*.txt
+media-optimization-*.json
+media-video-*.json
+storage-git-history.json
+storage-quality-*.png
+storage-interactions-*.json
+storage-product-*.png
+storage-verification.json
+storage-video-quality.json
+storage-browser-*.json
+storage-browser-*.log
+storage-before-*.png
+storage-after-*.png
+storage-optimization-report.md
+media-*.log
+vercel-deployment-cleanup-plan.json
+*.log
+
+reports/
+.storage-tools/
+tmp/
+temp/
+backups/
+*.log
