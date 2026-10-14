@@ -57,9 +57,9 @@ export default function ProductEditor({ token, productId, onBack, onDirty, onBus
   if(loading)return <div className="page"><Loading label="Cargando editor…"/></div>;
   return <div className="page product-editor"><Button variant="ghost" onClick={onBack} disabled={saving||mediaBusy}><ArrowLeft data-icon="inline-start"/>Volver a productos</Button><div className="page-heading"><h1>{form.id?'Editar producto':'Nuevo producto'}</h1><ProductPreview token={token} id={form.id} disabled={saving||mediaBusy}/></div><Alert>{error}</Alert>
     <form ref={formRef} onSubmit={save} noValidate>
-      <div className="editor-layout"><Tabs value={tab} onValueChange={setTab}><TabsList className="editor-tabs" aria-label="Secciones del producto">{[['general','General'],['variants','Variantes'],['inventory','Inventario']].map(([key,label])=><TabsTrigger key={key} value={key}>{label}</TabsTrigger>)}</TabsList>
+      <div className="editor-layout"><Tabs value={tab} onValueChange={setTab}><TabsList className="editor-tabs" aria-label="Secciones del producto">{[['general','Datos del producto'],['variants','Colores y talles'],['inventory','Stock']].map(([key,label])=><TabsTrigger key={key} value={key}>{label}</TabsTrigger>)}</TabsList>
         <TabsContent value="general">
-          <section className="panel editor-card"><h2>Información del producto</h2>
+          <section className="panel editor-card"><h2>Información del producto</h2><p className="section-help">Estos datos aparecen en la página de la prenda. Escribí qué la hace especial: tela, calce, uso y cuidados.</p>
             <FieldGroup>{input('name','Nombre del producto *',{maxLength:180,required:true})}
               <FormField label="Descripción" error={errors.description_html}><DescriptionField value={form.description_html} onChange={value=>update('description_html',value)}/></FormField>
               <p>Escribí la descripción real de esta prenda. La tienda no agrega textos genéricos.</p>
@@ -71,7 +71,7 @@ export default function ProductEditor({ token, productId, onBack, onDirty, onBus
               </FieldGroup>
             </FieldGroup>
           </section>
-          <details className="panel editor-card"><summary>Identificación y más detalles</summary><FieldGroup className="editor-fields">
+          <details className="panel editor-card"><summary>Más detalles y precios especiales</summary><p className="section-help">El SKU es el código interno de la prenda. Completá los campos que necesites para describirla mejor.</p><FieldGroup className="editor-fields">
             {input('sku','SKU *',{maxLength:80,required:true})}{input('barcode','Código de barras',{maxLength:80})}{input('slug','Slug',{maxLength:200})}{input('season_key','Temporada',{maxLength:80})}{input('tags','Etiquetas separadas por coma')}
             <FormField label="Colecciones"><select multiple value={form.collection_ids} onChange={e=>update('collection_ids',Array.from(e.target.selectedOptions,o=>o.value))}>{collections.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></FormField>
             {[['short_description','Descripción corta'],['features','Características'],['material','Material'],['composition','Composición'],['fit','Calce'],['origin','Origen'],['care','Cuidados']].map(([key,label])=><FormField key={key} label={label} error={errors.specifications}><textarea rows={2} maxLength={500} value={form.specifications[key]||''} onChange={e=>update('specifications',{...form.specifications,[key]:e.target.value})}/></FormField>)}
