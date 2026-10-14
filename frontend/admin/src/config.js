@@ -1,8 +1,14 @@
 const trimSlash = (value) => String(value || '').replace(/\/+$/, '');
 
+export function resolvePublicSiteUrl(configured, apiUrl, location) {
+  if (configured) return trimSlash(configured);
+  return ['localhost','127.0.0.1','[::1]'].includes(location.hostname)
+    ? trimSlash(apiUrl) : location.origin;
+}
+
 export const config = Object.freeze({
   apiUrl: trimSlash(import.meta.env.VITE_API_URL || 'http://localhost:8000'),
-  publicSiteUrl: trimSlash(import.meta.env.VITE_PUBLIC_SITE_URL || 'http://localhost:8000'),
+  publicSiteUrl: resolvePublicSiteUrl(import.meta.env.VITE_PUBLIC_SITE_URL, import.meta.env.VITE_API_URL || 'http://localhost:8000', window.location),
   supabaseUrl: trimSlash(import.meta.env.VITE_SUPABASE_URL || ''),
   supabaseKey:
     import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||

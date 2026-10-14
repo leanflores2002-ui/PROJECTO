@@ -21,6 +21,7 @@ from .inventory_service import InventoryService
 from .statistics_service import StatisticsService
 from .catalog_sync import _build_catalog
 from .config import get_settings
+from .media_paths import resolve_image_path
 from .product_schemas import AdminProductDetail, ProductDetail
 from .security import AdminPrincipal, require_admin, require_roles
 
@@ -333,6 +334,8 @@ def _product_detail(connection, product_id: UUID) -> dict:
         """,
         (product_id,),
     ).fetchall()
+    for image in product['images']:
+        image['public_url'] = resolve_image_path(image['public_url'])
     return product
 
 
@@ -420,6 +423,8 @@ def list_products(
             """,
             [*values, page_size, offset],
         ).fetchall()
+    for row in rows:
+        row['image_url'] = resolve_image_path(row['image_url'])
     return {"items": rows, "page": page, "pageSize": page_size, "total": total}
 
 
@@ -449,6 +454,9 @@ def preview_product(product_id: UUID, request: Request, admin: AdminPrincipal = 
     }"""
     bootstrap = f'<base href="{escape(origin, quote=True)}/"><script>{storage_shim}window.ROMIX_PRODUCT_PREVIEW={payload};</script>'
     document = re.sub(r'<link[^>]*as="fetch"[^>]*>', '', document)
+    # The optional shell module cannot import across an opaque sandbox origin.
+    # Core product rendering and icons use the existing classic scripts.
+    document = re.sub(r'<script[^>]*type="module"[^>]*>\s*</script>', '', document)
     return {'html': document.replace('<head>', '<head>'+bootstrap, 1)}
 
 

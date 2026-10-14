@@ -10,6 +10,7 @@ from threading import RLock
 from typing import Any
 
 from .config import get_settings
+from .media_paths import resolve_image_path
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -160,7 +161,9 @@ def _build_catalog(connection, reference=None, *, include_unpublished=False) -> 
         """,
         (product_ids,),
     ).fetchall():
-        images.setdefault(str(row["product_id"]), []).append(dict(row))
+        image = dict(row)
+        image['public_url'] = resolve_image_path(image['public_url'])
+        images.setdefault(str(row["product_id"]), []).append(image)
 
     variants: dict[str, list[dict]] = {}
     for row in connection.execute(
