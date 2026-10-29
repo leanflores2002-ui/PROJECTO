@@ -5,7 +5,7 @@ import { getApiHealth } from './lib/api';
 export const adminRoutes = ['/', '/products'];
 
 function AccessNotice() {
-  const enabled = import.meta.env.VITE_CLOUDFLARE_ACCESS_ENABLED !== 'false';
+  const enabled = import.meta.env.VITE_CLOUDFLARE_ACCESS_ENABLED === 'true';
   return (
     <aside className="access-notice" aria-label="Protección de acceso">
       <span className="access-dot" aria-hidden="true" />
@@ -53,7 +53,7 @@ function HomePage() {
     <section>
       <p className="section-label">ROMIX Admin</p>
       <h1>Base operativa preparada.</h1>
-      <p className="lede">El dashboard completo se incorporará después de estabilizar la API, D1, R2 y Access.</p>
+      <p className="lede">El dashboard completo se incorporará después de estabilizar la API, D1 y Access.</p>
       <div className="status-row">
         <div>
           <span className="metric-label">API</span>

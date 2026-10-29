@@ -1,7 +1,10 @@
 import type { HealthResponse } from '@romix/shared';
 
 export function getApiBaseUrl(): string {
-  return String(import.meta.env.VITE_API_BASE_URL || 'http://localhost:8787').replace(/\/$/, '');
+  const fallback = import.meta.env.PROD
+    ? 'https://romix-api.lean-flores2002.workers.dev'
+    : 'http://localhost:8787';
+  return String(import.meta.env.VITE_API_BASE_URL || fallback).replace(/\/$/, '');
 }
 
 export async function getApiHealth(): Promise<HealthResponse> {

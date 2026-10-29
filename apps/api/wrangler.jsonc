@@ -9,7 +9,7 @@
   },
   "vars": {
     "ENVIRONMENT": "development",
-    "CORS_ORIGINS": "http://localhost:4321,http://localhost:5173",
+    "CORS_ORIGINS": "http://localhost:4321,http://localhost:5173,https://romix-storefront.lean-flores2002.workers.dev,https://romix-admin.lean-flores2002.workers.dev",
     "ADMIN_ACCESS_AUDIENCE": "romix-admin-local"
   },
   "d1_databases": [
@@ -18,12 +18,6 @@
       "database_name": "romix-dev",
       "database_id": "4694a7ee-5f6a-451f-85aa-b5175675af1b",
       "migrations_dir": "../../migrations"
-    }
-  ],
-  "r2_buckets": [
-    {
-      "binding": "ASSETS_BUCKET",
-      "bucket_name": "romix-assets"
     }
   ],
   "durable_objects": {
