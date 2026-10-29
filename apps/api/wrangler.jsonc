@@ -16,6 +16,7 @@
     {
       "binding": "DB",
       "database_name": "romix-dev",
+      "database_id": "4694a7ee-5f6a-451f-85aa-b5175675af1b",
       "migrations_dir": "../../migrations"
     }
   ],
