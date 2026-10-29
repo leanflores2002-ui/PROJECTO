@@ -1,102 +1,115 @@
-const fs = require('fs');
-const path = require('path');
-const { JSDOM } = require('jsdom');
+// Browser outcomes replace obsolete assertions about SVG strings in source code.
+const assert = require('node:assert/strict');
+const { chromium, firefox, webkit } = require('playwright');
+const browserServer = require('./helpers/browserServer');
+const products = require('../frontend/public/assets/data/products.json');
+const product = products.find(item => item.visible !== false);
+const engineName = process.env.ROMIX_BROWSER || 'chromium';
+const engine = { chromium, firefox, webkit }[engineName];
+if (!engine) throw new Error(`Unsupported browser: ${engineName}`);
 
-const root = path.join(__dirname, '..');
-const publicDir = path.join(root, 'frontend', 'public');
-const pages = ['index.html', 'catalogo.html', 'product.html', 'cart.html', 'ayuda.html', '404.html'];
-
-function assert(condition, message) {
-  if (!condition) throw new Error(message || 'Assertion failed');
-}
-
-function read(relativePath) {
-  return fs.readFileSync(path.join(root, relativePath), 'utf8');
-}
-
-function visibleText(element) {
-  const clone = element.cloneNode(true);
-  clone.querySelectorAll('svg, [aria-hidden="true"]').forEach((node) => node.remove());
-  return clone.textContent.replace(/\s+/g, ' ').trim();
-}
-
-function isButtonLike(element) {
-  if (element.tagName.toLowerCase() === 'button') return true;
-  return Array.from(element.classList).some((token) => /^(?:romix-btn|btn|btn-primary|btn-secondary|product-cta|catalog-cta|product-action|card-action)$/.test(token));
-}
-
-function checkPageControls(page) {
-  const html = read(path.join('frontend', 'public', page));
-  const document = new JSDOM(html).window.document;
-  const issues = [];
-
-  document.querySelectorAll('button, a').forEach((element) => {
-    const text = visibleText(element);
-    const ariaLabel = (element.getAttribute('aria-label') || '').trim();
-    const hasSvg = !!element.querySelector('svg');
-    const hiddenScrim = element.matches('button.mobile-nav-scrim[hidden]');
-
-    if (!text && !ariaLabel) {
-      issues.push(`${page}: ${element.tagName.toLowerCase()} sin texto visible ni aria-label (${element.outerHTML.slice(0, 180)})`);
-      return;
+(async () => {
+  const server = await browserServer();
+  let browser;
+  try {
+    browser = await engine.launch();
+    for (const width of [1440, 390]) {
+      const context = await browser.newContext({ viewport: { width, height: 900 } });
+      try {
+        await context.route('**/*', route => {
+          const url = new URL(route.request().url());
+          if (url.origin !== server.origin) return route.fulfill({ status: 200, body: '' });
+          if (url.pathname === '/api/products') return route.fulfill({ json: products });
+          if (url.pathname === '/api/variants') return route.fulfill({ json: [] });
+          if (route.request().method() !== 'GET') throw new Error('Unexpected mutation');
+          return route.continue();
+        });
+        const page = await context.newPage();
+        page.setDefaultTimeout(10000);
+        const errors = [];
+        page.on('pageerror', error => errors.push(error.message));
+        async function checkControls(surface) {
+          const controls = page.getByRole('button').or(page.getByRole('link')).or(page.getByRole('tab'));
+          for (let index = 0; index < await controls.count(); index++) {
+            const control = controls.nth(index);
+            if (!await control.isVisible()) continue;
+            const snapshot = await control.ariaSnapshot();
+            assert.match(snapshot, /^- '?(?:button|link|tab|radio|checkbox|switch|menuitem) "[^"\n]+"/m, `${surface}: unnamed control: ${snapshot}`);
+            const text = await control.evaluate(node => {
+              const clone = node.cloneNode(true);
+              clone.querySelectorAll('svg, [aria-hidden="true"], .sr-only').forEach(child => child.remove());
+              return clone.textContent.trim();
+            });
+            if (!text) {
+              if (await control.evaluate(node => node.classList.contains('romix-icon-btn'))) {
+                assert.ok(await control.locator('svg:visible, img:visible, [role="img"]:visible').count(), `${surface}: icon control has no rendered visual: ${await control.evaluate(node => node.outerHTML)}`);
+              }
+              assert.notEqual(await control.getAttribute('tabindex'), '-1', `${surface}: icon-only control excluded from keyboard`);
+            }
+          }
+        }
+        for (const route of ['index.html', 'catalogo.html', `product.html?name=${encodeURIComponent(product.name)}`, 'cart.html', 'ayuda.html', '404.html']) {
+          await page.goto(server.origin + '/' + route);
+          await page.locator('header').waitFor();
+          if (route.startsWith('product.')) await page.locator('#btn-add').waitFor();
+          await checkControls(route);
+          if (route.startsWith('product.')) {
+            await page.locator('#size-options button:not([disabled])').first().click();
+            await page.locator('#btn-add').focus();
+            await page.keyboard.press('Enter');
+            await page.locator('.romix-cart-added-panel.is-visible').waitFor();
+            await checkControls('added product panel');
+          }
+          if (route === 'cart.html') {
+            await page.locator('.qty-stepper').waitFor();
+            await checkControls('cart variant controls');
+            const increase = page.getByRole('button', { name: 'Aumentar', exact: true });
+            await increase.focus();
+            await page.keyboard.press('Enter');
+            assert.equal(await page.locator('.qty-stepper input').inputValue(), '2');
+            await page.getByRole('button', { name: 'Eliminar', exact: true }).focus();
+            await page.keyboard.press('Enter');
+            assert.equal(await page.locator('.qty-stepper').count(), 0);
+          }
+        }
+        await page.goto(server.origin + '/index.html');
+        const search = page.locator('[data-search-toggle="true"]:visible').first();
+        await search.focus();
+        await page.keyboard.press('Enter');
+        await page.waitForFunction(() => document.querySelector('#header-search').getAttribute('aria-hidden') === 'false');
+        assert.equal(await page.locator('#global-search-form input[name=q]').evaluate(node => node === document.activeElement), true);
+        await checkControls('open search');
+        await page.keyboard.press('Escape');
+        await page.waitForFunction(() => document.querySelector('#header-search').getAttribute('aria-hidden') === 'true');
+        if (width === 390) {
+          const menu = page.locator('#toggle-mobile-nav');
+          await menu.focus();
+          await page.keyboard.press('Enter');
+          await page.waitForFunction(() => document.querySelector('#toggle-mobile-nav').getAttribute('aria-expanded') === 'true');
+          await checkControls('open mobile menu');
+          const focusable = page.locator('#header-mobile-nav a[href]:visible, #header-mobile-nav button:not([disabled]):visible');
+          await focusable.last().focus();
+          await page.keyboard.press('Tab');
+          assert.equal(await focusable.first().evaluate(node => node === document.activeElement), true, 'Tab stays inside the open drawer');
+          await page.keyboard.press('Shift+Tab');
+          assert.equal(await focusable.last().evaluate(node => node === document.activeElement), true, 'Shift+Tab wraps to the last drawer control');
+          await page.keyboard.press('Escape');
+          await page.waitForFunction(() => document.querySelector('#toggle-mobile-nav').getAttribute('aria-expanded') === 'false');
+          // The drawer restores focus on the next animation frame, after aria-expanded changes.
+          await page.waitForFunction(() => document.activeElement === document.querySelector('#toggle-mobile-nav'));
+          assert.equal(await menu.evaluate(node => node === document.activeElement), true);
+        }
+        await page.route('**/qa-catalog-tabs.html', route => route.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Catalog fallback regression</title><div id="catalog-grid"></div><script src="/assets/js/slugify.js"></script><script src="/assets/js/catalog-tabs.js"></script>' }));
+        await page.route('**/assets/data/products.json', route => route.fulfill({ json: [{ name: 'Missing photo fixture', section: 'mujer', sizes: ['U'], price: 1000 }] }));
+        await page.goto(server.origin + '/qa-catalog-tabs.html');
+        await page.locator('#catalog-grid img').waitFor();
+        const fallback = page.locator('#catalog-grid img');
+        assert.ok((await fallback.getAttribute('src')).startsWith('data:image/svg+xml'));
+        await fallback.evaluate(image => image.decode());
+        assert.ok(await fallback.evaluate(image => image.naturalWidth > 0));
+        assert.deepEqual(errors, []);
+        console.log(`buttonLabelTests: ${engineName} ${width}px passed (accessible names, rendered icons, keyboard and focus)`);
+      } finally { await context.close(); }
     }
-    if (isButtonLike(element) && !text && !hasSvg && !hiddenScrim) {
-      issues.push(`${page}: control icon-only sin SVG visible (${element.outerHTML.slice(0, 180)})`);
-    }
-  });
-
-  assert(issues.length === 0, issues.join('\n'));
-}
-
-function checkDynamicRenderers() {
-  const home = read('frontend/public/index.html');
-  const catalog = read('frontend/public/assets/js/romix-catalog-pages.js');
-  const product = read('frontend/public/product.html');
-  const cart = read('frontend/public/cart.html');
-  const sizeGuides = read('frontend/public/assets/js/size-guides.js');
-  const cartJs = read('frontend/public/assets/js/cart.js');
-  const search = read('frontend/public/assets/js/search.js');
-
-  assert(home.includes('cta.textContent = "Detalles"'), 'Inicio: el CTA de tarjetas debe decir Detalles');
-  assert(catalog.includes('card.setAttribute("aria-label", "Ver detalles de " + product.name)'), 'Catálogo: la tarjeta dinámica debe exponer la acción de detalle');
-  assert(catalog.includes('detailsLink.textContent = "Detalles"'), 'Catálogo: la acción de detalle debe mostrar Detalles');
-  assert(catalog.includes('controls.button.textContent = remaining > step ? "Ver " + step + " mas" : "Ver mas"'), 'Catálogo: el control Ver más debe conservar una etiqueta visible');
-  assert(catalog.includes('remove.innerHTML = \'<svg'), 'Catálogo: quitar filtro debe usar SVG visible');
-  assert(product.includes('>Agregar al carrito</button>'), 'Producto: falta Agregar al carrito');
-  assert(product.includes('>Comprar ahora</button>'), 'Producto: falta Comprar ahora');
-  assert(/>\s*Compartir\s*<\/button>/.test(product), 'Producto: falta Compartir');
-  assert(sizeGuides.includes('<strong>Gu&iacute;a de talles</strong>'), 'Producto: falta Guía de talles');
-  assert(cart.includes('>Vaciar carrito</button>'), 'Carrito: falta Vaciar carrito');
-  assert(cart.includes('>Continuar comprando</a>'), 'Carrito: falta Continuar comprando');
-  assert(cart.includes('> Enviar pedido</button>'), 'Carrito: falta Enviar pedido');
-  assert(cart.includes('aria-label="Disminuir"') && cart.includes('aria-label="Aumentar"'), 'Carrito: faltan etiquetas de cantidad');
-  assert(cart.includes('aria-label="Eliminar"><svg'), 'Carrito: eliminar debe conservar aria-label y SVG');
-  assert(cartJs.includes('aria-label="Cerrar"><svg'), 'Panel de carrito: cerrar debe conservar aria-label y SVG');
-  assert(search.includes('aria-label="Limpiar b&uacute;squeda" hidden><svg'), 'Búsqueda: limpiar debe conservar aria-label y SVG');
-}
-
-function checkIconTouchTarget() {
-  const designSystem = read('frontend/public/assets/css/romix-design-system.css');
-  const header = read('frontend/public/assets/css/romix-header.css');
-  const sizeGuide = read('frontend/public/assets/css/size-guide-drawer.css');
-  assert(designSystem.includes('--romix-control-md: 44px'), 'El token de control medio debe mantener 44px');
-  assert(/\.romix-icon-btn[\s\S]*?width:\s*var\(--romix-control-height\)/.test(designSystem), 'Los controles icon-only deben tener ancho táctil compartido');
-  assert(header.includes('global-search.romix-search-form .romix-search-clear {\n  position: absolute;') && header.includes('width: 44px;'), 'Limpiar búsqueda debe tener target táctil de 44px');
-  assert(/\.size-guide-drawer__x\s*\{[\s\S]*?width:\s*44px;[\s\S]*?height:\s*44px;/.test(sizeGuide), 'Cerrar guía debe tener target táctil de 44px');
-  assert(!/button:empty::after/.test(designSystem + header + sizeGuide), 'No se permite texto generado por CSS para etiquetar botones');
-}
-
-function main() {
-  pages.forEach(checkPageControls);
-  checkDynamicRenderers();
-  checkIconTouchTarget();
-  console.log('buttonLabelTests: passed');
-}
-
-try {
-  main();
-} catch (error) {
-  console.error('buttonLabelTests: failed');
-  console.error(error.message || error);
-  process.exit(1);
-}
+  } finally { if (browser) await browser.close(); await server.close(); }
+})().catch(error => { console.error(error); process.exitCode = 1; });

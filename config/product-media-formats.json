@@ -1,0 +1,1038 @@
+[
+  {
+    "source": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "d6f917580376e6a761fe7685d70328c7b7b0d20cf9fa5638b9ad5ad32ea35976",
+    "delivery": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_negro_delivery.webp",
+    "deliverySha256": "6115742d76479a3b9e02d1193aca796647454dfbfbc0845ada5e23fbc8ab5d6c"
+  },
+  {
+    "source": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_gris.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "72ff7a9be3fea00ccf6e521b4448b9a0fe255e18227ec2da9c636086a5678feb",
+    "delivery": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_gris_delivery.webp",
+    "deliverySha256": "7b9c2c3808095040f8a550fed41ed3b6b1cc7fe380632b2c4968badd35348f9b"
+  },
+  {
+    "source": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_azul.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "b15b42028e100fbfee0728ef4f0f3374c28ea5c1c6f08b84be1dc2035ff79f52",
+    "delivery": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_azul_delivery.webp",
+    "deliverySha256": "da26f73acc7f1c2ecaa2d98cac84a17cc132a2c3e53ed4018d52a918fbcf9c1f"
+  },
+  {
+    "source": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_gris_oscuro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "cf088c03b511f791c00d6ac95ae79c353e9f79096b12609e18f73d18772ef4dc",
+    "delivery": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_gris_oscuro_delivery.webp",
+    "deliverySha256": "181f0bf6ac607ae4579dae8a791d8b24a5b4d405cc10b01c71bb9a46968be837"
+  },
+  {
+    "source": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_beige.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "e2af220af87f4f7ae100e62a7d48a26ee2be870471fd2a6b0a3e031e59c92e7e",
+    "delivery": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_beige_delivery.webp",
+    "deliverySha256": "6962c3cf16312259aefc6a44118f11f32fa0038f837cc58fdc447f5d8b5fbf9b"
+  },
+  {
+    "source": "images/products/palazo_algodon_morley_liviano_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "ad997e45f75d0e3a18afdde2c097bc8cfd236dc06d3d9e17775c023de8210866",
+    "delivery": "images/products/palazo_algodon_morley_liviano_negro_delivery.webp",
+    "deliverySha256": "9692d9fdbdbb7c4b36bc161e62a79dacea976409f092e7cfd15fc8e29e5e0e1a"
+  },
+  {
+    "source": "images/products/palazo_algodon_morley_liviano_azul.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "4b505f62f049b864b009b12bfa1b043551bf291c09443d4232335c1c2d4b834e",
+    "delivery": "images/products/palazo_algodon_morley_liviano_azul_delivery.webp",
+    "deliverySha256": "27df990b6282d31387713d94e49fcb13f05fa981fe8d7efbc2884c0688a71b55"
+  },
+  {
+    "source": "images/products/palazo_algodon_morley_liviano_gris.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "bb40e3ddc028910ce0d8db36713e70e1dc207a008a900b06edbe2483f4c3b44d",
+    "delivery": "images/products/palazo_algodon_morley_liviano_gris_delivery.webp",
+    "deliverySha256": "6941f36311eea5c66e7b8d9927adfb6c08c66f916d643ad2b0052b01f1524280"
+  },
+  {
+    "source": "images/products/palazo_wide-leg_cey_dama_liso_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "77b795ef7ddb37d55f172c088e8c8c9bdeb86f80bb36c9c597e8752f10af8303",
+    "delivery": "images/products/palazo_wide-leg_cey_dama_liso_negro_delivery.webp",
+    "deliverySha256": "3c804bfc2950e1a88f37988d7f81694da27ba1f827b717d0a159fe27715cf4ac"
+  },
+  {
+    "source": "images/products/palazo_wide-leg_cey_dama_liso_azul.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "cc9c4899ee497615b0522ac662013a536d0ccb120e745e2a19ba35b02e3d8fb4",
+    "delivery": "images/products/palazo_wide-leg_cey_dama_liso_azul_delivery.webp",
+    "deliverySha256": "d5bfdaf8ef5b5ffd9d8ea509e8c3c0698937af7e06643c915495fb5188c94953"
+  },
+  {
+    "source": "images/products/palazo_wide-leg_cey_dama_liso_camel.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "51ec7e3153723c5249e078c7af52c0582dda95f4d4cb6d2e22f6f8bb7556e1b8",
+    "delivery": "images/products/palazo_wide-leg_cey_dama_liso_camel_delivery.webp",
+    "deliverySha256": "45fdf45c3ffb6a544b480592724f63fd7bcbedee3a086d755c82fdc7634afb75"
+  },
+  {
+    "source": "images/products/palazo_wide-leg_cey_dama_liso_verde.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "9534c70039e1af42bdb3fd7f8e218b73b789b4a9736626e3e2fbc3b2cde4df11",
+    "delivery": "images/products/palazo_wide-leg_cey_dama_liso_verde_delivery.webp",
+    "deliverySha256": "5c15fbbafa9a5e6c4e88ab21b9f8b444dcbd29e92317b2e2728401d1c3f1182e"
+  },
+  {
+    "source": "images/products/palazo_wide-leg_cey_dama_liso_gris.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "304584004d2f784087a45ed5c77f571434b5bd77ff4c1376967431f0ffdde59b",
+    "delivery": "images/products/palazo_wide-leg_cey_dama_liso_gris_delivery.webp",
+    "deliverySha256": "e1fcf86b9e6d6e50cb1e6233f9dab8c0daec5a4b49680e92f887309a85b08959"
+  },
+  {
+    "source": "images/products/palazo_cey_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "3b5834a0599071c147cc5b79a4f78af3766777bf0e1d3cb48e6eea5db2b46f16",
+    "delivery": "images/products/palazo_cey_negro_delivery.webp",
+    "deliverySha256": "4c253491e9a438add3d08f63a3692b5dc00d63686b898521e17300d9e6d24db6"
+  },
+  {
+    "source": "images/products/palazo_cey_azul.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "d759e66f15da8f29db9a89bd2942a9ae00636f9a9e92270cdc2bc1ee614be8ed",
+    "delivery": "images/products/palazo_cey_azul_delivery.webp",
+    "deliverySha256": "910badc66a64705b075d67617eee14dbef56f5e7f64c72878a11dd324bd0923c"
+  },
+  {
+    "source": "images/products/palazo_cey_verde.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "ea58cdb2b85a4bc82a0f3c9c104b2ff34b531cb7658a21f94df5da984fcf37e4",
+    "delivery": "images/products/palazo_cey_verde_delivery.webp",
+    "deliverySha256": "f4665f567773479993f9c4dde75c348f747bc88c5ea586d2ee9b16b02afbfd6d"
+  },
+  {
+    "source": "images/products/palazo_cey_camel.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "723eaf6e5f0261a7715e7442d2bbb032add48d89061d4d458f5c23ee3aa6cfba",
+    "delivery": "images/products/palazo_cey_camel_delivery.webp",
+    "deliverySha256": "f8a4e82ccde9aad8717c9c42700b8f930fd4e9d97b0f209f70284f88bec4f781"
+  },
+  {
+    "source": "images/products/palazo_cey_beige.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "6d7d494cbb9af267f0cc8518b985954cffed9d59c7d1972663c31faf272713ba",
+    "delivery": "images/products/palazo_cey_beige_delivery.webp",
+    "deliverySha256": "a8abae062a76e7ad2439e30e960c215066a68abf6408ea0060a5e46597f1db52"
+  },
+  {
+    "source": "images/products/palazo_cey_gris_oscuro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "e55e54eedf63aa85aadb554771199d32aa72714cb19283bb22f64cd9e76a2788",
+    "delivery": "images/products/palazo_cey_gris_oscuro_delivery.webp",
+    "deliverySha256": "1f489eb4ca72d9a4dbfaed5232ac3c86cc5ae486c7226b14864cb4d12d3f7820"
+  },
+  {
+    "source": "images/products/palazo_cey_lila.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "a0d59b8033a8c3206107c3e237b2a230027fa7a1b9d44f56c8abb3dfcc258b21",
+    "delivery": "images/products/palazo_cey_lila_delivery.webp",
+    "deliverySha256": "e0fb1fbed891f252c0511f02767c331768be7af110c6bb128f082671c184c12c"
+  },
+  {
+    "source": "images/products/capri_jaspeado_saplex_gris_melange.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "4a7fce4b994b84e863ecaf9b8313bcbd34ebeecb27f06c108987415e65720d95",
+    "delivery": "images/products/capri_jaspeado_saplex_gris_melange_delivery.webp",
+    "deliverySha256": "4bbee476f7228a3f60c7ad0550c3aea003c38eaf5161120910e4d0d921978bb7"
+  },
+  {
+    "source": "images/products/capri_jaspeado_saplex_azul.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "a800a971b5c47c2de92d83537af4c4453ee5f007e6740e0ea3c9ab5731bf2ca7",
+    "delivery": "images/products/capri_jaspeado_saplex_azul_delivery.webp",
+    "deliverySha256": "0008b7a8a01ff9bcf80d24d843182d78e44a4527ccb319209018dda26c0fbf40"
+  },
+  {
+    "source": "images/products/capri_jaspeado_saplex_rosa.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "ceb4295db67be74c8f8769d81cb3c2565db770a132996560d7c9c86d22c2edcb",
+    "delivery": "images/products/capri_jaspeado_saplex_rosa_delivery.webp",
+    "deliverySha256": "f373776a3c1329648e53fc125fcc9493e3554ba19b3cde440dc9e8101b0114ee"
+  },
+  {
+    "source": "images/products/capri_jaspeado_saplex_gris_oscuro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "35a678e40db2eee0e90f10590d573e778b43c998b6f62513176feb8ad1ca113d",
+    "delivery": "images/products/capri_jaspeado_saplex_gris_oscuro_delivery.webp",
+    "deliverySha256": "a9e91d6957a66cdb3eddd0668d6253ee0141a840a4fd83c512432743e1996ef7"
+  },
+  {
+    "source": "images/products/capri_jaspeado_saplex_terracota.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "ce3886df26c5b9dba5fb42172ca6cff0ab230a868be8364161c89702603f6d5a",
+    "delivery": "images/products/capri_jaspeado_saplex_terracota_delivery.webp",
+    "deliverySha256": "da3d8287357f2c8e870993aaca949973ec70928180bd4f95b51435a5e94cedf3"
+  },
+  {
+    "source": "images/products/capri_lycra_combinado_estampado_1.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "03ffc1e5678213d14cc1c522a40d2eaa9feec151ad70e7eabb94d909fa3f260f",
+    "delivery": "images/products/capri_lycra_combinado_estampado_1_delivery.webp",
+    "deliverySha256": "2883002ef9e564b5700820fe9af81cd946793bfda5178eb02ea8ce0ee3a39938"
+  },
+  {
+    "source": "images/products/capri_lycra_combinado_estampado_2.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "61f56b117cc2c3421896f3d1ba7b2e2b6d02ccfeab73dba8b9310f6d611c5371",
+    "delivery": "images/products/capri_lycra_combinado_estampado_2_delivery.webp",
+    "deliverySha256": "6a58c936fe8b2ee9bc9fd747fddda3a33f665428655753d024c251b04e958141"
+  },
+  {
+    "source": "images/products/capri_lycra_combinado_estampado_3.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "38f8ad95748dff2a31e1ce6842a9dd6fcffe37d5a0859afb26eea7cfb803fc6b",
+    "delivery": "images/products/capri_lycra_combinado_estampado_3_delivery.webp",
+    "deliverySha256": "89f3b0064ebf19b7556122e09a3e615442730f16d2fc55568af36ae6a8f4aea4"
+  },
+  {
+    "source": "images/products/capri_lycra_combinado_estampado_4.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "a4eb73bb4ac9e82eef9061ac36edc0c5f0a53a30b4f60a5241385165a00df0c5",
+    "delivery": "images/products/capri_lycra_combinado_estampado_4_delivery.webp",
+    "deliverySha256": "8cfb83734be89360193edb1522da97997ce26d0e7d11ffd733fb207a5297c4da"
+  },
+  {
+    "source": "images/products/capri_lycra_combinado_estampado_5.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "66353cc9b44aae3de3f866d5ce9b3d5bf69df2237ce3b77e79d23507f11fa9de",
+    "delivery": "images/products/capri_lycra_combinado_estampado_5_delivery.webp",
+    "deliverySha256": "2a1897bd5b1ad4d46708995fb6f92db145d214d6f8a9f473ca84fd2ae4070011"
+  },
+  {
+    "source": "images/products/capri_lycra_combinado_estampado_6.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "1e5d3a172be068bf1303e9854075c9443a11361d0e820c5cdb0b7a8da7ada6f5",
+    "delivery": "images/products/capri_lycra_combinado_estampado_6_delivery.webp",
+    "deliverySha256": "98f91fbaa367d6ed97f7d3585209626c44cb553d0e00fde603c0b14f3fba17ca"
+  },
+  {
+    "source": "images/products/capri_lycra_combinado_estampado_7.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "7f1746b995552f0fdefcceb2d5db4688018649ce53c8a7c9558d353d1bba7951",
+    "delivery": "images/products/capri_lycra_combinado_estampado_7_delivery.webp",
+    "deliverySha256": "4b4549c6715a2a29daac658492807f58b48cf5f85b00db982fa4c47c3409f2d5"
+  },
+  {
+    "source": "images/products/capri_cey_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "c9fae372fb93d9ff66d3ca696330b295e1a6c6f7ebfc3956e8adc44c74522d41",
+    "delivery": "images/products/capri_cey_negro_delivery.webp",
+    "deliverySha256": "b5381652136accffa397c8d1c0222984e4190c5d75c3ac359cdc50be1ca7b299"
+  },
+  {
+    "source": "images/products/capri_cey_gris.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "34924517a02a97e50c374d59bc5185983e1e6e57c4ae6115c38409bbada22370",
+    "delivery": "images/products/capri_cey_gris_delivery.webp",
+    "deliverySha256": "cc0de4339c1625d045a37bdfd4ba9ef27236584a1648006b6f4f929c12336efa"
+  },
+  {
+    "source": "images/products/capri_cey_verde.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "886a848c5cc3691fad9564994987aab3fad8d48f967b899bb7cf899eac641290",
+    "delivery": "images/products/capri_cey_verde_delivery.webp",
+    "deliverySha256": "4f4b9c39cafdc269a4e6f2ce931a8fe06fe414e8c7c9fde351ca08ae69065a56"
+  },
+  {
+    "source": "images/products/capri_cey_azul.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "5adbe8782044e84294258f6be23fb4a17f5eacecbe1997c51c36c6f6c3a45308",
+    "delivery": "images/products/capri_cey_azul_delivery.webp",
+    "deliverySha256": "ad3be6eda3d1f1371c82d086f90d18fbffe5e57b523e2c52530df1ef9e1c092e"
+  },
+  {
+    "source": "images/products/capri_cey_camel.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "65f950e58b6b7319fa3d2febf2d1420904c2de16bef03362608cf1d195787f5b",
+    "delivery": "images/products/capri_cey_camel_delivery.webp",
+    "deliverySha256": "ae41bfbbbe112d6b98da0db88a2c7574026b9d13dc162fc48f1e2e09e863e9fb"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_liso_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "33ab8b2b060e43173b1625eacf6d8b8da3ed36339078a68eff14258a93024936",
+    "delivery": "images/products/bermuda_fibrana_liso_negro_delivery.webp",
+    "deliverySha256": "0c91ffc74f500a6fd83f9bd91019b6d246fdcf13348ec9e68c6be6ff40083124"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_liso_verde.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "2653ae0f57cf3c8f1e3fed086f5536a21edd767df6a2d0a1abf4cc2031170fe4",
+    "delivery": "images/products/bermuda_fibrana_liso_verde_delivery.webp",
+    "deliverySha256": "f4fc4ae92b06b88e1a1d6443bf811dae3c2ff80bc46d67332ce891538aa30650"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_liso_camel.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "5a8be3b91d7071f2849690835a9af487123269123c50812da2e7097655a56b5d",
+    "delivery": "images/products/bermuda_fibrana_liso_camel_delivery.webp",
+    "deliverySha256": "a03184f45f75f7d4869ad802436afb6becd51320e5a05dac97b30f7e8a829613"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_liso_azul.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "cc77c112e8fc0fb0a14ece075f1b0e92fae0613599842932119d3b3f2e04317f",
+    "delivery": "images/products/bermuda_fibrana_liso_azul_delivery.webp",
+    "deliverySha256": "3e10df198ce5bc0db8b5f1ded1ca1692490e83fb9858e6a228443618effad8f9"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_liso_beige.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "d40c4ab9c74207dd49383a9a14abb81a7af5722dc235a57eaafd31141b355cac",
+    "delivery": "images/products/bermuda_fibrana_liso_beige_delivery.webp",
+    "deliverySha256": "3385104ac728133ee8004033c692282a86d98ff0244ad2251615768036a64244"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_liso_verde_claro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "b20a3d9b896034c648268d8ab0ce2969db4518b614d5a9bb7a15a4f63f34ae7c",
+    "delivery": "images/products/bermuda_fibrana_liso_verde_claro_delivery.webp",
+    "deliverySha256": "a832430547bdde8d6872849d967adcf758db25b20d5a9c28619ae47ea926c9d4"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_estampado_1.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "72a0f75797cecf480364d6a3d312b15699b0ec92cbd91606d2b72e3827a02a1d",
+    "delivery": "images/products/bermuda_fibrana_estampado_1_delivery.webp",
+    "deliverySha256": "490dc13ba1af57dfb3bb3e73d9365852ddbb0ae5354a45586b1eadc7dbb0b04a"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_estampado_2.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "0470315f054a852de4643578f181d198eb54f01fe16b1067aa6b54f0e9001953",
+    "delivery": "images/products/bermuda_fibrana_estampado_2_delivery.webp",
+    "deliverySha256": "6533fc6228c48c35cc57b77ba707708150758894a5d4d5948191a5aa61c7226f"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_estampado_3.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "851282c74f76bd695d96c57708a38cbb234a4610bc5d861b0da55f529d9e1dd1",
+    "delivery": "images/products/bermuda_fibrana_estampado_3_delivery.webp",
+    "deliverySha256": "6fdfbb6a3f85a3f0f899f25d2262121d21841cdf5e4c0dedac1107d9bafd45b6"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_estampado_4.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "118898e1de79b89d7f42985b3a03859435bb5fc00e566f3b28bcc6a992c4703f",
+    "delivery": "images/products/bermuda_fibrana_estampado_4_delivery.webp",
+    "deliverySha256": "d90e334cf568d876e08e7bfd4c42d6a8570b80dd64e7230d83f0e3a62c644aa3"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_estampado_5.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "ecaa6d8dffeb25e05aae7b15358042487cab8d72f59d0e2a7bf24e79298554de",
+    "delivery": "images/products/bermuda_fibrana_estampado_5_delivery.webp",
+    "deliverySha256": "65edb0583cf79f96577dd10d57e0ea2ef39fb0aa9594b6b934169d55823ff661"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_estampado_6.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "61b25671f4ef80b750b4aee77ea34d6263d9e4bfb052e06e51035f1b99496178",
+    "delivery": "images/products/bermuda_fibrana_estampado_6_delivery.webp",
+    "deliverySha256": "1da20bd3481b810aa4b3efabe5b9430ace3839d5fea2f95c7bb6792cc6f512c0"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_estampado_7.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "5d9a01704174ce336c199503ddfd2ed284b2d991934b9d341aae85fa48fcffd0",
+    "delivery": "images/products/bermuda_fibrana_estampado_7_delivery.webp",
+    "deliverySha256": "b569d9e27d2acc5b4d78864e5b5b38633e2b560f2871c75f5f5943de561a064b"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_estampado_8.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "6cc7bb6461ed8411bfdd832c57016a4c7d5de371fb832ea0b297ad047b5ffc11",
+    "delivery": "images/products/bermuda_fibrana_estampado_8_delivery.webp",
+    "deliverySha256": "666b0195e06e3de8fc9adafbbeb7fad6fe219a9d2aa45936ee49e2e2028c0eea"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_estampado_9.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "927733961f03cb4e681005b5561ca00d211df64aa220d076467277dba7163876",
+    "delivery": "images/products/bermuda_fibrana_estampado_9_delivery.webp",
+    "deliverySha256": "31f0ae61434b6eb6c3a7d2d635f7762771ef2fd340310a1dcd20111553874951"
+  },
+  {
+    "source": "images/products/bermuda_fibrana_estampado_10.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "00789941b72c3836c1721d3ce224f623dc701017aa4372b6bf9dd293d32b5b1a",
+    "delivery": "images/products/bermuda_fibrana_estampado_10_delivery.webp",
+    "deliverySha256": "6b55af216fa5a85d054c13dcfff58ac7a821b6bd0cea4eaacacdc22fe13a4c2c"
+  },
+  {
+    "source": "images/products/short_fibrana_liso_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "20ed953faeb9781a88c59dc1bbee082cc613ab275d972b3f140f828db7744316",
+    "delivery": "images/products/short_fibrana_liso_negro_delivery.webp",
+    "deliverySha256": "724e00a97cced2492600bee32ad640714135d6650414adb451b40fe9c7abb68e"
+  },
+  {
+    "source": "images/products/short_fibrana_liso_verde.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "24b93fe79c19def6d7e8119c2e5b07bf8b7feb9e0486cc06ecf0ef485609c5ef",
+    "delivery": "images/products/short_fibrana_liso_verde_delivery.webp",
+    "deliverySha256": "c0c93ce27c6eadf3685b6826eda58b339bdb96a40ddafb88071c2d5cc55f119f"
+  },
+  {
+    "source": "images/products/short_fibrana_liso_camel.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "45cbbe0528182f38a397fd370bc38951be6180fdbeb7b9e79841ceb574958ba5",
+    "delivery": "images/products/short_fibrana_liso_camel_delivery.webp",
+    "deliverySha256": "88baa9fb8a367192efc60151340b93263ca76f909409890d5277272a1772d982"
+  },
+  {
+    "source": "images/products/short_fibrana_liso_azul.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "7d72740f30a7d578687277bc9e526ecc4bb1ca6649b58aaadd3de7dc5e1449c9",
+    "delivery": "images/products/short_fibrana_liso_azul_delivery.webp",
+    "deliverySha256": "209d91f8c17aff15ab1ce5f9e0ffd1b6142fa6bc526ebe8939690b06f62caac4"
+  },
+  {
+    "source": "images/products/short_fibrana_liso_beige.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "0b66e5ee72e7aa60895fb8e5c539bf7d251664fe24e0a3492a998253e621fa75",
+    "delivery": "images/products/short_fibrana_liso_beige_delivery.webp",
+    "deliverySha256": "038ff1f8ef6c885d93c71f13645759ff2e5cfad4a0f6201ca541531c2831e1e9"
+  },
+  {
+    "source": "images/products/short_fibrana_liso_verde_claro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "0706807088eca531ed0d3d0cd5706d7f53bcc56adb74b8ee33c4c08c6e5e0c9b",
+    "delivery": "images/products/short_fibrana_liso_verde_claro_delivery.webp",
+    "deliverySha256": "10ee97a6dea43242ff1d9b55e2f4957585c27d99bcf9a78d01590a286ffd39ce"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_1.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "54222bf05f3077925519b2e76de1c6f653c0912ca58cc3154bcc565fe12050ac",
+    "delivery": "images/products/short_fibrana_estampado_dama_1_delivery.webp",
+    "deliverySha256": "5eddc9ada665e9c41dc2de0317b48df1d69f55b35b467e9586edf5094b51489c"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_2.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "d208e33cf1738da9e260c24a4222be26562c8389d879d4075236a3929150d730",
+    "delivery": "images/products/short_fibrana_estampado_dama_2_delivery.webp",
+    "deliverySha256": "922fed78993634c4cc7fee7cb8a1f254e02d21e2b4b2e8744915856e35b3e9d7"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_3.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "2992a1c86a5370dce9a9ce9b6ed79d29718d2710fbc646c843cb7b07c27fe05f",
+    "delivery": "images/products/short_fibrana_estampado_dama_3_delivery.webp",
+    "deliverySha256": "01a61cdad5cf73420a0cf61e750b85443a1b9495b5a5457538e41ae297f30134"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_4.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "3babf577377b4093115b2c90e9f94cb8bac9ee5eb72e9575747cc90405cccd66",
+    "delivery": "images/products/short_fibrana_estampado_dama_4_delivery.webp",
+    "deliverySha256": "33f6ac1d1a7c0f63858baa121e8a637ea4f342f3abca4cee7e1079bab85705e6"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_5.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "01cde1158d5c9990827b9cae74e83e99684b3703e446005b18d4bed3937c7734",
+    "delivery": "images/products/short_fibrana_estampado_dama_5_delivery.webp",
+    "deliverySha256": "655c43ad052d1c7f748b2550a92230248e29b179c09acb0a0da18bbed7809c60"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_6.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "c178b6a08e8337173c3da6990d7c35a1a97f96ae13e0c9e505a9d18ed8c111d9",
+    "delivery": "images/products/short_fibrana_estampado_dama_6_delivery.webp",
+    "deliverySha256": "ee5e7b24c1f8cff32a861ea91bd23e7cbc393f5ba8fcf4eb5b4513c83f3a5315"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_7.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "b9147011666e4814e9fb00e5feab88db75d7820307ef2b2dd333ceee96a25644",
+    "delivery": "images/products/short_fibrana_estampado_dama_7_delivery.webp",
+    "deliverySha256": "6f0e6146463ef3338c5a3e9c746941d94a016f43d73d67348e731fe40ad8a4d0"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_8.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "0deea1a5295a5d4c487b553f83f60e246d708ea8c7706834cf6406758a4c4bc5",
+    "delivery": "images/products/short_fibrana_estampado_dama_8_delivery.webp",
+    "deliverySha256": "2479a85f28dc1b712a9768aadc86a0da0f531c1fd084a72936827ea3251384bb"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_9.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "d07483895f556db8581e8a39e008dfbae0b018384ef43ca22b7583959bded748",
+    "delivery": "images/products/short_fibrana_estampado_dama_9_delivery.webp",
+    "deliverySha256": "a7a44101ea1f86b694ad41b79dca6da358399d2258f004529dbb9b9479eaab3d"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_10.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "17a0c1fe510d003d43fb5297e556629d448b174442ebf7fb8ffbaccab2286628",
+    "delivery": "images/products/short_fibrana_estampado_dama_10_delivery.webp",
+    "deliverySha256": "1deadc8ebeed936fd9c7e2a8477b1722e0b885d3aec97af79bae09b97f6500d1"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_11.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "5f9699ed1935cc035e9939f488df1e4a86f2b9496a5da2b333b30759c027277b",
+    "delivery": "images/products/short_fibrana_estampado_dama_11_delivery.webp",
+    "deliverySha256": "198c37362f70210542c45d1d4ba362009599d519df0a83808c6a6fd55ca6ad28"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_12.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "c6a8cdee2073423c56efb96aed9c8d8cf81a65c69e0bb8381fa6ad97d3979067",
+    "delivery": "images/products/short_fibrana_estampado_dama_12_delivery.webp",
+    "deliverySha256": "5d4e48f090e7096b576498740b96c6c1cf921ad5f81816b5cc03f423e46fd966"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_13.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "b94088f88e51eab57253924b24830a5ddfb1718e390f2aa9a53f8050c72d80eb",
+    "delivery": "images/products/short_fibrana_estampado_dama_13_delivery.webp",
+    "deliverySha256": "dbc14b2f1ac0e4608f079f368a22f62a4ed0b454a105f3e4a821da6ca80fe9f4"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_14.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "4ce407eb4a475d15ae26608217b249ce1aa4e0a6866dd7b01c9e95f6231fe622",
+    "delivery": "images/products/short_fibrana_estampado_dama_14_delivery.webp",
+    "deliverySha256": "543e32323eaf7293fd58d93f52021b6d246fd99d4e0115c1249162d1817025e2"
+  },
+  {
+    "source": "images/products/short_fibrana_estampado_dama_15.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "d7758c8003556e182b996c7052547382cdbf908bc83752fd3debe7e1fce0cb60",
+    "delivery": "images/products/short_fibrana_estampado_dama_15_delivery.webp",
+    "deliverySha256": "913135941c24a21f7f1ced92d3393b81c1a14df2ae8fd2e056bfe1c3fda35a2f"
+  },
+  {
+    "source": "images/products/short_lycra_estampado_1.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "641d4723c135b850a60b1156a9ea9e5f4ef2a78428dfda707cd2be2305661971",
+    "delivery": "images/products/short_lycra_estampado_1_delivery.webp",
+    "deliverySha256": "5749ad09d43fef92ddeb8b3d445284560c5621eee282ef83deee2794d2710bac"
+  },
+  {
+    "source": "images/products/short_lycra_estampado_2.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "6d563baf14e6f59343c878ea14298856927510342bae4f32be76adff67116cca",
+    "delivery": "images/products/short_lycra_estampado_2_delivery.webp",
+    "deliverySha256": "70b10d2395f1c3d037309835ff14d0870de48d6e3115aeb48597adfb8754ee2f"
+  },
+  {
+    "source": "images/products/short_lycra_estampado_3.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "14bc488c50fde9bc750a4a8f906d208c2ba8f55640cbb8ee6c757d14605f2ee7",
+    "delivery": "images/products/short_lycra_estampado_3_delivery.webp",
+    "deliverySha256": "b03fb4cd7187fc32466f5d8d84fe176584142b18c85f70f78164b419c16607b9"
+  },
+  {
+    "source": "images/products/short_lycra_estampado_4.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "dea7e5eadf536a64c8fb72850dbadc7d569895f15f6820231b24490092319780",
+    "delivery": "images/products/short_lycra_estampado_4_delivery.webp",
+    "deliverySha256": "8f63a6fdd528313b7b74ce9e262783c3eda06102d713f86c811f8da17e11b738"
+  },
+  {
+    "source": "images/products/short_lycra_estampado_5.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "f9769ebcab1c8bdffcfb0583a49258ad532d9d33c7c3985e3dc8428f9c49fa98",
+    "delivery": "images/products/short_lycra_estampado_5_delivery.webp",
+    "deliverySha256": "34fa22799457c1a89ec037ab37ff4c4ce62f3f5c402a414bea9c9255d96a652e"
+  },
+  {
+    "source": "images/products/short_lycra_estampado_6.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "d9bfd1831c1296819eaa970eb8dab4a14ce041f99c856db6e8d8338a8039c9de",
+    "delivery": "images/products/short_lycra_estampado_6_delivery.webp",
+    "deliverySha256": "364e1ef77e29defcb874c0501feca10b5c39c9024884d355c74c3dc72ca4d2d4"
+  },
+  {
+    "source": "images/products/short_lycra_estampado_7.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "8aa3b255870d402507f4b9c91128a89331a48dcd8e3086b17c3e9ff83259d0c3",
+    "delivery": "images/products/short_lycra_estampado_7_delivery.webp",
+    "deliverySha256": "59483b5fadc60967fc10b33846c3a2d20a650fa24d7dce49480a2935886fcf90"
+  },
+  {
+    "source": "images/products/short_lycra_estampado_8.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "8e95950cf83639e85ff045a48b86cb50f575e54fd89dd31cef823b2546037728",
+    "delivery": "images/products/short_lycra_estampado_8_delivery.webp",
+    "deliverySha256": "2818f04baf650c75a9a6d7b531376ed18bb89e037af31e5c73cbec2658ebc2c6"
+  },
+  {
+    "source": "images/products/ciclista_lycra_suplex_con_bolsillo_dama.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "7b82de4b6a6476eb9384af32e7c5f0ddd3ca40e2a261c0636db2230651975664",
+    "delivery": "images/products/ciclista_lycra_suplex_con_bolsillo_dama_delivery.webp",
+    "deliverySha256": "739223be8ea889b5570f20072d23165e97f1540937567a5ff8e66af0c250f2f1"
+  },
+  {
+    "source": "images/products/ciclista_lycra_combinado_estampado_1.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "a45c58b17a1dd0bde7b98dd8a6749a5a5904f3e89e9829922d241c980eadd7be",
+    "delivery": "images/products/ciclista_lycra_combinado_estampado_1_delivery.webp",
+    "deliverySha256": "81fd58696c52a2900bb778a369c5117337f7fb14125a83e21e213b6cd954b2eb"
+  },
+  {
+    "source": "images/products/ciclista_lycra_combinado_estampado_2.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "096467220955b2bf6ec219806ba0579b9ec070da680bad1572ed21348b29b593",
+    "delivery": "images/products/ciclista_lycra_combinado_estampado_2_delivery.webp",
+    "deliverySha256": "2aeb073a3ec8a319b0e8be2e0b66a3b8ba350f222f543f98866b8588db5c9682"
+  },
+  {
+    "source": "images/products/ciclista_lycra_combinado_estampado_3.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "46d796d9f8193755f4061ad85f30a588cf9d7a46cf3a27317fc3da767eeb8550",
+    "delivery": "images/products/ciclista_lycra_combinado_estampado_3_delivery.webp",
+    "deliverySha256": "8e4631a9f0bf12ab80bcb564c63315dcd6971b52449e607e123b7273b5fc2838"
+  },
+  {
+    "source": "images/products/ciclista_lycra_combinado_estampado_4.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "931afed3ebdaa6637b79376f6c01ba94d55fb1e0eda1658726f80de106d5dd4d",
+    "delivery": "images/products/ciclista_lycra_combinado_estampado_4_delivery.webp",
+    "deliverySha256": "822d46f19d50afbf640209b0476303f9987b39ab430d65625f99be927d7995b7"
+  },
+  {
+    "source": "images/products/ciclista_lycra_combinado_estampado_5.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "a6468328fe4012bc2119ca0211b66558413c619f64214ac31393a50568a5edfc",
+    "delivery": "images/products/ciclista_lycra_combinado_estampado_5_delivery.webp",
+    "deliverySha256": "54cb46e8721921d3a3b8e17c4db88162900c4de3a9c85e8ef25fe8bf1e481553"
+  },
+  {
+    "source": "images/products/ciclista_lycra_combinado_estampado_6.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "a2f50fa74f125b53ba57d99efaee268e210e8105532f90bd40ca13b3a23edbc7",
+    "delivery": "images/products/ciclista_lycra_combinado_estampado_6_delivery.webp",
+    "deliverySha256": "14eb9d8bb9153afb962e18f458cdc0577a639e3e528a5427760f63c648d6e7b1"
+  },
+  {
+    "source": "images/products/ciclista_lycra_combinado_estampado_7.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "b0ed55e00d44dbe976588c7f381ade9479737f74eb17b61fac9eb6c24023f1fd",
+    "delivery": "images/products/ciclista_lycra_combinado_estampado_7_delivery.webp",
+    "deliverySha256": "ff6fc6667f47bdab577df5e95baf430850d61722fef661f39300903cb0011712"
+  },
+  {
+    "source": "images/products/ciclista_lycra_combinado_estampado_8.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "734033782d5e6ac72095cb4ed8e32600b895ce7b227a37b35087290eca64a67c",
+    "delivery": "images/products/ciclista_lycra_combinado_estampado_8_delivery.webp",
+    "deliverySha256": "f2a02e193fad2f295a3effba8a5aa77dc219c0a9137a6ffab80f11f33d904f7b"
+  },
+  {
+    "source": "images/products/ciclista_lycra_combinado_estampado_9.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "503534a8292faf445c086bbde4a37cd2023a053941099096bce7b1a57f9fc2e3",
+    "delivery": "images/products/ciclista_lycra_combinado_estampado_9_delivery.webp",
+    "deliverySha256": "33ad16a7e2d786f977dcfd1b0b1edcfeb6e417217ca81eff6872b08d6244fdac"
+  },
+  {
+    "source": "images/products/ciclista_lycra_combinado_estampado_10.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "78e22894ae8da18c2681388066c133c46f51f396f8df0d9e216a4cffcc28b66d",
+    "delivery": "images/products/ciclista_lycra_combinado_estampado_10_delivery.webp",
+    "deliverySha256": "ee450ec982b69d176081e4b678566010bf0cd6725eaeba80eb3f67246302090b"
+  },
+  {
+    "source": "images/products/ciclista_lycra_combinado_estampado_11.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "345be9561e4ca46e4b35dc35afbd49a795bef979cdfe126129d17e85ae447b1b",
+    "delivery": "images/products/ciclista_lycra_combinado_estampado_11_delivery.webp",
+    "deliverySha256": "310e63c1acb94c156fdd04ee1116e3266e938958995fe46fc89d44d56a6ec352"
+  },
+  {
+    "source": "images/products/remera_peinado_dama_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "f7640a6cdb105c01cdd9a6ca938171fd9973538f8fdad0e314ef2ca01c7f5be6",
+    "delivery": "images/products/remera_peinado_dama_negro_delivery.webp",
+    "deliverySha256": "6069dcd08ad3fc6edd5d98406af2ce5cee20e9d6c7b0bbaad8a4a3b6cb1b657a"
+  },
+  {
+    "source": "images/products/remera_peinado_dama_azul.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "2f748964fe069e892566422cba237280aa7721390c6c76af6277d1a7a83a1ad9",
+    "delivery": "images/products/remera_peinado_dama_azul_delivery.webp",
+    "deliverySha256": "55fb9913ae918d48dd07cf66c78b3cd4d584816a42040e543000d85b30a7f5af"
+  },
+  {
+    "source": "images/products/remera_peinado_dama_gris_melange.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "29f9ed2c306613ac9e93f6dc2205fb9370acb44ab540ef11276e6f1b5ce8ba3b",
+    "delivery": "images/products/remera_peinado_dama_gris_melange_delivery.webp",
+    "deliverySha256": "0e4b0332b349b376fe9d92eb4a076ac56620cb60116a7f12a13871195bc10815"
+  },
+  {
+    "source": "images/products/remera_peinado_dama_gris_oscuro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "b6e7d3673f9dcba1340c12748137827486be121eeef158fc92b7ab160b7894a7",
+    "delivery": "images/products/remera_peinado_dama_gris_oscuro_delivery.webp",
+    "deliverySha256": "889baa79100249e1dcd6dce41204086c7bcfdb43448106805c7037877f54777b"
+  },
+  {
+    "source": "images/products/remera_peinado_dama_verde.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "932262068f0315f394b9bec35230f74fa68daa9f897499d06e205fc99feda08d",
+    "delivery": "images/products/remera_peinado_dama_verde_delivery.webp",
+    "deliverySha256": "7817c02adbab289c966b96947b90c698c0b4faff487b8a2966ad625970e07384"
+  },
+  {
+    "source": "images/products/musculosa_viscosa_morley_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "1507c020e1a0204a5f492728c6a6a690cd9defa212f7703ce4f945507c90c62c",
+    "delivery": "images/products/musculosa_viscosa_morley_negro_delivery.webp",
+    "deliverySha256": "299bd7aa220e665a0c0d5cde37b021c540f84c5e1f01ab09c7f709f3d7510732"
+  },
+  {
+    "source": "images/products/musculosa_viscosa_morley_rojo.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "7b279b515a406264e1548a4df8c801aec3414ca12b43bda7c54bc99a340597ef",
+    "delivery": "images/products/musculosa_viscosa_morley_rojo_delivery.webp",
+    "deliverySha256": "d5346225b8c30c716e931063e8495d153272945ab96fa176b793f03b85817e9d"
+  },
+  {
+    "source": "images/products/musculosa_viscosa_morley_verde.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "6e7905537c56912d8642e0d6fa8ef46ab4a0f9cad074a5d3f7c9c5418ee7d1eb",
+    "delivery": "images/products/musculosa_viscosa_morley_verde_delivery.webp",
+    "deliverySha256": "1b74286cc6824251ad224ebbf951b7570f5360a46490605a1b1d203adfbe0b6a"
+  },
+  {
+    "source": "images/products/musculosa_viscosa_morley_mostaza.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "4244c8898cfc113a43fac01201b12d34671c0cf4120246c3bc8c1d9d67d7c7cf",
+    "delivery": "images/products/musculosa_viscosa_morley_mostaza_delivery.webp",
+    "deliverySha256": "cc7e43cbdafe006c2358e40232ce68332c1a34f999b6a8c06420c905f6d28aea"
+  },
+  {
+    "source": "images/products/musculosa_viscosa_morley_azul.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "45faf4e788e5802aaa2c5b0d9c34d0a3b26f93cce26aa556eba4f082f05cfd38",
+    "delivery": "images/products/musculosa_viscosa_morley_azul_delivery.webp",
+    "deliverySha256": "cfa28505a9fabd58f1105cc12b0a65f7c4ac1d45d10f667c62da855badff677f"
+  },
+  {
+    "source": "images/products/musculosa_viscosa_morley_gris.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "3ea841d4fe938dfc1721420e6fd6110fd4f1bd53ef0e536e3b9b2b978c01e6d6",
+    "delivery": "images/products/musculosa_viscosa_morley_gris_delivery.webp",
+    "deliverySha256": "791e76fb0ebcef25bc1b473482ec8ccda4abd3051f751b3eb533298547b8e815"
+  },
+  {
+    "source": "images/products/camisola_fibrana_dama_estampado_1.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "f7b606ab026586dc695ef170e05dd383b8a0b906c2ea4979c7efa84e88c1bc5c",
+    "delivery": "images/products/camisola_fibrana_dama_estampado_1_delivery.webp",
+    "deliverySha256": "e7ae2b9fe8ba9183816d821673bc1562c162238d64cf3af38fc0b16f6c87ba81"
+  },
+  {
+    "source": "images/products/camisola_fibrana_dama_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "e2fa7f8d522520a9698307d6e0f4bab0a8b35c3d004c315b8e5e0598361c1d52",
+    "delivery": "images/products/camisola_fibrana_dama_negro_delivery.webp",
+    "deliverySha256": "d50d81904997673b734a0ed6f14858c65f30c23bffca06f12f71ee5ccd780231"
+  },
+  {
+    "source": "images/products/camisola_fibrana_dama_estampado_2.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "7c4d0d81e91ecca15df29e0d5aab5ca21b1cf2bcbc0ad69f813311b0b5d0a2ca",
+    "delivery": "images/products/camisola_fibrana_dama_estampado_2_delivery.webp",
+    "deliverySha256": "ebd510488e61a343cadb4825512f7a45a410c3b1a9fbb26b12af6fc4081ac78a"
+  },
+  {
+    "source": "images/products/camisola_fibrana_dama_estampado_3.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "8667c99d9b076d2eee0e68233d09b283eb9d1e88ba893e24e4fd7fb2788be4d1",
+    "delivery": "images/products/camisola_fibrana_dama_estampado_3_delivery.webp",
+    "deliverySha256": "ce2b61886dec599715a0ca9376f6a82d266868b37f35a9bdf8e43a827f2c30fd"
+  },
+  {
+    "source": "images/products/camisola_fibrana_dama_estampado_4.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "7fe148f3fcaa4896ea1f5640b1031aeb862ecf3b1a75d8d1bd865209aff32f74",
+    "delivery": "images/products/camisola_fibrana_dama_estampado_4_delivery.webp",
+    "deliverySha256": "1a85fb5ed4bc1e16503583a4df372e560936ed4a57dedc488a8c532c01df0c08"
+  },
+  {
+    "source": "images/products/camisola_fibrana_dama_estampado_5.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "f17aa8ba50b0d1dbf0528c77d3544b168b4dba244d7fffc3523c9a913f6970ad",
+    "delivery": "images/products/camisola_fibrana_dama_estampado_5_delivery.webp",
+    "deliverySha256": "9fc8426bd48563b0b2c5ac8dfb485260468c9ab149edf799742941f8796b6a0c"
+  },
+  {
+    "source": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "9daf69f38a13b6b6033268a2e6ff3decb2739b1f19a230bb1787cdef3f38e8a5",
+    "delivery": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_negro_delivery.webp",
+    "deliverySha256": "6d4712913f5b73818a2f59018c05cfe08a74dd45f6cf90a3f4336903a6b4e594"
+  },
+  {
+    "source": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_1.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "004a474b8739add1c1e4dbadb2c6b8f3be88c3d9c4efdf4245d4a7a37ca7576a",
+    "delivery": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_1_delivery.webp",
+    "deliverySha256": "950e197ef05a51e7c6e01b9e7202aa192c6d1127551d6aa9bac1ee75300557e5"
+  },
+  {
+    "source": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_2.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "bbe07cb4d73363b89e8cddf80fdfc2b2faa6b4c47af765770775285cd720537f",
+    "delivery": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_2_delivery.webp",
+    "deliverySha256": "23faae2cd50b3aed82d8752cb29c8771655bb9c7dab1050cd9c3ec28a9854751"
+  },
+  {
+    "source": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_3.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "90f460f5b5a9b6309e6f7ba2ed086378954baf7821a7eb03e95f404456b76fe8",
+    "delivery": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_3_delivery.webp",
+    "deliverySha256": "4ebe9e855f810184095b2dab007dd7f9b6cdb4ff2c3cf614448b74d171ed0741"
+  },
+  {
+    "source": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_4.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "57deb7c86a9cc88405f4d714e08431d5ce47c95260c82e6ca9df9a67dff2ccdf",
+    "delivery": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_4_delivery.webp",
+    "deliverySha256": "f911e2aeec62d834ba40dc0f9a4a77f028dc86498ab5132856a292f300b5ada1"
+  },
+  {
+    "source": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_5.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "20d5558dbf2a18f4e4abcc2877f3992a60267c8fe98f1b1a3e51b971c53bcb5c",
+    "delivery": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_5_delivery.webp",
+    "deliverySha256": "7b947c8eedbe4a1326f75593816e16fa82f6b29024365e4b3304159ef0e40867"
+  },
+  {
+    "source": "images/products/remera_peinado_hombre_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "b7d13548d94ac332bd8c2560b7b06edd8318b23cee854cf6eb89937d8547b845",
+    "delivery": "images/products/remera_peinado_hombre_negro_delivery.webp",
+    "deliverySha256": "54df103671b7300ddca1df39675a8c31b981156b55a1402cb7707f9e04a90f66"
+  },
+  {
+    "source": "images/products/remera_peinado_hombre_azul.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "79c2280e7e75dac7ffa14c9ef978faab94ed395ae0273e67b2f34e8b026ed18c",
+    "delivery": "images/products/remera_peinado_hombre_azul_delivery.webp",
+    "deliverySha256": "f60c95980a7e2b435c869d5d0201129b2c1270f914178f13a621d05aad67086c"
+  },
+  {
+    "source": "images/products/remera_peinado_hombre_gris_melange.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "8151b74ae4714fa27b0000d954a434269eabdd5a7ceb809ffba78d9d3e179f75",
+    "delivery": "images/products/remera_peinado_hombre_gris_melange_delivery.webp",
+    "deliverySha256": "7f44d88e73ab3cf092757a9d40d014288af1273d35704fdd32b2531888871786"
+  },
+  {
+    "source": "images/products/remera_peinado_hombre_gris_oscuro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "673ff668be1e5c54174ee08d0ab5dbaedf654ef33ed1488991a226855b585f91",
+    "delivery": "images/products/remera_peinado_hombre_gris_oscuro_delivery.webp",
+    "deliverySha256": "17619bc2e8e7ad51d2d8f37b497d41699e98280ae72828acbc8d7ae09e577fc5"
+  },
+  {
+    "source": "images/products/remera_peinado_hombre_verde.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "7f1d36e53895d0218185e68f9a707d794fca4ddc38f7b89ce76f9d1890f97afe",
+    "delivery": "images/products/remera_peinado_hombre_verde_delivery.webp",
+    "deliverySha256": "5a6ddd91d284b534a80591e5228ff2ef58395ce46ba52d90774406725204dc39"
+  },
+  {
+    "source": "images/products/pantalon_algodon_rustico_chico_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "253229d9fe3f09fd09d85bb37ff5978e0a069bd98071a83fab87147f88503cd7",
+    "delivery": "images/products/pantalon_algodon_rustico_chico_negro_delivery.webp",
+    "deliverySha256": "57d5750d5fe6ade70f9040874127710048c76f03355e38522e308a0cd3ede2d9"
+  },
+  {
+    "source": "images/products/pantalon_algodon_rustico_chico_azul.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "b3dccfd4bb4a6cfd34ce2b7af62debcfabadb993cf6fc0a5f6238fb8547b194c",
+    "delivery": "images/products/pantalon_algodon_rustico_chico_azul_delivery.webp",
+    "deliverySha256": "a3327c65f8d541e2b260ae904d4d1be8daef29d1dbce96e44e8500e25b5dacef"
+  },
+  {
+    "source": "images/products/pantalon_algodon_rustico_chico_gris_melange.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "a5acbd51203ee2229415b55c6a9576bad74da94155bb9cd21c562844ed860a81",
+    "delivery": "images/products/pantalon_algodon_rustico_chico_gris_melange_delivery.webp",
+    "deliverySha256": "6505259c3ca49f41d5bbaf519b1f68976ab4a4f66982f2a0d32aa97b62fa7783"
+  },
+  {
+    "source": "images/products/pantalon_algodon_rustico_chico_gris_oscuro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "e48f8a69ad512e88ec8bab0c713804e8c248e36f6e7298168a987a254ddbe3e0",
+    "delivery": "images/products/pantalon_algodon_rustico_chico_gris_oscuro_delivery.webp",
+    "deliverySha256": "18b3822e8ceea2ef1f50ce1f3b7aa0b11b7662d25266862471494866f8086464"
+  },
+  {
+    "source": "images/products/calza_lycra_morley_con_bolsillos_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "525dc301bc0cdff5662800236fdfa0ebaa22c876ca136dbcca9edfcf273c1ad1",
+    "delivery": "images/products/calza_lycra_morley_con_bolsillos_negro_delivery.webp",
+    "deliverySha256": "6ea41eb7955b6213e82728aeef2cb40e151338a1188a3fba033729a2a2cefe8d"
+  },
+  {
+    "source": "images/products/calza_lycra_morley_con_bolsillos_fucsia.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "c20d24478ba5039c2153ba4b3c0e57fbee16caf55d68db6eedcbb1fe9fd12dff",
+    "delivery": "images/products/calza_lycra_morley_con_bolsillos_fucsia_delivery.webp",
+    "deliverySha256": "d6648a51a0ea68b4beeba7c7bf3805b926ed9fb9915cb00c21776d49242aeb8f"
+  },
+  {
+    "source": "images/products/calza_lycra_morley_con_bolsillos_verde.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "5bfb083f9ded343a1c083d04848ca1596caef2c9cd8b9445a593cc1c0ac911fa",
+    "delivery": "images/products/calza_lycra_morley_con_bolsillos_verde_delivery.webp",
+    "deliverySha256": "a85d45b872bf51a7fb6ab1dd8c8b09533fc9d82990867c6052615cdea1bc7da2"
+  },
+  {
+    "source": "images/products/calza_lycra_morley_con_bolsillos_azul.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "0597b4c342a4f2bbc0c572a8619b4c228d2f2d158a2520b2ef3efb655fc7515e",
+    "delivery": "images/products/calza_lycra_morley_con_bolsillos_azul_delivery.webp",
+    "deliverySha256": "e6780515c378c476daeb930efbe9aeca26e1752d37ec5c1e5ab5b2119e6c5fa1"
+  },
+  {
+    "source": "images/products/calza_lycra_morley_con_bolsillos_azul lavanda.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "62899ff092744ac83841b2178c6f901249a06e46b4fe23a2406df4b2a03c3f5b",
+    "delivery": "images/products/calza_lycra_morley_con_bolsillos_azul lavanda_delivery.webp",
+    "deliverySha256": "d43db30373a7d53bf41ac209ce2a9c63c9294b37556868a9c53b76644d965003"
+  },
+  {
+    "source": "images/products/calza_lycra_morley_con_bolsillos_gris.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "7e5fe2dbd7304aabedf62a6be98a88af7c7c35fe05b4d58a4470ce7864024c5e",
+    "delivery": "images/products/calza_lycra_morley_con_bolsillos_gris_delivery.webp",
+    "deliverySha256": "80c8ead59b4584fb856e63977a6ecffbd28a83b7b8979d96a459a69d134fbd4d"
+  },
+  {
+    "source": "images/products/calza_lycra_morley_con_bolsillos_bordo.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "de2fea5bd14c2a09766efe8852237da33d8a1ba42b313607accbc91f9675e2d8",
+    "delivery": "images/products/calza_lycra_morley_con_bolsillos_bordo_delivery.webp",
+    "deliverySha256": "7ab9d9b00e914b24acfa2671e2b1f26caba017f6c90e5c94baa20c994a2e7a96"
+  },
+  {
+    "source": "images/products/calza_lycra_morley_con_bolsillos_chocolate.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "bb4aaafc604051b1a9c785a4c2f14e48a1f837b9df606ae3c8b70b61b65b8dab",
+    "delivery": "images/products/calza_lycra_morley_con_bolsillos_chocolate_delivery.webp",
+    "deliverySha256": "6da2bc314610037eeff72a71bb949ec0dea31d2bd119be574d104faedf9e7b1f"
+  },
+  {
+    "source": "images/products/calza_oxford_algodon_con_lycra_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "79d9c7e26804c09dad1d17307c80427761de80b523d6fa788d397aab678f27a6",
+    "delivery": "images/products/calza_oxford_algodon_con_lycra_negro_delivery.webp",
+    "deliverySha256": "4270e145b55933ba34ecb432243a2c12f2a69ac3835ff202fc336731fceaf54b"
+  },
+  {
+    "source": "images/products/campera_lycra_estampado_1.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "7ee70386ebfd53b71558a7ad723cb8cfbba2e50c2c35b8bb513a8e2f00e82f6c",
+    "delivery": "images/products/campera_lycra_estampado_1_delivery.webp",
+    "deliverySha256": "42ee61b0c09e7f8fbf73c6eee20475aad5b45827508c6ebbdd2e816aed49c9dd"
+  },
+  {
+    "source": "images/products/campera_lycra_estampado_2.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "011ab3aa793407384de1ce1b4bd6155a295c3600d543028e2a838a33853dfc5d",
+    "delivery": "images/products/campera_lycra_estampado_2_delivery.webp",
+    "deliverySha256": "772703e2641590c5fea773b5063e4f93de6ff8cda24cf529286bdbc9d55f4990"
+  },
+  {
+    "source": "images/products/campera_lycra_estampado_3.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "9139425431c0cd6619caf51feca1de76b6322d587541f0e2d559d702aa2e8a61",
+    "delivery": "images/products/campera_lycra_estampado_3_delivery.webp",
+    "deliverySha256": "5b1c78dad008cdf9873a779f19ccac924b64ed8c61346eda6ccf495bc246d3a5"
+  },
+  {
+    "source": "images/products/campera_lycra_estampado_4.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "a5b9af703c69fe24a27d2ab17c491cc5be99d18148959b52e222a538168d37ce",
+    "delivery": "images/products/campera_lycra_estampado_4_delivery.webp",
+    "deliverySha256": "9186e487d22b294ae9c3e6f526f08d473df8284c2c18a891bcf459c03b37aa26"
+  },
+  {
+    "source": "images/products/campera_lycra_estampado_5.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "6c9a585997d94fdd1af2e62d59ab046b5d4fc359bc6fb48dcf0485aebb013d2f",
+    "delivery": "images/products/campera_lycra_estampado_5_delivery.webp",
+    "deliverySha256": "7d0e088b78208e9f96b6f15747fc99be05b019b13b119960707b8f240f93deb1"
+  },
+  {
+    "source": "images/products/campera_lycra_estampado_6.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "4058d50bb1b89327d5d0c7ccbd8d584b283d94595fdb40d243b2c72bd75d6f19",
+    "delivery": "images/products/campera_lycra_estampado_6_delivery.webp",
+    "deliverySha256": "795ff51304362858906998df032d5d5159d4b7d78ce543900e5a6b99392d0ba5"
+  },
+  {
+    "source": "images/products/campera_lycra_estampado_7.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "f2a6ec573c699e91760ec31aeca66bf9be1f6577d467432e2965f8a2e08a94ba",
+    "delivery": "images/products/campera_lycra_estampado_7_delivery.webp",
+    "deliverySha256": "ee6e9c6e0cd50b2ad1c7fed66cbe9dac493f1be3049924a7490254f317ea21b2"
+  },
+  {
+    "source": "images/products/campera_lycra_estampado_8.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "22b8cff2afa14107d7efb8f396ca25009171625f027069d44b2e390ee6eb809f",
+    "delivery": "images/products/campera_lycra_estampado_8_delivery.webp",
+    "deliverySha256": "1b6acd4ed85513c0767af1135c269838d58fa2b9ad3d49f3d966d66ed7913d47"
+  },
+  {
+    "source": "images/products/campera_lycra_estampado_9.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "f189c4c61277d509c4619785dca5d7c854f82d1808e91d46b2aff88d0ddb3172",
+    "delivery": "images/products/campera_lycra_estampado_9_delivery.webp",
+    "deliverySha256": "a67c5b6ede3e6fd25299eb853611972a4b1affd4344e7640cb2a9cbf887d6bc9"
+  },
+  {
+    "source": "images/products/campera_lycra_estampado_10.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "1ed124f7ec32e487989fe1669cfe4a5053c731c463a9b974d8584d9d9c62c989",
+    "delivery": "images/products/campera_lycra_estampado_10_delivery.webp",
+    "deliverySha256": "2937392cf64577a917a878ef90888650feb8b100cc06d759324f2c914bac85e3"
+  },
+  {
+    "source": "images/products/campera_corto_lycra_morley_negro.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "a8c798cb92864a8fa224e44f5dece5fc78d6b815f4410d241968af72d984fe19",
+    "delivery": "images/products/campera_corto_lycra_morley_negro_delivery.webp",
+    "deliverySha256": "b825edc4ec24dc4e3be1a3bbca15a926a28ec2ba41e52aa106526460d8c61adb"
+  },
+  {
+    "source": "images/products/campera_corto_lycra_morley_fucsia.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "59e166c8e3b09bd72c683f2552e38a44e4b58b2e9ca8004791b3360e6979aa48",
+    "delivery": "images/products/campera_corto_lycra_morley_fucsia_delivery.webp",
+    "deliverySha256": "a9137207ef1c5bdaca80c5378c5d1e26b185de6eef022c649aac556eaebb36c1"
+  },
+  {
+    "source": "images/products/campera_corto_lycra_morley_lila.webp",
+    "sourceFormat": "png",
+    "sourceSha256": "fc59c4c91eb0494b6b2ce00daa5aa66e16937a3a15698caa0c27e2a7916b21fc",
+    "delivery": "images/products/campera_corto_lycra_morley_lila_delivery.webp",
+    "deliverySha256": "2308b0b638af1c309399eb7b2b9f6d7bb7515ce752811647d4d6e58a61596fdd"
+  }
+]

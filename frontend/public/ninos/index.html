@@ -2,11 +2,11 @@
 <html lang="es">
 <head>
   <base href="/" />
-  <script src="/assets/js/romix-api-config.js"></script>
+  <script src="/assets/js/product-url.js?v=1"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- ROMIX:SHELL:CRITICAL:START -->
-<link rel="stylesheet" href="assets/css/romix-shell-base.css?v=18" data-romix-shell-critical />
+<link rel="stylesheet" href="assets/css/romix-shell-base.css?v=23" data-romix-shell-critical />
 <!-- ROMIX:SHELL:CRITICAL:END -->
   <title>Ropa para niños | ROMIX</title>
   <meta name="description" content="Descubrí la ropa para niños y niñas de ROMIX. Consultá talles, colores y precios de los productos publicados." />
@@ -29,15 +29,17 @@
 <noscript>
 </noscript>
   <link rel="preload" as="fetch" href="assets/data/products.json" crossorigin="anonymous" />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
-  <link rel="stylesheet" href="assets/css/romix-design-system.css?v=20" />
-  <link rel="stylesheet" href="assets/css/romix-catalog-pages.css?v=21" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="assets/css/romix-design-system.css?v=23" />
+  <link rel="stylesheet" href="assets/css/romix-catalog-pages.css?v=23" />
+  <link rel="stylesheet" href="assets/css/romix-product-card.css?v=1" />
   <link rel="icon" href="images/branding/romix-logo-icon.webp" type="image/webp" sizes="180x180" />
   <link rel="apple-touch-icon" href="images/branding/romix-logo-icon.webp" sizes="180x180" />
-  <link rel="stylesheet" href="assets/css/romix-pricing.css?v=19" />
-  <link rel="stylesheet" href="assets/css/romix-header.css?v=20" />
-  <link rel="stylesheet" href="assets/css/romix-footer.css?v=19" />
-  <script defer src="/assets/js/romix-analytics.js?v=1"></script>
+  <link rel="stylesheet" href="assets/css/romix-pricing.css?v=23" />
+  <link rel="stylesheet" href="assets/css/romix-header.css?v=25" />
+  <link rel="stylesheet" href="/assets/css/cookie-consent.css?v=2" />
+  <link rel="stylesheet" href="assets/css/romix-footer.css?v=23" />
+  <script defer src="/assets/js/romix-analytics.js?v=3"></script>
 </head>
 <body data-catalog-scope="ninos" data-category-page="ninos">
   <a class="skip-link" href="#main-content">Saltar al contenido</a>
@@ -45,9 +47,6 @@
 <div class="romix-announcement" role="note">ENV&Iacute;OS Y RETIROS COORDINADOS &middot; CONSULT&Aacute; DISPONIBILIDAD</div>
 <header class="site-header romix-shared-header" data-romix-shell="header-v1">
   <div class="container header-row">
-    <div class="header-actions-left" aria-label="Acciones principales">
-      <button class="icon-btn romix-icon-btn mobile-menu-btn" id="toggle-mobile-nav" type="button" aria-label="Abrir men&uacute;" aria-controls="header-mobile-nav" aria-expanded="false"><span data-romix-icon="Menu" data-romix-icon-size="md"></span></button>
-    </div>
     <a class="brand site-logo-link" href="index.html" aria-label="ROMIX inicio"><picture><source srcset="images/optimized/branding/romix-logo-360.webp 360w, images/optimized/branding/romix-logo-720.webp 720w" sizes="(max-width: 900px) 156px, 184px" type="image/webp" /><img class="site-logo site-logo--header" src="images/optimized/branding/romix-logo-360.webp" alt="ROMIX" width="360" height="120" decoding="async" /></picture></a>
     <nav class="mega-nav" id="header-mobile-nav" aria-label="Principal">
       <div class="mobile-drawer-header">
@@ -78,6 +77,9 @@
         <span class="icon-badge" id="cart-count" aria-hidden="true">0</span>
       </a>
       <button class="icon-btn romix-icon-btn header-utility-menu" id="toggle-utility-menu" type="button" aria-label="Abrir menú de utilidades" aria-controls="header-utility-panel" aria-expanded="false"><span data-romix-icon="Menu" data-romix-icon-size="md"></span></button>
+    </div>
+    <div class="header-actions-left" aria-label="Acciones principales">
+      <button class="icon-btn romix-icon-btn mobile-menu-btn" id="toggle-mobile-nav" type="button" aria-label="Abrir men&uacute;" aria-controls="header-mobile-nav" aria-expanded="false"><span data-romix-icon="Menu" data-romix-icon-size="md"></span></button>
     </div>
   </div>
   <div class="header-utility-panel" id="header-utility-panel" role="dialog" aria-label="Men&uacute; de utilidades" aria-hidden="true" hidden>
@@ -110,7 +112,7 @@
     </div>
   </div>
 </header>
-<script src="assets/js/romix-icons.js?v=18"></script>
+<script src="assets/js/romix-icons.js?v=19"></script>
 <!-- ROMIX:SHELL:HEADER:END -->
 
   <div id="filters-overlay" class="filters-overlay" aria-hidden="true"></div>
@@ -119,7 +121,7 @@
     <h1 id="page-title" class="catalog-heading">Ropa para niños ROMIX</h1>
     <p class="catalog-intro">Explorá las prendas para niños y niñas del catálogo ROMIX. Revisá los talles y las opciones de cada producto antes de coordinar tu pedido.</p>
     <nav class="catalog-nav" aria-label="Catálogos por sección"><a href="catalogo.html" data-scope="catalogo">Todo el catálogo</a> · <a href="/mujer/" data-scope="mujer">Mujer</a> · <a href="/hombre/" data-scope="hombre">Hombre</a> · <a href="/ninos/" data-scope="ninos">Niños</a></nav>
-    <noscript><p class="catalog-noscript">Podés abrir cada producto del listado. Activá JavaScript para usar los filtros interactivos.</p></noscript>
+    <noscript><p class="catalog-noscript" role="status">Podés abrir cada producto del listado. Activá JavaScript para usar los filtros interactivos.</p></noscript>
 
     <div class="catalog-layout">
       <aside id="filters-sidebar" class="filters-sidebar" aria-label="Filtros">
@@ -197,7 +199,11 @@
 
       <section class="products-wrap" aria-label="Listado de productos">
         <div class="products-top">
-          <p id="products-summary" class="products-summary">12 productos publicados</p>
+          <p id="products-summary" class="products-summary">123 productos publicados</p>
+          <button id="toggle-filters" type="button" class="filters-toggle-btn romix-btn romix-btn--outline" aria-controls="filters-sidebar" aria-expanded="true">
+            <span data-romix-icon="SlidersHorizontal" data-romix-icon-size="sm" aria-hidden="true"></span>
+            <span class="filters-toggle-label">Ocultar filtros</span>
+          </button>
           <label class="products-sort" for="products-sort">
             <span class="products-sort-label">Ordenar por</span>
             <select id="products-sort" class="products-sort-select" aria-label="Ordenar productos" data-sort-control="true">
@@ -220,135 +226,147 @@
           <div id="active-filters-list" class="active-filters-list"></div>
         </section>
 
-        <div id="product-grid" class="grid" aria-live="polite"><article class="product-card">
-  <a class="product-thumb" href="/product.html?id=remera-oversize-algodon-peinado-chico&amp;slug=remera-oversize-algodon-peinado-chico&amp;name=Remera%20oversize%20algodon%20peinado%20chico" aria-label="Ver Remera oversize algodon peinado chico">
+        <div id="product-grid" class="grid" aria-live="polite"><article class="product-card romix-product-card">
+  <a class="product-thumb" href="/productos/remera-oversize-algodon-peinado-chico/" aria-label="Ver Remera oversize algodon peinado chico">
     <img src="images/thumbs/remera_oversize_algodon_peinado_chico_azul.webp" alt="Remera oversize algodon peinado chico" width="720" height="960" loading="lazy" decoding="async" />
   </a>
   <div class="product-body">
-    <a class="product-name" href="/product.html?id=remera-oversize-algodon-peinado-chico&amp;slug=remera-oversize-algodon-peinado-chico&amp;name=Remera%20oversize%20algodon%20peinado%20chico">Remera oversize algodon peinado chico</a>
-    <p class="product-meta">remeras</p>
-    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/product.html?id=remera-oversize-algodon-peinado-chico&amp;slug=remera-oversize-algodon-peinado-chico&amp;name=Remera%20oversize%20algodon%20peinado%20chico">Ver talles y colores</a>
+    <div class="product-variant-thumbs" aria-label="Variantes fotográficas"><span class="product-variant-thumb" aria-label="Variante Azul"><img src="images/thumbs/remera_oversize_algodon_peinado_chico_azul.webp" alt="Azul" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Blanco"><img src="images/thumbs/remera_oversize_algodon_peinado_chico_blanco.webp" alt="Blanco" width="96" height="128" loading="lazy" decoding="async" /></span></div>
+    <a class="product-name" href="/productos/remera-oversize-algodon-peinado-chico/">Remera oversize algodon peinado chico</a>
+    <div class="price-row"><p class="product-price">Desde $4.500</p></div>
+    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/productos/remera-oversize-algodon-peinado-chico/">Ver producto</a>
   </div>
 </article>
 
-<article class="product-card">
-  <a class="product-thumb" href="/product.html?id=calza-lycra-nena&amp;slug=calza-lycra-nena&amp;name=Calza%20lycra%20nena" aria-label="Ver Calza lycra nena">
+<article class="product-card romix-product-card">
+  <a class="product-thumb" href="/productos/calza-lycra-nena/" aria-label="Ver Calza lycra nena">
     <img src="images/thumbs/calza_lycra_nena_negro.webp" alt="Calza lycra nena" width="720" height="960" loading="lazy" decoding="async" />
   </a>
   <div class="product-body">
-    <a class="product-name" href="/product.html?id=calza-lycra-nena&amp;slug=calza-lycra-nena&amp;name=Calza%20lycra%20nena">Calza lycra nena</a>
-    <p class="product-meta">calzas</p>
-    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/product.html?id=calza-lycra-nena&amp;slug=calza-lycra-nena&amp;name=Calza%20lycra%20nena">Ver talles y colores</a>
+    <div class="product-variant-thumbs" aria-label="Variantes fotográficas"><span class="product-variant-thumb" aria-label="Variante Negro"><img src="images/thumbs/calza_lycra_nena_negro.webp" alt="Negro" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Azul"><img src="images/thumbs/calza_lycra_nena_azul.webp" alt="Azul" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Francia"><img src="images/thumbs/calza_lycra_nena_francia.webp" alt="Francia" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Gris"><img src="images/thumbs/calza_lycra_nena_gris.webp" alt="Gris" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-more" aria-label="Hay 1 variantes adicionales">+1</span></div>
+    <a class="product-name" href="/productos/calza-lycra-nena/">Calza lycra nena</a>
+    <div class="price-row"><p class="product-price">Desde $5.000</p></div>
+    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/productos/calza-lycra-nena/">Ver producto</a>
   </div>
 </article>
 
-<article class="product-card">
-  <a class="product-thumb" href="/product.html?id=calza-jaspeado-saplex-nena&amp;slug=calza-jaspeado-saplex-nena&amp;name=Calza%20jaspeado%20saplex%20nena" aria-label="Ver Calza jaspeado saplex nena">
+<article class="product-card romix-product-card">
+  <a class="product-thumb" href="/productos/calza-jaspeado-saplex-nena/" aria-label="Ver Calza jaspeado saplex nena">
     <img src="images/thumbs/calza_jaspeado_saplex_nena_lila_jaspeado.webp" alt="Calza jaspeado saplex nena" width="720" height="960" loading="lazy" decoding="async" />
   </a>
   <div class="product-body">
-    <a class="product-name" href="/product.html?id=calza-jaspeado-saplex-nena&amp;slug=calza-jaspeado-saplex-nena&amp;name=Calza%20jaspeado%20saplex%20nena">Calza jaspeado saplex nena</a>
-    <p class="product-meta">calzas</p>
-    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/product.html?id=calza-jaspeado-saplex-nena&amp;slug=calza-jaspeado-saplex-nena&amp;name=Calza%20jaspeado%20saplex%20nena">Ver talles y colores</a>
+    <div class="product-variant-thumbs" aria-label="Variantes fotográficas"><span class="product-variant-thumb" aria-label="Variante Lila"><img src="images/thumbs/calza_jaspeado_saplex_nena_lila_jaspeado.webp" alt="Lila" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Rosa"><img src="images/thumbs/calza_jaspeado_saplex_nena_rosa_jaspeado.webp" alt="Rosa" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Francia"><img src="images/thumbs/calza_jaspeado_saplex_nena_azul_francia_jaspeado.webp" alt="Francia" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Gris oscuro"><img src="images/thumbs/calza_jaspeado_saplex_nena_gris_oscuro_jaspeado.webp" alt="Gris oscuro" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-more" aria-label="Hay 2 variantes adicionales">+2</span></div>
+    <a class="product-name" href="/productos/calza-jaspeado-saplex-nena/">Calza jaspeado saplex nena</a>
+    <div class="price-row"><p class="product-price">Desde $5.000</p></div>
+    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/productos/calza-jaspeado-saplex-nena/">Ver producto</a>
   </div>
 </article>
 
-<article class="product-card">
-  <a class="product-thumb" href="/product.html?id=calza-algodon-con-lycra-nina&amp;slug=calza-algodon-con-lycra-nina&amp;name=Calza%20algodon%20con%20lycra%20Ni%C3%B1a" aria-label="Ver Calza algodon con lycra Niña">
+<article class="product-card romix-product-card">
+  <a class="product-thumb" href="/productos/calza-algodon-con-lycra-nina/" aria-label="Ver Calza algodon con lycra Niña">
     <img src="images/thumbs/calza_algodon_lycra_nina_negro.webp" alt="Calza algodon con lycra Niña" width="720" height="960" loading="lazy" decoding="async" />
   </a>
   <div class="product-body">
-    <a class="product-name" href="/product.html?id=calza-algodon-con-lycra-nina&amp;slug=calza-algodon-con-lycra-nina&amp;name=Calza%20algodon%20con%20lycra%20Ni%C3%B1a">Calza algodon con lycra Niña</a>
-    <p class="product-meta">calzas</p>
-    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/product.html?id=calza-algodon-con-lycra-nina&amp;slug=calza-algodon-con-lycra-nina&amp;name=Calza%20algodon%20con%20lycra%20Ni%C3%B1a">Ver talles y colores</a>
+    <div class="product-variant-thumbs" aria-label="Variantes fotográficas"><span class="product-variant-thumb" aria-label="Variante Negro"><img src="images/thumbs/calza_algodon_lycra_nina_negro.webp" alt="Negro" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Gris melange"><img src="images/thumbs/calza_algodon_lycra_nina_gris_melange.webp" alt="Gris melange" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Azul marino"><img src="images/thumbs/calza_algodon_lycra_nina_azul_marino.webp" alt="Azul marino" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Gris oscuro"><img src="images/thumbs/calza_algodon_lycra_nina_gris_oscuro.webp" alt="Gris oscuro" width="96" height="128" loading="lazy" decoding="async" /></span></div>
+    <a class="product-name" href="/productos/calza-algodon-con-lycra-nina/">Calza algodon con lycra Niña</a>
+    <div class="price-row"><p class="product-price">Desde $5.000</p></div>
+    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/productos/calza-algodon-con-lycra-nina/">Ver producto</a>
   </div>
 </article>
 
-<article class="product-card">
-  <a class="product-thumb" href="/product.html?id=ciclista-lycra-liso-nena&amp;slug=ciclista-lycra-liso-nena&amp;name=Ciclista%20lycra%20liso%20nena" aria-label="Ver Ciclista lycra liso nena">
+<article class="product-card romix-product-card">
+  <a class="product-thumb" href="/productos/ciclista-lycra-liso-nena/" aria-label="Ver Ciclista lycra liso nena">
     <img src="images/thumbs/ciclista_lycra_liso_nena_negro.webp" alt="Ciclista lycra liso nena" width="720" height="960" loading="lazy" decoding="async" />
   </a>
   <div class="product-body">
-    <a class="product-name" href="/product.html?id=ciclista-lycra-liso-nena&amp;slug=ciclista-lycra-liso-nena&amp;name=Ciclista%20lycra%20liso%20nena">Ciclista lycra liso nena</a>
-    <p class="product-meta">ciclistas</p>
-    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/product.html?id=ciclista-lycra-liso-nena&amp;slug=ciclista-lycra-liso-nena&amp;name=Ciclista%20lycra%20liso%20nena">Ver talles y colores</a>
+    <div class="product-variant-thumbs" aria-label="Variantes fotográficas"><span class="product-variant-thumb" aria-label="Variante Negro"><img src="images/thumbs/ciclista_lycra_liso_nena_negro.webp" alt="Negro" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Fucsia"><img src="images/thumbs/ciclista_lycra_liso_nena_fucsia.webp" alt="Fucsia" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Lila"><img src="images/thumbs/ciclista_lycra_liso_nena_lila.webp" alt="Lila" width="96" height="128" loading="lazy" decoding="async" /></span></div>
+    <a class="product-name" href="/productos/ciclista-lycra-liso-nena/">Ciclista lycra liso nena</a>
+    <div class="price-row"><p class="product-price">Desde $3.500</p></div>
+    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/productos/ciclista-lycra-liso-nena/">Ver producto</a>
   </div>
 </article>
 
-<article class="product-card">
-  <a class="product-thumb" href="/product.html?id=ciclista-jaspeado-saplex-nena&amp;slug=ciclista-jaspeado-saplex-nena&amp;name=Ciclista%20jaspeado%20saplex%20nena" aria-label="Ver Ciclista jaspeado saplex nena">
+<article class="product-card romix-product-card">
+  <a class="product-thumb" href="/productos/ciclista-jaspeado-saplex-nena/" aria-label="Ver Ciclista jaspeado saplex nena">
     <img src="images/thumbs/ciclista_jaspeado_saplex_nena_gris_melange.webp" alt="Ciclista jaspeado saplex nena" width="720" height="960" loading="lazy" decoding="async" />
   </a>
   <div class="product-body">
-    <a class="product-name" href="/product.html?id=ciclista-jaspeado-saplex-nena&amp;slug=ciclista-jaspeado-saplex-nena&amp;name=Ciclista%20jaspeado%20saplex%20nena">Ciclista jaspeado saplex nena</a>
-    <p class="product-meta">ciclistas</p>
-    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/product.html?id=ciclista-jaspeado-saplex-nena&amp;slug=ciclista-jaspeado-saplex-nena&amp;name=Ciclista%20jaspeado%20saplex%20nena">Ver talles y colores</a>
+    <div class="product-variant-thumbs" aria-label="Variantes fotográficas"><span class="product-variant-thumb" aria-label="Variante Gris melange"><img src="images/thumbs/ciclista_jaspeado_saplex_nena_gris_melange.webp" alt="Gris melange" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Rosa"><img src="images/thumbs/ciclista_jaspeado_saplex_nena_rosa.webp" alt="Rosa" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Azul"><img src="images/thumbs/ciclista_jaspeado_saplex_nena_azul.webp" alt="Azul" width="96" height="128" loading="lazy" decoding="async" /></span></div>
+    <a class="product-name" href="/productos/ciclista-jaspeado-saplex-nena/">Ciclista jaspeado saplex nena</a>
+    <div class="price-row"><p class="product-price">Desde $3.500</p></div>
+    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/productos/ciclista-jaspeado-saplex-nena/">Ver producto</a>
   </div>
 </article>
 
-<article class="product-card">
-  <a class="product-thumb" href="/product.html?id=ciclista-algodon-con-lycra-nena&amp;slug=ciclista-algodon-con-lycra-nena&amp;name=Ciclista%20algodon%20con%20lycra%20nena" aria-label="Ver Ciclista algodon con lycra nena">
+<article class="product-card romix-product-card">
+  <a class="product-thumb" href="/productos/ciclista-algodon-con-lycra-nena/" aria-label="Ver Ciclista algodon con lycra nena">
     <img src="images/thumbs/ciclista_algodon_lycra_nena_negro.webp" alt="Ciclista algodon con lycra nena" width="720" height="960" loading="lazy" decoding="async" />
   </a>
   <div class="product-body">
-    <a class="product-name" href="/product.html?id=ciclista-algodon-con-lycra-nena&amp;slug=ciclista-algodon-con-lycra-nena&amp;name=Ciclista%20algodon%20con%20lycra%20nena">Ciclista algodon con lycra nena</a>
-    <p class="product-meta">ciclistas</p>
-    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/product.html?id=ciclista-algodon-con-lycra-nena&amp;slug=ciclista-algodon-con-lycra-nena&amp;name=Ciclista%20algodon%20con%20lycra%20nena">Ver talles y colores</a>
+    <div class="product-variant-thumbs" aria-label="Variantes fotográficas"><span class="product-variant-thumb" aria-label="Variante Bordo"><img src="images/thumbs/ciclista_algodon_lycra_nena_bordo.webp" alt="Bordo" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Gris melange"><img src="images/thumbs/ciclista_algodon_lycra_nena_gris_melange.webp" alt="Gris melange" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Azul petroleo"><img src="images/thumbs/ciclista_algodon_lycra_nena_azul_petroleo.webp" alt="Azul petroleo" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Negro"><img src="images/thumbs/ciclista_algodon_lycra_nena_negro.webp" alt="Negro" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-more" aria-label="Hay 3 variantes adicionales">+3</span></div>
+    <a class="product-name" href="/productos/ciclista-algodon-con-lycra-nena/">Ciclista algodon con lycra nena</a>
+    <div class="price-row"><p class="product-price">Desde $3.500</p></div>
+    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/productos/ciclista-algodon-con-lycra-nena/">Ver producto</a>
   </div>
 </article>
 
-<article class="product-card">
-  <a class="product-thumb" href="/product.html?id=top-lycra-liso-y-jaspeado-nena&amp;slug=top-lycra-liso-y-jaspeado-nena&amp;name=Top%20lycra%20liso%20y%20jaspeado%20nena" aria-label="Ver Top lycra liso y jaspeado nena">
+<article class="product-card romix-product-card">
+  <a class="product-thumb" href="/productos/top-lycra-liso-y-jaspeado-nena/" aria-label="Ver Top lycra liso y jaspeado nena">
     <img src="images/thumbs/top_lycra_nena_violeta.webp" alt="Top lycra liso y jaspeado nena" width="720" height="960" loading="lazy" decoding="async" />
   </a>
   <div class="product-body">
-    <a class="product-name" href="/product.html?id=top-lycra-liso-y-jaspeado-nena&amp;slug=top-lycra-liso-y-jaspeado-nena&amp;name=Top%20lycra%20liso%20y%20jaspeado%20nena">Top lycra liso y jaspeado nena</a>
-    <p class="product-meta">tops</p>
-    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/product.html?id=top-lycra-liso-y-jaspeado-nena&amp;slug=top-lycra-liso-y-jaspeado-nena&amp;name=Top%20lycra%20liso%20y%20jaspeado%20nena">Ver talles y colores</a>
+    <div class="product-variant-thumbs" aria-label="Variantes fotográficas"><span class="product-variant-thumb" aria-label="Variante Violeta"><img src="images/thumbs/top_lycra_nena_violeta.webp" alt="Violeta" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Rosa"><img src="images/thumbs/top_lycra_nena_rosa.webp" alt="Rosa" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Lila"><img src="images/thumbs/top_lycra_nena_lila.webp" alt="Lila" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Negro"><img src="images/thumbs/top_lycra_nena_negra.webp" alt="Negro" width="96" height="128" loading="lazy" decoding="async" /></span></div>
+    <a class="product-name" href="/productos/top-lycra-liso-y-jaspeado-nena/">Top lycra liso y jaspeado nena</a>
+    <div class="price-row"><p class="product-price">Desde $4.000</p></div>
+    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/productos/top-lycra-liso-y-jaspeado-nena/">Ver producto</a>
   </div>
 </article>
 
-<article class="product-card">
-  <a class="product-thumb" href="/product.html?id=top-lycra-estampado-nena&amp;slug=top-lycra-estampado-nena&amp;name=Top%20lycra%20estampado%20nena" aria-label="Ver Top lycra estampado nena">
+<article class="product-card romix-product-card">
+  <a class="product-thumb" href="/productos/top-lycra-estampado-nena/" aria-label="Ver Top lycra estampado nena">
     <img src="images/thumbs/top_lycra_estampado_nena_estampado_1.webp" alt="Top lycra estampado nena" width="720" height="960" loading="lazy" decoding="async" />
   </a>
   <div class="product-body">
-    <a class="product-name" href="/product.html?id=top-lycra-estampado-nena&amp;slug=top-lycra-estampado-nena&amp;name=Top%20lycra%20estampado%20nena">Top lycra estampado nena</a>
-    <p class="product-meta">tops</p>
-    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/product.html?id=top-lycra-estampado-nena&amp;slug=top-lycra-estampado-nena&amp;name=Top%20lycra%20estampado%20nena">Ver talles y colores</a>
+    <div class="product-variant-thumbs" aria-label="Variantes fotográficas"><span class="product-variant-thumb" aria-label="Variante Estampado 1"><img src="images/thumbs/top_lycra_estampado_nena_estampado_1.webp" alt="Estampado 1" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Estampado 2"><img src="images/thumbs/top_lycra_estampado_nena_estampado_2.webp" alt="Estampado 2" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Estampado 3"><img src="images/thumbs/top_lycra_estampado_nena_estampado_3.webp" alt="Estampado 3" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Estampado 4"><img src="images/thumbs/top_lycra_estampado_nena_estampado_4.webp" alt="Estampado 4" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-more" aria-label="Hay 4 variantes adicionales">+4</span></div>
+    <a class="product-name" href="/productos/top-lycra-estampado-nena/">Top lycra estampado nena</a>
+    <div class="price-row"><p class="product-price">Desde $4.500</p></div>
+    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/productos/top-lycra-estampado-nena/">Ver producto</a>
   </div>
 </article>
 
-<article class="product-card">
-  <a class="product-thumb" href="/product.html?id=bermuda-algodon-rustico-nino&amp;slug=bermuda-algodon-rustico-nino&amp;name=Bermuda%20algodon%20rustico%20Ni%C3%B1o" aria-label="Ver Bermuda algodon rustico Niño">
+<article class="product-card romix-product-card">
+  <a class="product-thumb" href="/productos/bermuda-algodon-rustico-nino/" aria-label="Ver Bermuda algodon rustico Niño">
     <img src="images/thumbs/bermuda_algodon_rustico_nino_azul.webp" alt="Bermuda algodon rustico Niño" width="720" height="960" loading="lazy" decoding="async" />
   </a>
   <div class="product-body">
-    <a class="product-name" href="/product.html?id=bermuda-algodon-rustico-nino&amp;slug=bermuda-algodon-rustico-nino&amp;name=Bermuda%20algodon%20rustico%20Ni%C3%B1o">Bermuda algodon rustico Niño</a>
-    <p class="product-meta">bermudas</p>
-    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/product.html?id=bermuda-algodon-rustico-nino&amp;slug=bermuda-algodon-rustico-nino&amp;name=Bermuda%20algodon%20rustico%20Ni%C3%B1o">Ver talles y colores</a>
+    <div class="product-variant-thumbs" aria-label="Variantes fotográficas"><span class="product-variant-thumb" aria-label="Variante Azul"><img src="images/thumbs/bermuda_algodon_rustico_nino_azul.webp" alt="Azul" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Gris melange"><img src="images/thumbs/bermuda_algodon_rustico_nino_gris_melange.webp" alt="Gris melange" width="96" height="128" loading="lazy" decoding="async" /></span></div>
+    <a class="product-name" href="/productos/bermuda-algodon-rustico-nino/">Bermuda algodon rustico Niño</a>
+    <div class="price-row"><p class="product-price">Desde $4.000</p></div>
+    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/productos/bermuda-algodon-rustico-nino/">Ver producto</a>
   </div>
 </article>
 
-<article class="product-card">
-  <a class="product-thumb" href="/product.html?id=pantalon-algodon-rustico-recto-chico&amp;slug=pantalon-algodon-rustico-recto-chico&amp;name=Pantalon%20algodon%20rustico%20recto%20chico" aria-label="Ver Pantalon algodon rustico recto chico">
-    <img src="images/thumbs/pantalon_algodon_rustico_chico_negro.webp" alt="Pantalon algodon rustico recto chico" width="720" height="960" loading="lazy" decoding="async" />
+<article class="product-card romix-product-card">
+  <a class="product-thumb" href="/productos/pantalon-algodon-rustico-recto-chico/" aria-label="Ver Pantalon algodon rustico recto chico">
+    <img src="images/thumbs/pantalon_algodon_rustico_chico_negro_delivery.webp" alt="Pantalon algodon rustico recto chico" width="720" height="960" loading="lazy" decoding="async" />
   </a>
   <div class="product-body">
-    <a class="product-name" href="/product.html?id=pantalon-algodon-rustico-recto-chico&amp;slug=pantalon-algodon-rustico-recto-chico&amp;name=Pantalon%20algodon%20rustico%20recto%20chico">Pantalon algodon rustico recto chico</a>
-    <p class="product-meta">pantalones</p>
-    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/product.html?id=pantalon-algodon-rustico-recto-chico&amp;slug=pantalon-algodon-rustico-recto-chico&amp;name=Pantalon%20algodon%20rustico%20recto%20chico">Ver talles y colores</a>
+    <div class="product-variant-thumbs" aria-label="Variantes fotográficas"><span class="product-variant-thumb" aria-label="Variante Negro"><img src="images/thumbs/pantalon_algodon_rustico_chico_negro_delivery.webp" alt="Negro" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Azul"><img src="images/thumbs/pantalon_algodon_rustico_chico_azul_delivery.webp" alt="Azul" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Gris melange"><img src="images/thumbs/pantalon_algodon_rustico_chico_gris_melange_delivery.webp" alt="Gris melange" width="96" height="128" loading="lazy" decoding="async" /></span><span class="product-variant-thumb" aria-label="Variante Gris oscuro"><img src="images/thumbs/pantalon_algodon_rustico_chico_gris_oscuro_delivery.webp" alt="Gris oscuro" width="96" height="128" loading="lazy" decoding="async" /></span></div>
+    <a class="product-name" href="/productos/pantalon-algodon-rustico-recto-chico/">Pantalon algodon rustico recto chico</a>
+    <div class="price-row"><p class="product-price">Desde $9.000</p></div>
+    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/productos/pantalon-algodon-rustico-recto-chico/">Ver producto</a>
   </div>
 </article>
 
-<article class="product-card">
-  <a class="product-thumb" href="/product.html?id=short-algodon-rustico-chico&amp;slug=short-algodon-rustico-chico&amp;name=Short%20algodon%20rustico%20chico" aria-label="Ver Short algodon rustico chico">
+<article class="product-card romix-product-card">
+  <a class="product-thumb" href="/productos/short-algodon-rustico-chico/" aria-label="Ver Short algodon rustico chico">
     <img src="images/thumbs/short_algodon_rustico_chico_azul.webp" alt="Short algodon rustico chico" width="720" height="960" loading="lazy" decoding="async" />
   </a>
   <div class="product-body">
-    <a class="product-name" href="/product.html?id=short-algodon-rustico-chico&amp;slug=short-algodon-rustico-chico&amp;name=Short%20algodon%20rustico%20chico">Short algodon rustico chico</a>
-    <p class="product-meta">shorts</p>
-    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/product.html?id=short-algodon-rustico-chico&amp;slug=short-algodon-rustico-chico&amp;name=Short%20algodon%20rustico%20chico">Ver talles y colores</a>
+    <div class="product-variant-thumbs" aria-label="Variantes fotográficas"><span class="product-variant-thumb" aria-label="Variante Azul"><img src="images/thumbs/short_algodon_rustico_chico_azul.webp" alt="Azul" width="96" height="128" loading="lazy" decoding="async" /></span></div>
+    <a class="product-name" href="/productos/short-algodon-rustico-chico/">Short algodon rustico chico</a>
+    <div class="price-row"><p class="product-price">Desde $6.500</p></div>
+    <a class="catalog-cta romix-btn romix-btn--outline romix-btn--sm" href="/productos/short-algodon-rustico-chico/">Ver producto</a>
   </div>
 </article>
 </div>
@@ -374,10 +392,11 @@
       </div>
       <nav class="footer-column" aria-label="Comprar"><h2>Comprar</h2><ul><li><a href="/mujer/">Mujer</a></li><li><a href="/hombre/">Hombre</a></li><li><a href="/ninos/">Ni&ntilde;os</a></li><li><a href="catalogo.html?view=novedades">Novedades</a></li><li><a href="catalogo.html?q=oferta">Ofertas</a></li></ul></nav>
       <nav class="footer-column" aria-label="Categor&iacute;a"><h2>Categor&iacute;a</h2><ul><li><a href="catalogo.html?categories=calzas">Calzas</a></li><li><a href="catalogo.html?categories=remeras">Remeras</a></li><li><a href="catalogo.html?categories=pantalones">Pantalones</a></li><li><a href="catalogo.html?categories=camperas">Camperas</a></li><li><a href="catalogo.html?categories=tops">Tops</a></li><li><a href="catalogo.html?categories=buzos">Buzos</a></li></ul></nav>
-      <nav class="footer-column" aria-label="Ayuda"><h2>Ayuda</h2><ul><li><a href="ayuda.html#size-guide">Gu&iacute;a de talles</a></li><li><a href="ayuda.html#returns">Cambios</a></li><li><a href="ayuda.html#payments">Formas de pago</a></li><li><a href="ayuda.html#contact">Contacto</a></li></ul></nav>
+      <nav class="footer-column" aria-label="Ayuda"><h2>Ayuda</h2><ul><li><a href="ayuda.html#size-guide">Gu&iacute;a de talles</a></li><li><a href="ayuda.html#returns">Cambios</a></li><li><a href="ayuda.html#payments">Formas de pago</a></li><li><a href="ayuda.html#contact">Contacto</a></li><li><a href="/privacidad.html">Privacidad</a></li><li><a href="/terminos.html">Términos y condiciones</a></li><li><a href="https://wa.me/5491154272065?text=Hola%20ROMIX.%20Quiero%20ejercer%20el%20derecho%20de%20arrepentimiento%20respecto%20de%20una%20compra%20a%20distancia.%20Datos%20para%20identificar%20mi%20pedido%3A%20" target="_blank" rel="noopener noreferrer">Botón de arrepentimiento</a></li></ul></nav>
     </div>
     <div class="footer-bottom">
       <p>&copy; 2026 ROMIX. Indumentaria deportiva, invernal y urbana.</p>
+      <button type="button" class="cookie-settings" id="cookie-settings" hidden>Preferencias de cookies</button>
       <div class="footer-socials" aria-label="Redes sociales">
         <a href="https://www.instagram.com/romixdamasalbertina/" target="_blank" rel="noopener" aria-label="Instagram"><span data-romix-icon="Instagram" data-romix-icon-size="sm"></span></a>
         <a href="https://www.facebook.com/p/ROMIX-concordia-514-100040099371330/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.8 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5H17V3.9c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 4V10H8.3v3h2.6v8h2.9Z"/></svg></a>
@@ -387,17 +406,29 @@
     </div>
   </div>
 </footer>
+<section class="cookie-consent" id="cookie-consent" aria-labelledby="cookie-consent-title" hidden>
+  <div class="cookie-consent__copy">
+    <h2 id="cookie-consent-title">Cookies de analítica</h2>
+    <p>Google Analytics usa cookies para medir visitas, solo si aceptás. Cambiá tu elección desde el pie. <a class="cookie-privacy-link" href="/privacidad.html">Privacidad</a>.</p>
+  </div>
+  <p id="cookie-consent-status" role="status" aria-live="polite"></p>
+  <div class="cookie-consent__actions">
+    <button type="button" id="cookie-reject" aria-label="Rechazar analítica">Rechazar</button>
+    <button type="button" id="cookie-accept" aria-label="Aceptar analítica">Aceptar</button>
+  </div>
+</section>
+<script defer src="/assets/js/cookie-consent.js?v=1"></script>
 <!-- ROMIX:SHELL:FOOTER:END -->
 
   <div id="catalog-toast" class="catalog-toast" aria-live="polite" role="status"></div>
 
-  <script src="assets/js/romix-image-utils.js?v=20" defer></script>
+  <script src="assets/js/romix-image-utils.js?v=21" defer></script>
   <script src="assets/js/catalog-sections.js?v=1" defer></script>
-  <script src="assets/js/cart.js?v=19" defer></script>
+  <script src="assets/js/cart.js?v=20" defer></script>
   <script src="assets/js/romix-pricing.js?v=19" defer></script>
   <script src="assets/js/products-store.js?v=20" defer></script>
   <script src="assets/js/catalog-relevance-order.js?v=19" defer></script>
-  <script src="assets/js/romix-catalog-pages.js?v=20" defer></script>
+  <script src="assets/js/romix-catalog-pages.js?v=23" defer></script>
   <script src="assets/js/romix-header.js?v=20" defer></script>
   <romix-toast></romix-toast>
   <script type="module" src="assets/js/ts/main.js?v=19"></script>

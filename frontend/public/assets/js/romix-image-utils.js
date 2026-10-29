@@ -552,6 +552,12 @@
     return img;
   }
 
+  // A single srcset candidate cannot contain literal URL whitespace or commas.
+  // Keep existing percent escapes intact and leave the underlying filename alone.
+  function srcsetUrl(value) {
+    return String(value || '').replace(/[\t\n\f\r ,]/g, character => encodeURIComponent(character));
+  }
+
   function createPicture(options) {
     const opts = options || {};
     const picture = document.createElement("picture");
@@ -563,14 +569,14 @@
 
     if (avifSrc) {
       const avif = document.createElement("source");
-      avif.srcset = avifSrc;
+      avif.srcset = srcsetUrl(avifSrc);
       avif.type = "image/avif";
       picture.appendChild(avif);
     }
 
     if (webpSrc && webpSrc !== imgSrc) {
       const webp = document.createElement("source");
-      webp.srcset = webpSrc;
+      webp.srcset = srcsetUrl(webpSrc);
       webp.type = "image/webp";
       picture.appendChild(webp);
     }
@@ -610,6 +616,7 @@
     loadImageResource,
     applyImageWithFallback,
     createPicture,
+    srcsetUrl,
     dimensions: {
       productCard: { width: PRODUCT_CARD_WIDTH, height: PRODUCT_CARD_HEIGHT },
       productFull: { width: PRODUCT_FULL_WIDTH, height: PRODUCT_FULL_HEIGHT },

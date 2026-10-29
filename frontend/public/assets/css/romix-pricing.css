@@ -16,7 +16,7 @@
 
 .romix-price-current {
   color: inherit;
-  font-family: "Outfit", "Manrope", sans-serif;
+  font-family: var(--romix-font-body);
   font-weight: 800;
   white-space: nowrap;
 }

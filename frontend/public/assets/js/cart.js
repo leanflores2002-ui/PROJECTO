@@ -62,12 +62,14 @@
 
   const normalizeItem = (item) => {
     if (!item || typeof item !== 'object') return null;
-    const qty = Math.max(1, Number(item.qty ?? item.quantity ?? 1) || 1);
+    const rawQty = Object.hasOwn(item, 'qty') ? item.qty : Object.hasOwn(item, 'quantity') ? item.quantity : 1;
+    const qty = typeof rawQty === 'number' ? rawQty : Number(rawQty);
+    if (!['number', 'string'].includes(typeof rawQty) || !Number.isSafeInteger(qty) || qty <= 0) return null;
     const price = Number(item.price || 0);
     const productId = item.productId ?? item.pid ?? item.id ?? item.slug ?? item.sku ?? '';
     const color = item.color ?? item.colorName ?? item.colorKey ?? 'Unico';
     const size = item.size ?? item.talle ?? item.sizeValue ?? 'U';
-    const key = item.key || buildKey({ productId, color, size });
+    const key = buildKey({ productId, color, size });
 
     return {
       key,
@@ -353,7 +355,7 @@
         const normalized = legacy
           .map((item) => normalizeItem(item))
           .filter(Boolean);
-        persist(normalized);
+        if (!persist(normalized)) return normalized;
         try {
           localStorage.removeItem(key);
         } catch {
@@ -414,6 +416,7 @@
     if (existingIndex >= 0) {
       const existing = cart[existingIndex];
       const qty = (Number(existing.qty) || Number(existing.quantity) || 0) + newItem.qty;
+      if (!Number.isSafeInteger(qty)) return cart;
       cart[existingIndex] = {
         ...existing,
         ...newItem,
@@ -437,13 +440,19 @@
   };
 
   const removeFromCart = (key) => {
-    const filtered = getCart().filter((item) => item.key !== key);
-    return saveCart(filtered);
+    const before = getCart();
+    const removed = before.filter(item => item.key === key);
+    const saved = saveCart(before.filter(item => item.key !== key));
+    if (lastSavePersisted && removed.length) window.dispatchEvent(new CustomEvent('romix:analytics-cart-removed', { detail: { items: removed } }));
+    return saved;
   };
 
   const updateQty = (key, qty) => {
-    const nextQty = Math.max(1, Number(qty) || 1);
-    const updated = getCart().map((item) => {
+    const nextQty = Number(qty);
+    if (!['number', 'string'].includes(typeof qty) || !Number.isSafeInteger(nextQty) || nextQty <= 0) return getCart();
+    const before = getCart();
+    const previous = before.find(item => item.key === key);
+    const updated = before.map((item) => {
       if (item.key !== key) return item;
       return {
         ...item,
@@ -452,10 +461,22 @@
         subtotal: nextQty * (Number(item.price) || 0),
       };
     });
-    return saveCart(updated);
+    const saved = saveCart(updated);
+    const delta = previous ? nextQty - previous.qty : 0;
+    if (lastSavePersisted && delta) {
+      const change = { ...previous, qty: Math.abs(delta), quantity: Math.abs(delta) };
+      const name = delta > 0 ? 'romix:analytics-cart-added' : 'romix:analytics-cart-removed';
+      window.dispatchEvent(new CustomEvent(name, { detail: delta > 0 ? { item: change } : { items: [change] } }));
+    }
+    return saved;
   };
 
-  const clearCart = () => saveCart([]);
+  const clearCart = ({ forOrder = false } = {}) => {
+    const before = getCart();
+    const saved = saveCart([]);
+    if (lastSavePersisted && before.length && !forOrder) window.dispatchEvent(new CustomEvent('romix:analytics-cart-removed', { detail: { items: before } }));
+    return saved;
+  };
 
   const updateBadge = (selector = '#cart-count') => {
     const badge = document.querySelector(selector);

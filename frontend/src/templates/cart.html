@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <script src="/assets/js/romix-api-config.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- ROMIX:SHELL:CRITICAL:START -->
-<link rel="stylesheet" href="assets/css/romix-shell-base.css?v=18" data-romix-shell-critical />
+<link rel="stylesheet" href="assets/css/romix-shell-base.css?v=23" data-romix-shell-critical />
 <!-- ROMIX:SHELL:CRITICAL:END -->
   <title>ROMIX - Mi Carrito</title>
   <meta name="description" content="Revisá tu selección de prendas ROMIX y coordiná tu pedido por WhatsApp." />
@@ -19,7 +18,7 @@
     :root { --primary:#e83e8c; --secondary:#6f42c1; --success:#28a745; --danger:#dc3545; --light:#f8f9fa; --dark:#343a40; --radius:10px; }
     * { box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { margin:0; background:#f5f5f5; color:#232323; }
-    header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color:#fff; padding:14px 0 10px; box-shadow:0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+    header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color:#fff; padding:14px 0 10px; box-shadow: none; position: sticky; top: 0; z-index: 1000; }
     .header-container { max-width:1600px; margin:0 auto; padding:0 28px; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:16px; }
     .logo { font-size:1.8rem; font-weight:800; display:flex; align-items:center; gap:10px; text-decoration:none; color:#fff; letter-spacing:-0.5px; }
     .logo .logo-mark { width:40px; height:40px; object-fit:contain; display:block; }
@@ -32,7 +31,7 @@
     .icon-btn { width:36px; height:36px; border-radius:50%; border:1px solid rgba(255,255,255,.35); background:rgba(255,255,255,.08); color:#fff; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; position:relative; }
     .icon-badge { position:absolute; top:-6px; right:-6px; background:var(--danger); color:#fff; border-radius:999px; font-size:.7rem; padding:2px 6px; }
     .nav-secondary { max-width:1600px; margin:8px auto 0; padding:0 28px 10px; display:flex; gap:14px; align-items:center; flex-wrap:nowrap; overflow-x:auto; color:#fff; font-weight:700; scrollbar-width:none; }
-    .nav-secondary a { color:#fff; text-decoration:none; padding:10px 12px; border-radius:12px; transition:background .2s ease, color .2s ease; }
+    .nav-secondary a { color:#fff; text-decoration:none; padding:10px 12px; border-radius: var(--romix-radius); transition:background .2s ease, color .2s ease; }
     .nav-secondary a:hover { background:rgba(255,255,255,.12); }
     .cat-pill { background:rgba(255,255,255,.16); color:#fff; border:1px solid rgba(255,255,255,.35); padding:8px 12px; border-radius:999px; font-weight:700; text-decoration:none; font-size:.95rem; }
 
@@ -40,47 +39,47 @@
     .cart-page { text-align:center; padding-bottom:48px; }
     .cart-title { font-size: 1.8rem; font-weight: 900; color: #1b1f24; margin: 6px 0; }
     .cart-subtitle { color:#6c757d; margin-bottom:14px; }
-    .cart-box { max-width: 1240px; margin: 0 auto; background:#fff; border-radius:14px; box-shadow:0 14px 36px rgba(0,0,0,.10); padding: 22px; min-height:160px; }
+    .cart-box { max-width: 1240px; margin: 0 auto; background:#fff; border-radius: var(--romix-radius); box-shadow: none; padding: 22px; min-height:160px; }
     .cart-list { display:flex; flex-direction:column; gap:12px; }
-    .cart-item { display:grid; grid-template-columns: 86px 1fr auto; gap:14px; align-items:center; border:1px solid #e9ecef; border-radius:10px; padding:10px; }
-    .cart-thumb { width:86px; height:86px; background:#f8f9fb; border-radius:8px; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+    .cart-item { display:grid; grid-template-columns: 86px 1fr auto; gap:14px; align-items:center; border:1px solid #e9ecef; border-radius: var(--romix-radius); padding:10px; }
+    .cart-thumb { width:86px; height:86px; background:#f8f9fb; border-radius: var(--romix-radius); overflow:hidden; display:flex; align-items:center; justify-content:center; }
     .cart-thumb img { width:100%; height:100%; object-fit:contain; }
     .cart-info { text-align:left; }
     .cart-info .name { font-weight:900; color:#111; }
     .cart-info .meta { color:#6c757d; font-size:.95rem; }
     .cart-info .unit { color: var(--secondary); font-weight:800; font-size:1rem; }
-    .qty-stepper { display:inline-flex; align-items:center; gap:8px; border:1px solid #dee2e6; border-radius:8px; padding:4px 6px; background:#fff; margin-top:6px; }
-    .qty-stepper button { width:28px; height:28px; border-radius:6px; border:1px solid #dee2e6; background:#fff; cursor:pointer; }
+    .qty-stepper { display:inline-flex; align-items:center; gap:8px; border:1px solid #dee2e6; border-radius: var(--romix-radius); padding:4px 6px; background:#fff; margin-top:6px; }
+    .qty-stepper button { width:28px; height:28px; border-radius: var(--romix-radius); border:1px solid #dee2e6; background:#fff; cursor:pointer; }
     .qty-stepper input { width:48px; text-align:center; border:none; outline:none; }
     .cart-right { text-align:right; }
     .cart-right .subtotal { font-weight:900; color:#1b1f24; }
-    .cart-right .remove { color:#dc3545; background:#fff; border:1px solid #f1a6ad; border-radius:8px; padding:6px 8px; cursor:pointer; }
+    .cart-right .remove { color:#dc3545; background:#fff; border:1px solid #f1a6ad; border-radius: var(--romix-radius); padding:6px 8px; cursor:pointer; }
     .cart-summary { margin-top:14px; display:flex; align-items:center; justify-content:space-between; gap:10px; padding-top:12px; border-top:1px solid #e9ecef; }
     .cart-summary .left { text-align:left; color:#6c757d; }
     .cart-actions-row { margin-top:12px; display:flex; gap:10px; justify-content:flex-end; }
-    .btn { padding:10px 16px; border-radius:10px; border:1px solid #e9ecef; background:#fff; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:8px; }
+    .btn { padding:10px 16px; border-radius: var(--romix-radius); border:1px solid #e9ecef; background:#fff; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:8px; }
     .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color:#fff; border:none; }
     .btn-outline { background:#fff; color:#495057; }
     .link-danger { background:none; border:none; color:#dc3545; cursor:pointer; text-decoration:underline; }
-    .cart-alert { display:flex; align-items:center; gap:8px; padding:10px 14px; margin-bottom:18px; border-radius:12px; font-weight:700; }
+    .cart-alert { display:flex; align-items:center; gap:8px; padding:10px 14px; margin-bottom:18px; border-radius: var(--romix-radius); font-weight:700; }
     .cart-alert--error { background:#ffe9ea; border:1px solid #f5a2ab; color:#a10e1d; }
     .cart-alert--info { background:#e6f0ff; border:1px solid #7aa7ff; color:#0b3d91; }
     .cart-empty-state { color:#6c757d; font-weight:700; }
-    .post-order-state { border:1px dashed #e9ecef; border-radius:14px; padding:20px; background:#fffdfb; display:flex; flex-direction:column; gap:14px; }
+    .post-order-state { border:1px dashed #e9ecef; border-radius: var(--romix-radius); padding:20px; background:#fffdfb; display:flex; flex-direction:column; gap:14px; }
     .post-order-state__details { display:flex; align-items:center; gap:12px; }
     .post-order-state__icon { font-size:1.8rem; color:var(--success); }
     .post-order-state__title { font-size:1.2rem; font-weight:800; margin:0; color:#111; }
     .post-order-state__subtitle { margin:4px 0 0; color:#6c757d; font-size:.95rem; }
     .post-order-state__action { align-self:flex-start; }
     /* Sugerencias buscador */
-    .search-suggestions { position:absolute; top:100%; left:0; right:0; background:#fff; border:1px solid #ddd; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,.12); padding:6px 0; z-index:2001; }
+    .search-suggestions { position:absolute; top:100%; left:0; right:0; background:#fff; border:1px solid #ddd; border-radius: var(--romix-radius); box-shadow: none; padding:6px 0; z-index:2001; }
     .search-suggestion { display:flex; align-items:center; gap:8px; padding:8px 10px; cursor:pointer; color:#212529; }
     .search-suggestion .t { color:#212529; }
     .search-suggestion small { color:#6c757d; }
     .search-suggestion:hover, .search-suggestion.active { background:#f1f3f5; }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
-  <link rel="stylesheet" href="assets/css/romix-design-system.css?v=20" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="assets/css/romix-design-system.css?v=23" />
   <link rel="stylesheet" href="assets/css/responsive.css?v=19">
   <link rel="icon" href="images/branding/romix-logo-icon.webp" type="image/webp" sizes="180x180" />
   <link rel="apple-touch-icon" href="images/branding/romix-logo-icon.webp" sizes="180x180" />
@@ -160,7 +159,7 @@
       border: 1px solid #f1e8f4;
       border-radius: 999px;
       padding: 7px 12px;
-      box-shadow: 0 4px 12px rgba(229, 198, 219, 0.2);
+      box-shadow: none;
     }
 
     .checkout-steps li:not(:last-child)::after {
@@ -174,7 +173,7 @@
       color: #fff;
       background: linear-gradient(135deg, #f476bb 0%, #d93a94 100%);
       border-color: transparent;
-      box-shadow: 0 12px 24px rgba(217, 58, 148, 0.32);
+      box-shadow: none;
     }
 
     .checkout-steps li.is-active::after {
@@ -200,17 +199,17 @@
       margin: 0;
       min-height: 0;
       padding: 16px;
-      border-radius: 30px;
+      border-radius: var(--romix-radius);
       border: 1px solid var(--glass-border);
       background: var(--glass-bg);
-      box-shadow: var(--shadow-soft);
+      box-shadow: none;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
     }
 
     .cart-alert {
       margin-bottom: 14px;
-      border-radius: 14px;
+      border-radius: var(--romix-radius);
       font-weight: 700;
       font-size: 0.92rem;
     }
@@ -239,10 +238,10 @@
 
     .cart-item {
       border: 1px solid #f1e8f4;
-      border-radius: 22px;
+      border-radius: var(--romix-radius);
       padding: 14px;
       background: #fff;
-      box-shadow: var(--shadow-card);
+      box-shadow: none;
       display: grid;
       grid-template-columns: 24px 82px 1fr;
       grid-template-areas:
@@ -270,10 +269,10 @@
       grid-area: thumb;
       width: 82px;
       height: 92px;
-      border-radius: 14px;
+      border-radius: var(--romix-radius);
       border: 1px solid #f3eaf5;
       background: #fff9fd;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      box-shadow: none;
     }
 
     .cart-info {
@@ -353,7 +352,7 @@
       border-radius: 999px;
       padding: 4px;
       gap: 4px;
-      box-shadow: 0 8px 16px rgba(229, 184, 212, 0.22);
+      box-shadow: none;
     }
 
     .qty-stepper button {
@@ -361,10 +360,10 @@
       height: 30px;
       border: none;
       border-radius: 999px;
-      background: linear-gradient(135deg, #f67ec2 0%, #df459c 100%);
+      background: var(--romix-pink-readable);
       color: #fff;
       font-weight: 800;
-      box-shadow: 0 8px 14px rgba(223, 69, 156, 0.3);
+      box-shadow: none;
     }
 
     .qty-stepper input {
@@ -386,7 +385,7 @@
       color: var(--rose-600);
       border: 1px solid #ffd0eb;
       background: #fff4fb;
-      border-radius: 12px;
+      border-radius: var(--romix-radius);
       width: 34px;
       height: 34px;
       padding: 0;
@@ -406,9 +405,9 @@
       display: block;
       background: rgba(255, 255, 255, 0.86);
       border: 1px solid rgba(255, 255, 255, 0.95);
-      border-radius: 24px;
+      border-radius: var(--romix-radius);
       padding: 16px;
-      box-shadow: 0 16px 30px rgba(219, 169, 204, 0.24);
+      box-shadow: none;
     }
 
     .cart-summary .left {
@@ -436,11 +435,11 @@
     .summary-thumb {
       width: 40px;
       height: 40px;
-      border-radius: 12px;
+      border-radius: var(--romix-radius);
       border: 1px solid #f3e7f2;
       object-fit: cover;
       background: #fff8fd;
-      box-shadow: 0 5px 12px rgba(227, 194, 218, 0.32);
+      box-shadow: none;
     }
 
     .summary-thumb-empty {
@@ -493,7 +492,7 @@
     .btn {
       min-height: 50px;
       width: 100%;
-      border-radius: 16px;
+      border-radius: var(--romix-radius);
       border: 1px solid #eedee9;
       font-size: 0.95rem;
       font-weight: 800;
@@ -512,19 +511,19 @@
     .btn-outline {
       color: #6b6076;
       background: #fff;
-      box-shadow: 0 8px 14px rgba(226, 205, 220, 0.26);
+      box-shadow: none;
     }
 
     .btn-primary {
       border: none;
       color: #fff;
-      background: linear-gradient(135deg, #f873bc 0%, #d93491 100%);
-      box-shadow: 0 14px 28px rgba(217, 52, 145, 0.38);
+      background: var(--romix-pink-readable);
+      box-shadow: none;
     }
 
     .cart-empty-state {
       border: 1px dashed #ecdbe8;
-      border-radius: 18px;
+      border-radius: var(--romix-radius);
       padding: 22px;
       background: #fff;
       color: #6F6D76;
@@ -533,10 +532,10 @@
 
     .post-order-state {
       border: 1px dashed #eedfed;
-      border-radius: 20px;
+      border-radius: var(--romix-radius);
       background: #fff;
       padding: 18px;
-      box-shadow: 0 10px 18px rgba(220, 198, 216, 0.22);
+      box-shadow: none;
     }
 
     .post-order-state__icon {
@@ -579,7 +578,7 @@
       }
 
       .cart-box {
-        border-radius: 22px;
+        border-radius: var(--romix-radius);
         padding: 12px;
       }
 
@@ -589,7 +588,7 @@
       }
 
       .cart-item {
-        border-radius: 18px;
+        border-radius: var(--romix-radius);
         grid-template-columns: 20px 74px minmax(0, 1fr);
         grid-template-areas:
           'check thumb info'
@@ -605,7 +604,7 @@
       .cart-thumb {
         width: 74px;
         height: 84px;
-        border-radius: 12px;
+        border-radius: var(--romix-radius);
       }
 
       .cart-info .brand {
@@ -657,7 +656,7 @@
       }
 
       .cart-summary {
-        border-radius: 18px;
+        border-radius: var(--romix-radius);
         padding: 14px;
       }
 
@@ -683,7 +682,7 @@
 
       .btn {
         min-height: 48px;
-        border-radius: 14px;
+        border-radius: var(--romix-radius);
         font-size: 0.92rem;
       }
     }
@@ -732,11 +731,12 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="assets/css/romix-minimal-theme.css?v=19" />
-  <link rel="stylesheet" href="assets/css/romix-pricing.css?v=19" />
-  <link rel="stylesheet" href="assets/css/romix-header.css?v=20" />
-  <link rel="stylesheet" href="assets/css/romix-footer.css?v=19" />
-  <script defer src="/assets/js/romix-analytics.js?v=1"></script>
+  <link rel="stylesheet" href="assets/css/romix-minimal-theme.css?v=23" />
+  <link rel="stylesheet" href="assets/css/romix-pricing.css?v=23" />
+  <link rel="stylesheet" href="assets/css/romix-header.css?v=25" />
+  <link rel="stylesheet" href="/assets/css/cookie-consent.css?v=2" />
+  <link rel="stylesheet" href="assets/css/romix-footer.css?v=23" />
+  <script defer src="/assets/js/romix-analytics.js?v=3"></script>
 </head>
 <body>
 <!-- ROMIX:INCLUDE:HEADER -->
@@ -771,9 +771,9 @@
     </div>
   </div>
 <!-- ROMIX:INCLUDE:FOOTER -->
-  <script src="assets/js/romix-image-utils.js?v=20"></script>
+  <script src="assets/js/romix-image-utils.js?v=21"></script>
     <script src="assets/js/color-utils.js?v=19"></script>
-  <script src="assets/js/cart.js?v=19"></script>
+  <script src="assets/js/cart.js?v=20"></script>
   <script>
     // Correccion basica de textos mal decodificados
     (function(){
@@ -975,7 +975,7 @@
     function finalizeOrder() {
       orderStatus = 'success';
       hideCartAlert();
-      window.romixCart.clearCart();
+      window.romixCart.clearCart({ forOrder: true });
       removeCartStorage();
       window.romixCart.updateBadge();
       renderCart();
@@ -1013,15 +1013,29 @@
         if (orderBtn) orderBtn.disabled = false;
         return;
       }
-      const orderWindow = window.open('about:blank', '_blank');
+      if (window.romixAnalytics) window.romixAnalytics.trackCheckout(cart);
+      let orderWindow;
+      try {
+        orderWindow = window.open('about:blank', '_blank');
+        if (orderWindow) {
+          orderWindow.opener = null;
+          orderWindow.location.href = `https://wa.me/${WA_NUMBER}?text=${message}`;
+        }
+      } catch {
+        try { if (orderWindow) orderWindow.close(); } catch { /* Browser may deny access. */ }
+        if (window.romixAnalytics) window.romixAnalytics.trackCheckoutFailure('open_error');
+        showCartAlert('error', 'No se pudo abrir WhatsApp. Intenta nuevamente.');
+        orderInProgress = false;
+        if (orderBtn) orderBtn.disabled = false;
+        return;
+      }
       if (!orderWindow) {
+        if (window.romixAnalytics) window.romixAnalytics.trackCheckoutFailure('popup_blocked');
         showCartAlert('error', 'El navegador bloqueo la apertura de WhatsApp. Habilita las ventanas emergentes e intenta nuevamente.');
         orderInProgress = false;
         if (orderBtn) orderBtn.disabled = false;
         return;
       }
-      orderWindow.opener = null;
-      orderWindow.location.href = `https://wa.me/${WA_NUMBER}?text=${message}`;
       if (window.romixAnalytics) window.romixAnalytics.trackWhatsApp(cart);
       finalizeOrder();
       orderInProgress = false;
@@ -1029,6 +1043,8 @@
     window.orderCartWhatsApp = handleOrder;
     function renderCart(){
       const cart = window.romixCart.getCart();
+      window.romixViewedCart = cart;
+      window.dispatchEvent(new CustomEvent('romix:analytics-cart-viewed', { detail: { items: cart } }));
       const list = document.getElementById('cart-list');
       const countDisplay = document.getElementById('cart-count-display');
       const itemsTitleCount = document.getElementById('cart-items-title-count');

@@ -89,6 +89,61 @@
     return currencyFormatter.format(amount).replace(/\$\s+/u, "$");
   }
 
+  function formatSizeLabel(values) {
+    const sizes = Array.isArray(values)
+      ? values.map((value) => value && typeof value === "object" ? value.size || value.label : value)
+        .map((value) => String(value == null ? "" : value).trim())
+        .filter(Boolean)
+      : [];
+    return sizes.length ? sizes.join(", ") : "";
+  }
+
+  function getCardPriceEntries(product) {
+    const groups = product && product.priceByGroup && typeof product.priceByGroup === "object"
+      ? Object.entries(product.priceByGroup)
+        .map(([key, value]) => ({ key, value: toAmount(value) }))
+        .filter((entry) => entry.value > 0)
+      : [];
+    if (!groups.length) {
+      const currentPrice = getCurrentPrice(product);
+      return currentPrice > 0 ? [{ key: "base", value: currentPrice, label: "" }] : [];
+    }
+
+    const entries = groups
+      .sort((a, b) => a.value - b.value)
+      .map((entry) => {
+        let sizes = "";
+        if (entry.key === "special") sizes = formatSizeLabel(product.specialSizes);
+        if (entry.key === "special2") sizes = formatSizeLabel(product.specialSizes2 || product.superSpecialSizes);
+        const label = sizes ? "Talles " + sizes : entry.key === "common" ? "Talles comunes" : entry.key;
+        return { ...entry, label };
+      });
+    return entries;
+  }
+
+  function createCardPriceDisplay(product, options) {
+    const opts = options || {};
+    const entries = getCardPriceEntries(product);
+    const values = Array.from(new Set(entries.map((entry) => entry.value))).sort((a, b) => a - b);
+    const root = document.createElement(opts.rootTag || "div");
+    if (opts.rootClass) appendClasses(root, opts.rootClass);
+    if (!entries.length) {
+      root.className += " romix-price-display";
+      return root;
+    }
+
+    renderInto(root, product, { ...opts, currentPrice: values[0], variant: "card" });
+    const current = root.querySelector(".romix-price-current");
+    if (current && values.length > 1) current.textContent = "Desde " + formatPrice(values[0]);
+    if (values.length > 1) {
+      const note = document.createElement("span");
+      note.className = "romix-price-range-note";
+      note.textContent = entries.map((entry) => `${entry.label}: ${formatPrice(entry.value)}`).join(" · ");
+      root.appendChild(note);
+    }
+    return root;
+  }
+
   function appendClasses(element, value) {
     String(value || "")
       .split(/\s+/)
@@ -171,6 +226,8 @@
     getDiscountPercent,
     getProductSavings,
     formatPrice,
+    getCardPriceEntries,
+    createCardPriceDisplay,
     renderInto,
     createPriceDisplay
   });

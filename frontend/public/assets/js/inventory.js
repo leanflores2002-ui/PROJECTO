@@ -161,7 +161,7 @@
       const signal = typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function'
         ? AbortSignal.timeout(4000)
         : undefined;
-      const res = await fetch((window.romixApiUrl ? window.romixApiUrl('/api/variants') : '/api/variants'), { cache: 'no-store', signal });
+      const res = await fetch('/api/variants', { cache: 'no-store', signal });
       if (!res.ok) throw new Error(`API variants respondió ${res.status}`);
       const list = await res.json();
       if (!Array.isArray(list)) throw new Error('API variants devolvió un formato inválido');

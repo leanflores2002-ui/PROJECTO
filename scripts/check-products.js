@@ -125,11 +125,16 @@ function main() {
       }
       const bytes = fs.statSync(absolute).size;
       if (bytes > 1.5 * 1024 * 1024) {
-        warnings.push(`${label} / ${colorName}: ${image} pesa ${formatMb(bytes)}; conviene convertirla a WebP.`);
+        warnings.push(`${label} / ${colorName}: ${image} pesa ${formatMb(bytes)}; revisar entrega y derivados sin reemplazar el original.`);
       }
     });
   });
 
+  if (process.argv.includes('--json')) {
+    console.log(JSON.stringify({ products: products.length, referencedFiles: referencedFiles.size, warnings, errors }, null, 2));
+    process.exitCode = errors.length ? 1 : 0;
+    return;
+  }
   console.log(`Catalogo: ${products.length} productos.`);
   if (warnings.length) {
     console.log(`Advertencias (${warnings.length}):`);
@@ -147,4 +152,5 @@ function main() {
   console.log(`OK: ${products.length} productos y ${referencedFiles.size} imagenes principales validadas.`);
 }
 
-main();
+if (require.main === module) main();
+module.exports = { productColors, resolveColorImage };

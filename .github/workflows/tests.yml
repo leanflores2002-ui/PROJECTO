@@ -1,0 +1,35 @@
+name: ROMIX tests
+on:
+  pull_request:
+    branches: [develop]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      ROMIX_BROWSER: chromium
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: npm ci
+      - run: python -m pip install -r backend/requirements.txt pytest httpx
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - run: npm run check:ts
+        if: ${{ !cancelled() }}
+      - run: npm run check:products
+        if: ${{ !cancelled() }}
+      - run: npm run test:backend
+        if: ${{ !cancelled() }}
+      - run: npm run test:browser
+        if: ${{ !cancelled() }}

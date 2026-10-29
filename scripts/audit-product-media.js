@@ -73,6 +73,7 @@ function makeAssetRecord(file) {
   let kind = 'other';
   if (lower.startsWith('images/products/')) kind = 'canonical-product';
   else if (lower.startsWith('images/thumbs/')) kind = 'thumbnail-derived';
+  else if (lower.startsWith('images/swatches/')) kind = 'swatch-derived';
   else if (lower.startsWith('images/mobile/')) kind = 'mobile-derived';
   else if (lower.startsWith('images/optimized/')) kind = 'optimized-derived';
   else if (lower.startsWith('share-previews/')) kind = 'social-preview';
@@ -108,7 +109,7 @@ function main() {
   const duplicates = [...duplicateMap.entries()]
     .filter(([, paths]) => paths.length > 1)
     .map(([sha256, paths]) => ({ sha256, paths }));
-  const derivedKinds = new Set(['thumbnail-derived', 'mobile-derived', 'optimized-derived']);
+  const derivedKinds = new Set(['thumbnail-derived', 'swatch-derived', 'mobile-derived', 'optimized-derived']);
   const relevantAssets = assets.filter((asset) => asset.kind === 'canonical-product' || derivedKinds.has(asset.kind));
   const orphanAssets = relevantAssets
     .filter((asset) => !referencedAssets.has(asset.path))

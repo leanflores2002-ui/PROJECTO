@@ -4,6 +4,7 @@
   const COLOR_LIMIT = 8;
   const SIZE_BASE = ["1", "2", "3", "4", "5", "6"];
   const imageUtils = window.romixImageUtils || {};
+  const srcsetUrl = imageUtils.srcsetUrl || (value => String(value || '').replace(/[\t\n\f\r ,]/g, character => encodeURIComponent(character)));
   const pricing = window.romixPricing || {};
   const iconMarkup = (name, options) => typeof window.romixIcon === "function"
     ? window.romixIcon(name, options)
@@ -48,6 +49,8 @@
     { key: "price-asc", label: "Menor a mayor precio" },
     { key: "price-desc", label: "Mayor a menor precio" }
   ];
+
+  const FILTERS_SIDEBAR_STORAGE_KEY = "romix.catalog.filters.sidebarHidden";
 
   const NINO_AUDIENCE_PRODUCT_SLUGS = new Set([
     "campera-frizada-algodon-nino",
@@ -130,12 +133,66 @@
     priceMin: "",
     priceMax: "",
     sizeValues: [],
-    visibleCount: window.innerWidth <= 768 ? 8 : 12
+    visibleCount: window.innerWidth <= 768 ? 8 : 12,
+    desktopFiltersHidden: false
   };
   let filterLastFocus = null;
 
   function isCompactVariantViewport() {
     return window.innerWidth <= 768;
+  }
+
+  function readDesktopFiltersHidden() {
+    try {
+      return window.sessionStorage.getItem(FILTERS_SIDEBAR_STORAGE_KEY) === "1";
+    } catch (_error) {
+      return false;
+    }
+  }
+
+  function persistDesktopFiltersHidden(hidden) {
+    try {
+      if (hidden) window.sessionStorage.setItem(FILTERS_SIDEBAR_STORAGE_KEY, "1");
+      else window.sessionStorage.removeItem(FILTERS_SIDEBAR_STORAGE_KEY);
+    } catch (_error) {
+      // The toggle remains usable when sessionStorage is unavailable or blocked.
+    }
+  }
+
+  function updateDesktopFiltersToggle(hidden) {
+    const toggle = document.getElementById("toggle-filters");
+    if (!toggle) return;
+    const label = toggle.querySelector(".filters-toggle-label");
+    const text = hidden ? "Mostrar filtros" : "Ocultar filtros";
+    toggle.setAttribute("aria-controls", "filters-sidebar");
+    toggle.setAttribute("aria-expanded", String(!hidden));
+    toggle.setAttribute("aria-label", text);
+    if (label) label.textContent = text;
+  }
+
+  function applyDesktopFiltersState(hidden, options) {
+    const settings = options || {};
+    const nextHidden = Boolean(hidden);
+    const sidebar = document.getElementById("filters-sidebar");
+    const toggle = document.getElementById("toggle-filters");
+    const focusInsideSidebar = sidebar && sidebar.contains(document.activeElement);
+
+    state.desktopFiltersHidden = nextHidden;
+    if (window.innerWidth > 960) {
+      document.body.classList.toggle("filters-sidebar-collapsed", nextHidden);
+      if (sidebar) {
+        sidebar.setAttribute("aria-hidden", String(nextHidden));
+        sidebar.inert = nextHidden;
+      }
+    } else {
+      document.body.classList.remove("filters-sidebar-collapsed");
+    }
+    updateDesktopFiltersToggle(nextHidden);
+    if (settings.persist !== false) persistDesktopFiltersHidden(nextHidden);
+
+    if (nextHidden && focusInsideSidebar && toggle) {
+      requestAnimationFrame(() => toggle.focus());
+    }
   }
 
   function getInitialVisibleProducts() {
@@ -1130,6 +1187,7 @@
   }
 
   function detailUrl(product) {
+    if (window.romixProductUrl) return window.romixProductUrl.detailHref(product);
     const id = encodeURIComponent(product.id || product.slug);
     const slug = encodeURIComponent(product.slug || slugify(product.name));
     const name = encodeURIComponent(product.name || "");
@@ -1468,7 +1526,7 @@
 
     visibleProducts.forEach((product, index) => {
       const card = document.createElement("article");
-      card.className = "product-card";
+      card.className = "product-card romix-product-card";
       const productDetailUrl = detailUrl(product);
       card.setAttribute("role", "link");
       card.setAttribute("tabindex", "0");
@@ -1523,12 +1581,12 @@
           return;
         }
         if (current) {
-          current.srcset = src;
+          current.srcset = srcsetUrl(src);
           return;
         }
         const source = document.createElement("source");
         source.type = type;
-        source.srcset = src;
+        source.srcset = srcsetUrl(src);
         if (type === "image/avif") {
           picture.insertBefore(source, picture.firstChild);
           return;
@@ -1635,6 +1693,7 @@
             const active = Number(control.dataset.variantIndex) === index;
             control.classList.toggle("is-active", active);
             control.setAttribute("aria-pressed", active ? "true" : "false");
+            control.setAttribute("aria-current", active ? "true" : "false");
           });
           setMainImage(color, color.name).catch(function (error) {
             console.warn("No se pudo cargar la imagen de la variante", product.id, color.name, error);
@@ -1651,10 +1710,11 @@
           button.className = "product-variant-thumb" + (index === 0 ? " is-active" : "");
           button.setAttribute("aria-label", "Ver variante " + color.name);
           button.setAttribute("aria-pressed", index === 0 ? "true" : "false");
+            button.setAttribute("aria-current", index === 0 ? "true" : "false");
           button.title = "Ver variante " + color.name;
           button.dataset.variantIndex = String(index);
           const preview = document.createElement("img");
-          preview.src = String(color.swatch || color.thumb || color.thumbnail || color.image || "").trim();
+            preview.src = String(color.thumb || color.thumbnail || color.image || "").trim();
           preview.alt = "Variante " + color.name;
           preview.loading = "lazy";
           preview.decoding = "async";
@@ -1682,20 +1742,22 @@
         body.appendChild(thumbs);
       }
 
-      const name = document.createElement("p");
-      name.className = "product-name";
-      name.textContent = product.name;
+      if (!body.querySelector(".product-variant-thumbs")) {
+        const emptyThumbs = document.createElement("div");
+        emptyThumbs.className = "product-variant-thumbs";
+        emptyThumbs.setAttribute("aria-hidden", "true");
+        body.appendChild(emptyThumbs);
+      }
 
-      const meta = document.createElement("p");
-      meta.className = "product-meta";
-      const pageConfig = PAGE_CONFIG[state.scope] || PAGE_CONFIG.catalogo;
-      const sectionLabelText = pageConfig.label || product.sectionLabel;
-      meta.textContent = sectionLabelText + " | " + (product.typeLabel || "Indumentaria");
+      const name = document.createElement("a");
+      name.className = "product-name";
+      name.href = productDetailUrl;
+      name.textContent = product.name;
 
       const priceRow = document.createElement("div");
       priceRow.className = "price-row";
-      const priceDisplay = typeof pricing.createPriceDisplay === "function"
-        ? pricing.createPriceDisplay(product, {
+      const priceDisplay = typeof pricing.createCardPriceDisplay === "function"
+        ? pricing.createCardPriceDisplay(product, {
             currentClass: "product-price",
             currentTag: "span"
           })
@@ -1707,22 +1769,24 @@
         price.textContent = formatPrice(product.price);
       }
 
-      const stock = document.createElement("p");
-      const stockInfo = STOCK_META[product.stockStatus] || STOCK_META.unknown;
-      stock.className = "stock-note " + stockInfo.css;
-      stock.textContent = stockInfo.label;
-
       priceRow.appendChild(price);
-      priceRow.appendChild(stock);
 
       body.appendChild(name);
-      body.appendChild(meta);
       body.appendChild(priceRow);
+
+      const stockInfo = STOCK_META[product.stockStatus] || STOCK_META.unknown;
+      if (stockInfo.label !== "Consultar disponibilidad") {
+        const stock = document.createElement("p");
+        stock.className = "stock-note " + stockInfo.css;
+        stock.setAttribute("aria-hidden", "true");
+        stock.textContent = stockInfo.label;
+        body.appendChild(stock);
+      }
 
       const detailsLink = document.createElement("a");
       detailsLink.className = "catalog-cta romix-btn romix-btn--outline romix-btn--sm";
       detailsLink.href = productDetailUrl;
-      detailsLink.innerHTML = iconMarkup("Eye", { size: "sm" }) + "<span>Detalles</span>";
+      detailsLink.textContent = "Ver producto";
       body.appendChild(detailsLink);
 
       card.appendChild(thumb);
@@ -2242,7 +2306,9 @@
       trigger.setAttribute("aria-expanded", "false");
     });
     if (sidebar) {
-      sidebar.setAttribute("aria-hidden", "true");
+      const mobile = window.innerWidth <= 960;
+      sidebar.setAttribute("aria-hidden", String(mobile));
+      sidebar.inert = mobile;
       sidebar.removeAttribute("aria-modal");
       sidebar.removeAttribute("role");
     }
@@ -2261,6 +2327,7 @@
       trigger.setAttribute("aria-expanded", "true");
     });
     if (sidebar) {
+      sidebar.inert = false;
       sidebar.setAttribute("role", "dialog");
       sidebar.setAttribute("aria-modal", "true");
       sidebar.setAttribute("aria-hidden", "false");
@@ -2358,6 +2425,14 @@
       openBtn.addEventListener("click", openSidebar);
     }
 
+    const desktopToggle = document.getElementById("toggle-filters");
+    if (desktopToggle) {
+      desktopToggle.addEventListener("click", function () {
+        applyDesktopFiltersState(!state.desktopFiltersHidden);
+      });
+      updateDesktopFiltersToggle(state.desktopFiltersHidden);
+    }
+
     const mobileTrigger = document.getElementById("catalog-mobile-filter-trigger");
     if (mobileTrigger) {
       mobileTrigger.addEventListener("click", openSidebar);
@@ -2398,7 +2473,8 @@
     });
 
     window.addEventListener("resize", function () {
-      if (window.innerWidth > 960) closeSidebar();
+      if (window.innerWidth > 960 || !document.body.classList.contains("filters-open")) closeSidebar();
+      applyDesktopFiltersState(state.desktopFiltersHidden, { persist: false });
       const nextCompactVariantViewport = isCompactVariantViewport();
       if (state.compactVariantViewport !== nextCompactVariantViewport) {
         state.compactVariantViewport = nextCompactVariantViewport;
@@ -2411,9 +2487,12 @@
     state.catalogView = resolveCatalogView();
     state.scope = state.catalogView.scope;
     state.sortBy = readInitialSortKey();
+    state.desktopFiltersHidden = readDesktopFiltersHidden();
 
     initPageHeader();
     wireUiEvents();
+    closeSidebar();
+    applyDesktopFiltersState(state.desktopFiltersHidden, { persist: false });
 
     try {
       const raw = await loadProducts();
@@ -2437,7 +2516,7 @@
     applyFilters();
     } catch (error) {
       const grid = document.getElementById("product-grid");
-      if (document.body.dataset.categoryPage && grid?.querySelector('.product-card')) {
+      if (grid?.querySelector('.product-card')) {
         const summary = document.getElementById('products-summary');
         if (summary) summary.textContent = 'Los filtros no están disponibles por ahora. Podés abrir los productos del listado.';
         console.warn('[romix-catalog] Se conserva el listado generado.', error);

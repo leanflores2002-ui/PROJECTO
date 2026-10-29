@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <script src="/assets/js/romix-api-config.js"></script>
+  <script src="/assets/js/product-url.js?v=1"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- ROMIX:SHELL:CRITICAL:START -->
-<link rel="stylesheet" href="assets/css/romix-shell-base.css?v=18" data-romix-shell-critical />
+<link rel="stylesheet" href="assets/css/romix-shell-base.css?v=23" data-romix-shell-critical />
 <!-- ROMIX:SHELL:CRITICAL:END -->
   <meta name="description" content="Centro de ayuda de ROMIX con gu&iacute;a de talles, cambios, medios de pago y contacto.">
   <meta name="keywords" content="ROMIX, centro de ayuda, gu&iacute;a de talles, cambios, medios de pago">
   <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"ClothingStore","name":"ROMIX","url":"https://romix-ropas.vercel.app/","telephone":"+54 9 11 5427-2065","address":{"@type":"PostalAddress","streetAddress":"Concordia 514 local B","addressLocality":"CABA","addressCountry":"AR"},"openingHours":["Mo-Fr 07:00-16:30","Sa 07:00-12:30"]}
+    {"@context":"https://schema.org","@type":"ClothingStore","name":"ROMIX","@id":"https://romix-ropas.vercel.app/#negocio","sameAs":["https://www.instagram.com/romixdamasalbertina/","https://www.facebook.com/p/ROMIX-concordia-514-100040099371330/"],"url":"https://romix-ropas.vercel.app/","telephone":"+54 9 11 5427-2065","address":{"@type":"PostalAddress","streetAddress":"Concordia 514 local B","addressLocality":"CABA","addressCountry":"AR"},"openingHours":["Mo-Fr 07:00-16:30","Sa 07:00-12:30"]}
   </script>
   <title>Romix - Ayuda</title>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -586,7 +586,7 @@
     #contact .local-visit-card h3 {
       margin:0;
       color:var(--romix-ink);
-      font-family:"Outfit", "Manrope", sans-serif;
+      font-family:var(--romix-font-heading);
       font-size:clamp(1.25rem, 2vw, 1.5rem);
       line-height:1.15;
     }
@@ -654,7 +654,7 @@
     #contact .contact-social h4 {
       margin:0;
       color:var(--romix-ink);
-      font-family:"Outfit", "Manrope", sans-serif;
+      font-family:var(--romix-font-heading);
       font-size:1rem;
     }
     #contact .contact-social p { margin:5px 0 0; font-size:.88rem; }
@@ -968,8 +968,8 @@
       }
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
-  <link rel="stylesheet" href="assets/css/romix-design-system.css?v=20" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="assets/css/romix-design-system.css?v=23" />
   <link rel="stylesheet" href="assets/css/responsive.css?v=19">
   <link rel="icon" href="images/branding/romix-logo-icon.webp" type="image/webp" sizes="180x180" />
   <link rel="apple-touch-icon" href="images/branding/romix-logo-icon.webp" sizes="180x180" />
@@ -984,12 +984,13 @@
   <meta name="twitter:title" content="Centro de ayuda y contacto | ROMIX">
   <meta name="twitter:description" content="Gu?a de talles, cambios, medios de pago, horarios y contacto de ROMIX en Concordia 514 local B, CABA.">
   <meta name="twitter:image" content="https://romix-ropas.vercel.app/images/branding/romix-logo-social.webp">
-  <link rel="stylesheet" href="assets/css/romix-minimal-theme.css?v=19" />
-  <link rel="stylesheet" href="assets/css/romix-pricing.css?v=19" />
-  <link rel="stylesheet" href="assets/css/romix-help.css?v=20" />
-  <link rel="stylesheet" href="assets/css/romix-header.css?v=20" />
-  <link rel="stylesheet" href="assets/css/romix-footer.css?v=19" />
-  <script defer src="/assets/js/romix-analytics.js?v=1"></script>
+  <link rel="stylesheet" href="assets/css/romix-minimal-theme.css?v=23" />
+  <link rel="stylesheet" href="assets/css/romix-pricing.css?v=23" />
+  <link rel="stylesheet" href="assets/css/romix-help.css?v=23" />
+  <link rel="stylesheet" href="assets/css/romix-header.css?v=25" />
+  <link rel="stylesheet" href="/assets/css/cookie-consent.css?v=2" />
+  <link rel="stylesheet" href="assets/css/romix-footer.css?v=23" />
+  <script defer src="/assets/js/romix-analytics.js?v=3"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Saltar al contenido</a>
@@ -997,9 +998,6 @@
 <div class="romix-announcement" role="note">ENV&Iacute;OS Y RETIROS COORDINADOS &middot; CONSULT&Aacute; DISPONIBILIDAD</div>
 <header class="site-header romix-shared-header" data-romix-shell="header-v1">
   <div class="container header-row">
-    <div class="header-actions-left" aria-label="Acciones principales">
-      <button class="icon-btn romix-icon-btn mobile-menu-btn" id="toggle-mobile-nav" type="button" aria-label="Abrir men&uacute;" aria-controls="header-mobile-nav" aria-expanded="false"><span data-romix-icon="Menu" data-romix-icon-size="md"></span></button>
-    </div>
     <a class="brand site-logo-link" href="index.html" aria-label="ROMIX inicio"><picture><source srcset="images/optimized/branding/romix-logo-360.webp 360w, images/optimized/branding/romix-logo-720.webp 720w" sizes="(max-width: 900px) 156px, 184px" type="image/webp" /><img class="site-logo site-logo--header" src="images/optimized/branding/romix-logo-360.webp" alt="ROMIX" width="360" height="120" decoding="async" /></picture></a>
     <nav class="mega-nav" id="header-mobile-nav" aria-label="Principal">
       <div class="mobile-drawer-header">
@@ -1030,6 +1028,9 @@
         <span class="icon-badge" id="cart-count" aria-hidden="true">0</span>
       </a>
       <button class="icon-btn romix-icon-btn header-utility-menu" id="toggle-utility-menu" type="button" aria-label="Abrir menú de utilidades" aria-controls="header-utility-panel" aria-expanded="false"><span data-romix-icon="Menu" data-romix-icon-size="md"></span></button>
+    </div>
+    <div class="header-actions-left" aria-label="Acciones principales">
+      <button class="icon-btn romix-icon-btn mobile-menu-btn" id="toggle-mobile-nav" type="button" aria-label="Abrir men&uacute;" aria-controls="header-mobile-nav" aria-expanded="false"><span data-romix-icon="Menu" data-romix-icon-size="md"></span></button>
     </div>
   </div>
   <div class="header-utility-panel" id="header-utility-panel" role="dialog" aria-label="Men&uacute; de utilidades" aria-hidden="true" hidden>
@@ -1062,7 +1063,7 @@
     </div>
   </div>
 </header>
-<script src="assets/js/romix-icons.js?v=18"></script>
+<script src="assets/js/romix-icons.js?v=19"></script>
 <!-- ROMIX:SHELL:HEADER:END -->
 
   <main class="container help-page" id="main">
@@ -1567,10 +1568,11 @@
       </div>
       <nav class="footer-column" aria-label="Comprar"><h2>Comprar</h2><ul><li><a href="/mujer/">Mujer</a></li><li><a href="/hombre/">Hombre</a></li><li><a href="/ninos/">Ni&ntilde;os</a></li><li><a href="catalogo.html?view=novedades">Novedades</a></li><li><a href="catalogo.html?q=oferta">Ofertas</a></li></ul></nav>
       <nav class="footer-column" aria-label="Categor&iacute;a"><h2>Categor&iacute;a</h2><ul><li><a href="catalogo.html?categories=calzas">Calzas</a></li><li><a href="catalogo.html?categories=remeras">Remeras</a></li><li><a href="catalogo.html?categories=pantalones">Pantalones</a></li><li><a href="catalogo.html?categories=camperas">Camperas</a></li><li><a href="catalogo.html?categories=tops">Tops</a></li><li><a href="catalogo.html?categories=buzos">Buzos</a></li></ul></nav>
-      <nav class="footer-column" aria-label="Ayuda"><h2>Ayuda</h2><ul><li><a href="ayuda.html#size-guide">Gu&iacute;a de talles</a></li><li><a href="ayuda.html#returns">Cambios</a></li><li><a href="ayuda.html#payments">Formas de pago</a></li><li><a href="ayuda.html#contact">Contacto</a></li></ul></nav>
+      <nav class="footer-column" aria-label="Ayuda"><h2>Ayuda</h2><ul><li><a href="ayuda.html#size-guide">Gu&iacute;a de talles</a></li><li><a href="ayuda.html#returns">Cambios</a></li><li><a href="ayuda.html#payments">Formas de pago</a></li><li><a href="ayuda.html#contact">Contacto</a></li><li><a href="/privacidad.html">Privacidad</a></li><li><a href="/terminos.html">Términos y condiciones</a></li><li><a href="https://wa.me/5491154272065?text=Hola%20ROMIX.%20Quiero%20ejercer%20el%20derecho%20de%20arrepentimiento%20respecto%20de%20una%20compra%20a%20distancia.%20Datos%20para%20identificar%20mi%20pedido%3A%20" target="_blank" rel="noopener noreferrer">Botón de arrepentimiento</a></li></ul></nav>
     </div>
     <div class="footer-bottom">
       <p>&copy; 2026 ROMIX. Indumentaria deportiva, invernal y urbana.</p>
+      <button type="button" class="cookie-settings" id="cookie-settings" hidden>Preferencias de cookies</button>
       <div class="footer-socials" aria-label="Redes sociales">
         <a href="https://www.instagram.com/romixdamasalbertina/" target="_blank" rel="noopener" aria-label="Instagram"><span data-romix-icon="Instagram" data-romix-icon-size="sm"></span></a>
         <a href="https://www.facebook.com/p/ROMIX-concordia-514-100040099371330/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.8 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5H17V3.9c-.3 0-1.2-.1-2.3-.1-2.3 0-3.8 1.4-3.8 4V10H8.3v3h2.6v8h2.9Z"/></svg></a>
@@ -1580,9 +1582,21 @@
     </div>
   </div>
 </footer>
+<section class="cookie-consent" id="cookie-consent" aria-labelledby="cookie-consent-title" hidden>
+  <div class="cookie-consent__copy">
+    <h2 id="cookie-consent-title">Cookies de analítica</h2>
+    <p>Google Analytics usa cookies para medir visitas, solo si aceptás. Cambiá tu elección desde el pie. <a class="cookie-privacy-link" href="/privacidad.html">Privacidad</a>.</p>
+  </div>
+  <p id="cookie-consent-status" role="status" aria-live="polite"></p>
+  <div class="cookie-consent__actions">
+    <button type="button" id="cookie-reject" aria-label="Rechazar analítica">Rechazar</button>
+    <button type="button" id="cookie-accept" aria-label="Aceptar analítica">Aceptar</button>
+  </div>
+</section>
+<script defer src="/assets/js/cookie-consent.js?v=1"></script>
 <!-- ROMIX:SHELL:FOOTER:END -->
 
-  <script src="assets/js/cart.js?v=19"></script>
+  <script src="assets/js/cart.js?v=20"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (window.romixCart) window.romixCart.updateBadge();

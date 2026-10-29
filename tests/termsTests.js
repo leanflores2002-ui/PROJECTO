@@ -1,0 +1,38 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const {JSDOM}=require('jsdom');
+const {renderPage,generatedPages}=require('../scripts/sync-storefront-shells');
+const {sitemap,previewHtml}=require('../scripts/generate-seo');
+const origin=require('../config/site.json').origin;
+const root=path.join(__dirname,'../frontend/public');
+for(const file of generatedPages){const dom=new JSDOM(fs.readFileSync(path.join(root,file),'utf8'));assert(dom.window.document.querySelector('footer a[href="/terminos.html"]'),file);dom.window.close();}
+const html=renderPage('terminos.html');
+assert.equal(html,fs.readFileSync(path.join(root,'terminos.html'),'utf8'),'Terms must regenerate from sources');
+const dom=new JSDOM(html);const d=dom.window.document;const main=d.querySelector('main');
+assert.equal(main.querySelectorAll('h1').length,1);
+assert.equal(main.querySelector('h1').textContent,'Términos y condiciones');
+assert(!main.querySelector('input[type=checkbox]'),'Do not require a new blanket consent');
+assert(!d.querySelector('.privacy-index'),'Keep the institutional presentation compact');
+assert.equal(d.querySelector('link[rel=canonical]').href,origin+'/terminos.html');
+assert(main.textContent.includes('27-93793888-3'));
+assert(main.textContent.includes('sin compra mínima'));
+assert(main.querySelector('#cambios').textContent.includes('15 días'));
+assert(main.querySelector('#cambios').textContent.includes('no limitan'));
+assert(main.querySelector('#arrepentimiento').textContent.includes('10 días corridos'));
+assert(main.querySelector('#arrepentimiento').textContent.includes('24 horas'));
+assert(!d.querySelector('.romix-announcement a'));
+const withdrawal=d.querySelector('footer a[href*="text="]');
+assert.equal(withdrawal.textContent,'Botón de arrepentimiento');
+const destination=new URL(withdrawal.href);
+assert.equal(destination.hostname,'wa.me');
+assert.equal(destination.pathname,'/5491154272065');
+assert(destination.searchParams.get('text').includes('arrepentimiento'));
+assert(main.querySelector('#alcance').textContent.includes('destino de los bienes'));
+const help=new JSDOM(renderPage('ayuda.html'));const returns=help.window.document.querySelector('#returns').textContent;assert(returns.includes('15 días'));
+for(const link of main.querySelectorAll('a[href^="/"]')){const u=new URL(link.href,origin);const file=u.pathname==='/'?'index.html':u.pathname.slice(1);assert(fs.existsSync(path.join(root,file)),file);if(u.hash){const target=new JSDOM(fs.readFileSync(path.join(root,file),'utf8'));assert(target.window.document.getElementById(u.hash.slice(1)),u.href);target.window.close();}}
+assert(sitemap([],origin).includes(origin+'/terminos.html'));
+assert(new JSDOM(previewHtml(html)).window.document.querySelector('meta[name=robots]').content.includes('noindex'));
+assert(!d.querySelector('meta[name=robots]'),'Production must not inherit Preview noindex');
+assert.equal(d.querySelectorAll('#cookie-consent button').length,2);
+help.window.close();dom.window.close();console.log('termsTests: passed (sources, legal identity, commercial changes distinct from statutory rights, links, canonical, sitemap, Preview)');

@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <script src="/assets/js/romix-api-config.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- ROMIX:SHELL:CRITICAL:START -->
-<link rel="stylesheet" href="assets/css/romix-shell-base.css?v=18" data-romix-shell-critical />
+<link rel="stylesheet" href="assets/css/romix-shell-base.css?v=23" data-romix-shell-critical />
 <!-- ROMIX:SHELL:CRITICAL:END -->
   <meta name="description" content="Centro de ayuda de ROMIX con gu&iacute;a de talles, cambios, medios de pago y contacto.">
   <meta name="keywords" content="ROMIX, centro de ayuda, gu&iacute;a de talles, cambios, medios de pago">
   <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"ClothingStore","name":"ROMIX","url":"%%ROMIX_SITE_ORIGIN%%/","telephone":"+54 9 11 5427-2065","address":{"@type":"PostalAddress","streetAddress":"Concordia 514 local B","addressLocality":"CABA","addressCountry":"AR"},"openingHours":["Mo-Fr 07:00-16:30","Sa 07:00-12:30"]}
+    {"@context":"https://schema.org","@type":"ClothingStore","name":"ROMIX","@id":"%%ROMIX_SITE_ORIGIN%%/#negocio","sameAs":["https://www.instagram.com/romixdamasalbertina/","https://www.facebook.com/p/ROMIX-concordia-514-100040099371330/"],"url":"%%ROMIX_SITE_ORIGIN%%/","telephone":"+54 9 11 5427-2065","address":{"@type":"PostalAddress","streetAddress":"Concordia 514 local B","addressLocality":"CABA","addressCountry":"AR"},"openingHours":["Mo-Fr 07:00-16:30","Sa 07:00-12:30"]}
   </script>
   <title>Romix - Ayuda</title>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -586,7 +585,7 @@
     #contact .local-visit-card h3 {
       margin:0;
       color:var(--romix-ink);
-      font-family:"Outfit", "Manrope", sans-serif;
+      font-family:var(--romix-font-heading);
       font-size:clamp(1.25rem, 2vw, 1.5rem);
       line-height:1.15;
     }
@@ -654,7 +653,7 @@
     #contact .contact-social h4 {
       margin:0;
       color:var(--romix-ink);
-      font-family:"Outfit", "Manrope", sans-serif;
+      font-family:var(--romix-font-heading);
       font-size:1rem;
     }
     #contact .contact-social p { margin:5px 0 0; font-size:.88rem; }
@@ -968,8 +967,8 @@
       }
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
-  <link rel="stylesheet" href="assets/css/romix-design-system.css?v=20" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="assets/css/romix-design-system.css?v=23" />
   <link rel="stylesheet" href="assets/css/responsive.css?v=19">
   <link rel="icon" href="images/branding/romix-logo-icon.webp" type="image/webp" sizes="180x180" />
   <link rel="apple-touch-icon" href="images/branding/romix-logo-icon.webp" sizes="180x180" />
@@ -984,12 +983,13 @@
   <meta name="twitter:title" content="Centro de ayuda y contacto | ROMIX">
   <meta name="twitter:description" content="Gu?a de talles, cambios, medios de pago, horarios y contacto de ROMIX en Concordia 514 local B, CABA.">
   <meta name="twitter:image" content="%%ROMIX_SITE_ORIGIN%%/images/branding/romix-logo-social.webp">
-  <link rel="stylesheet" href="assets/css/romix-minimal-theme.css?v=19" />
-  <link rel="stylesheet" href="assets/css/romix-pricing.css?v=19" />
-  <link rel="stylesheet" href="assets/css/romix-help.css?v=20" />
-  <link rel="stylesheet" href="assets/css/romix-header.css?v=20" />
-  <link rel="stylesheet" href="assets/css/romix-footer.css?v=19" />
-  <script defer src="/assets/js/romix-analytics.js?v=1"></script>
+  <link rel="stylesheet" href="assets/css/romix-minimal-theme.css?v=23" />
+  <link rel="stylesheet" href="assets/css/romix-pricing.css?v=23" />
+  <link rel="stylesheet" href="assets/css/romix-help.css?v=23" />
+  <link rel="stylesheet" href="assets/css/romix-header.css?v=25" />
+  <link rel="stylesheet" href="/assets/css/cookie-consent.css?v=2" />
+  <link rel="stylesheet" href="assets/css/romix-footer.css?v=23" />
+  <script defer src="/assets/js/romix-analytics.js?v=3"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Saltar al contenido</a>
@@ -1481,7 +1481,7 @@
   </main>
 <!-- ROMIX:INCLUDE:FOOTER -->
 
-  <script src="assets/js/cart.js?v=19"></script>
+  <script src="assets/js/cart.js?v=20"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (window.romixCart) window.romixCart.updateBadge();

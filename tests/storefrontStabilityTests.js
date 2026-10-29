@@ -57,7 +57,8 @@ function checkStaticShells() {
     assert(doc.querySelectorAll('header[data-romix-shell="header-v1"]').length === 1, `${page}: one initial header required`);
     assert(doc.querySelectorAll('footer[data-romix-shell="footer-v1"]').length === 1, `${page}: one initial footer required`);
     const announcement = doc.querySelector('.romix-announcement');
-    assert(announcement.textContent.replace(/\s+/g, ' ').trim() === 'ENV\u00cdOS Y RETIROS COORDINADOS \u00b7 CONSULT\u00c1 DISPONIBILIDAD', `${page}: announcement copy drifted`);
+    assert(announcement.textContent.replace(/\s+/g, ' ').trim() === 'ENVÍOS Y RETIROS COORDINADOS · CONSULTÁ DISPONIBILIDAD', `${page}: announcement copy drifted`);
+    assert(!announcement.querySelector('a'), `${page}: withdrawal access must stay outside the announcement`);
     assert(announcement.querySelector('strong') == null, `${page}: announcement must not retain the old highlighted word`);
     const headerMarkup = doc.querySelector('header[data-romix-shell="header-v1"]').outerHTML;
     if (canonicalHeader == null) canonicalHeader = headerMarkup;
@@ -80,7 +81,7 @@ function checkStaticShells() {
     assert((doc.documentElement.getAttribute('lang') || '').toLowerCase().startsWith('es'), `${page}: Spanish lang is required`);
     const baseStyles = doc.querySelectorAll('link[data-romix-shell-critical]');
     assert(baseStyles.length === 1, `${page}: one shared base stylesheet required`);
-    assert(baseStyles[0].getAttribute('href') === 'assets/css/romix-shell-base.css?v=18', `${page}: shared base stylesheet path drifted`);
+    assert(baseStyles[0].getAttribute('href') === 'assets/css/romix-shell-base.css?v=23', `${page}: shared base stylesheet path drifted`);
     assert(!doc.querySelector('style[data-romix-shell-critical]'), `${page}: shared base styles must not be duplicated inline`);
     assert(doc.querySelector('link[rel="stylesheet"][href^="assets/css/"]') === baseStyles[0], `${page}: base styles must precede other local styles`);
     assert(fs.existsSync(path.join(publicDir, 'assets/css/romix-shell-base.css')), `${page}: base stylesheet missing`);
@@ -143,7 +144,7 @@ async function checkProductsStore() {
     }
   });
   const list = await context.window.romixProductsStore.load({ force: true });
-  assert(calls.length === 2 && calls[0] === '/api/products' && calls[1].includes('assets/data/products.json'), 'Admin-managed storefront must prioritize API and recover with JSON when unavailable');
+  assert(calls.length === 1 && calls[0].includes('assets/data/products.json'), 'Static storefront must load JSON without probing an absent API');
 
   assert(list[0].sizes[0].status === 'unknown', 'Primitive sizes must not invent availability');
   assert(context.window.romixProductsStore.getStatus().source === 'json', 'Fallback source must be observable');
@@ -156,13 +157,13 @@ async function checkProductsStore() {
   assert(emptyContext.window.romixProductsStore.getStatus().source === 'api', 'Empty API response must remain authoritative');
 
   const cachedPayload = JSON.stringify({
-    version: 8,
+    version: 7,
     timestamp: Date.now(),
     source: 'json',
     list: [{ id: 'cached', name: 'Producto cacheado', sizes: ['M'] }]
   });
   const offlineContext = loadScript('frontend/public/assets/js/products-store.js', {
-    sessionStorage: storage({ romixProductsCacheV8: cachedPayload }),
+    sessionStorage: storage({ romixProductsCacheV7: cachedPayload }),
     fetch: async () => { throw new Error('offline'); }
   });
   const cached = await offlineContext.window.romixProductsStore.load({ force: true });

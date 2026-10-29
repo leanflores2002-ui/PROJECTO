@@ -442,7 +442,7 @@
     "season": "media-estacion",
     "featured": true,
     "featuredBadge": "Nuevo",
-    "image": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_negro.webp",
+    "image": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_negro_delivery.webp",
     "price": 14000,
     "priceByGroup": {
       "common": 14000
@@ -451,27 +451,27 @@
       {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_negro.webp"
+        "image": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_negro_delivery.webp"
       },
       {
         "name": "Gris",
         "hex": "#A9A9A9",
-        "image": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_gris.webp"
+        "image": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_gris_delivery.webp"
       },
       {
         "name": "Azul",
         "hex": "#1E4ED8",
-        "image": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_azul.webp"
+        "image": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_azul_delivery.webp"
       },
       {
         "name": "Gris oscuro",
         "hex": "#4B4B4B",
-        "image": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_gris_oscuro.webp"
+        "image": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_gris_oscuro_delivery.webp"
       },
       {
         "name": "Beige",
         "hex": "#F5F5DC",
-        "image": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_beige.webp"
+        "image": "images/products/pantalon_baggy_jogging_algodon_rustico_dama_beige_delivery.webp"
       }
     ],
     "sizes": [
@@ -590,7 +590,7 @@
     "season": "media-estacion",
     "featured": true,
     "featuredBadge": "Por agotarse",
-    "image": "images/products/palazo_algodon_morley_liviano_negro.webp",
+    "image": "images/products/palazo_algodon_morley_liviano_negro_delivery.webp",
     "price": 11000,
     "priceByGroup": {
       "common": 11000,
@@ -607,19 +607,18 @@
       {
         "name": "Negro",
         "hex": "#000",
-        "image": "images/products/palazo_algodon_morley_liviano_negro.webp"
+        "image": "images/products/palazo_algodon_morley_liviano_negro_delivery.webp"
       },
       {
         "name": "Azul",
         "hex": "#6b8cff",
-        "image": "images/products/palazo_algodon_morley_liviano_azul.webp"
+        "image": "images/products/palazo_algodon_morley_liviano_azul_delivery.webp"
       },
       {
         "name": "Gris",
         "hex": "#a9a9a9",
-        "image": "images/products/palazo_algodon_morley_liviano_gris.webp"
+        "image": "images/products/palazo_algodon_morley_liviano_gris_delivery.webp"
       }
-
     ],
     "sizes": [
       "2",
@@ -2034,7 +2033,7 @@
     "season": "verano",
     "featured": true,
     "featuredBadge": "Nuevo",
-    "image": "images/products/palazo_wide-leg_cey_dama_liso_negro.webp",
+    "image": "images/products/palazo_wide-leg_cey_dama_liso_negro_delivery.webp",
     "price": 10500,
     "priceByGroup": {
       "common": 10500
@@ -2043,27 +2042,27 @@
       {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/palazo_wide-leg_cey_dama_liso_negro.webp"
+        "image": "images/products/palazo_wide-leg_cey_dama_liso_negro_delivery.webp"
       },
       {
         "name": "Azul",
         "hex": "#1E4ED8",
-        "image": "images/products/palazo_wide-leg_cey_dama_liso_azul.webp"
+        "image": "images/products/palazo_wide-leg_cey_dama_liso_azul_delivery.webp"
       },
       {
         "name": "Camel",
         "hex": "#D2B48C",
-        "image": "images/products/palazo_wide-leg_cey_dama_liso_camel.webp"
+        "image": "images/products/palazo_wide-leg_cey_dama_liso_camel_delivery.webp"
       },
       {
         "name": "Verde",
         "hex": "#2E7D32",
-        "image": "images/products/palazo_wide-leg_cey_dama_liso_verde.webp"
+        "image": "images/products/palazo_wide-leg_cey_dama_liso_verde_delivery.webp"
       },
       {
         "name": "Gris",
         "hex": "#8BC34A",
-        "image": "images/products/palazo_wide-leg_cey_dama_liso_gris.webp"
+        "image": "images/products/palazo_wide-leg_cey_dama_liso_gris_delivery.webp"
       }
     ],
     "sizes": [
@@ -2250,7 +2249,7 @@
     "type": "Palazos",
     "name": "Palazo CEY",
     "season": "verano",
-    "image": "images/products/palazo_cey_negro.webp",
+    "image": "images/products/palazo_cey_negro_delivery.webp",
     "price": 8500,
     "priceByGroup": {
       "common": 8500,
@@ -2265,37 +2264,37 @@
       {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/palazo_cey_negro.webp"
+        "image": "images/products/palazo_cey_negro_delivery.webp"
       },
       {
         "name": "Azul",
         "hex": "#1E4ED8",
-        "image": "images/products/palazo_cey_azul.webp"
+        "image": "images/products/palazo_cey_azul_delivery.webp"
       },
       {
         "name": "Verde",
         "hex": "#2E7D32",
-        "image": "images/products/palazo_cey_verde.webp"
+        "image": "images/products/palazo_cey_verde_delivery.webp"
       },
       {
         "name": "Camel",
         "hex": "#C19A6B",
-        "image": "images/products/palazo_cey_camel.webp"
+        "image": "images/products/palazo_cey_camel_delivery.webp"
       },
       {
         "name": "Beige",
         "hex": "#E5D3B3",
-        "image": "images/products/palazo_cey_beige.webp"
+        "image": "images/products/palazo_cey_beige_delivery.webp"
       },
       {
         "name": "Gris oscuro",
         "hex": "#4B4B4B",
-        "image": "images/products/palazo_cey_gris_oscuro.webp"
+        "image": "images/products/palazo_cey_gris_oscuro_delivery.webp"
       },
       {
         "name": "Lila",
         "hex": "#C8A2C8",
-        "image": "images/products/palazo_cey_lila.webp"
+        "image": "images/products/palazo_cey_lila_delivery.webp"
       }
     ],
     "sizes": [
@@ -2407,7 +2406,7 @@
     "type": "capri",
     "name": "Capri jaspeado saplex",
     "season": "verano",
-    "image": "images/products/capri_jaspeado_saplex_gris_melange.webp",
+    "image": "images/products/capri_jaspeado_saplex_gris_melange_delivery.webp",
     "price": 9500,
     "priceByGroup": {
       "common": 9500,
@@ -2422,27 +2421,27 @@
       {
         "name": "Gris melange",
         "hex": "#A9A9A9",
-        "image": "images/products/capri_jaspeado_saplex_gris_melange.webp"
+        "image": "images/products/capri_jaspeado_saplex_gris_melange_delivery.webp"
       },
       {
         "name": "Azul",
         "hex": "#1E4ED8",
-        "image": "images/products/capri_jaspeado_saplex_azul.webp"
+        "image": "images/products/capri_jaspeado_saplex_azul_delivery.webp"
       },
       {
         "name": "Rosa",
         "hex": "#F2A7C6",
-        "image": "images/products/capri_jaspeado_saplex_rosa.webp"
+        "image": "images/products/capri_jaspeado_saplex_rosa_delivery.webp"
       },
       {
         "name": "Gris oscuro",
         "hex": "#4B4B4B",
-        "image": "images/products/capri_jaspeado_saplex_gris_oscuro.webp"
+        "image": "images/products/capri_jaspeado_saplex_gris_oscuro_delivery.webp"
       },
       {
         "name": "Terracota",
         "hex": "#c89c7d",
-        "image": "images/products/capri_jaspeado_saplex_terracota.webp"
+        "image": "images/products/capri_jaspeado_saplex_terracota_delivery.webp"
       }
     ],
     "sizes": [
@@ -2461,7 +2460,7 @@
     "type": "capri",
     "name": "Capri lycra combinado",
     "season": "verano",
-    "image": "images/products/capri_lycra_combinado_estampado_1.webp",
+    "image": "images/products/capri_lycra_combinado_estampado_1_delivery.webp",
     "price": 10500,
     "priceByGroup": {
       "common": 10500,
@@ -2476,44 +2475,44 @@
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/capri_lycra_combinado_estampado_1.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_1.webp"
+        "swatch": "images/products/capri_lycra_combinado_estampado_1_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_1_delivery.webp"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/capri_lycra_combinado_estampado_2.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_2.webp"
+        "swatch": "images/products/capri_lycra_combinado_estampado_2_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_2_delivery.webp"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/capri_lycra_combinado_estampado_3.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_3.webp"
+        "swatch": "images/products/capri_lycra_combinado_estampado_3_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_3_delivery.webp"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/capri_lycra_combinado_estampado_4.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_4.webp"
+        "swatch": "images/products/capri_lycra_combinado_estampado_4_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_4_delivery.webp"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/capri_lycra_combinado_estampado_5.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_5.webp"
+        "swatch": "images/products/capri_lycra_combinado_estampado_5_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_5_delivery.webp"
       },
       {
         "name": "Estampado 6",
         "hex": "#1D3557",
-        "swatch": "images/products/capri_lycra_combinado_estampado_6.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_6.webp"
+        "swatch": "images/products/capri_lycra_combinado_estampado_6_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_6_delivery.webp"
       },
       {
         "name": "Estampado 7",
         "hex": "#2A9D8F",
-        "swatch": "images/products/capri_lycra_combinado_estampado_7.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_7.webp"
+        "swatch": "images/products/capri_lycra_combinado_estampado_7_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_7_delivery.webp"
       }
     ],
     "sizes": [
@@ -2530,50 +2529,50 @@
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/capri_lycra_combinado_estampado_1.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_1.webp",
+        "swatch": "images/products/capri_lycra_combinado_estampado_1_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_1_delivery.webp",
         "variantId": "estampado-1"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/capri_lycra_combinado_estampado_2.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_2.webp",
+        "swatch": "images/products/capri_lycra_combinado_estampado_2_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_2_delivery.webp",
         "variantId": "estampado-2"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/capri_lycra_combinado_estampado_3.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_3.webp",
+        "swatch": "images/products/capri_lycra_combinado_estampado_3_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_3_delivery.webp",
         "variantId": "estampado-3"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/capri_lycra_combinado_estampado_4.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_4.webp",
+        "swatch": "images/products/capri_lycra_combinado_estampado_4_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_4_delivery.webp",
         "variantId": "estampado-4"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/capri_lycra_combinado_estampado_5.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_5.webp",
+        "swatch": "images/products/capri_lycra_combinado_estampado_5_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_5_delivery.webp",
         "variantId": "estampado-5"
       },
       {
         "name": "Estampado 6",
         "hex": "#1D3557",
-        "swatch": "images/products/capri_lycra_combinado_estampado_6.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_6.webp",
+        "swatch": "images/products/capri_lycra_combinado_estampado_6_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_6_delivery.webp",
         "variantId": "estampado-6"
       },
       {
         "name": "Estampado 7",
         "hex": "#2A9D8F",
-        "swatch": "images/products/capri_lycra_combinado_estampado_7.webp",
-        "image": "images/products/capri_lycra_combinado_estampado_7.webp",
+        "swatch": "images/products/capri_lycra_combinado_estampado_7_delivery.webp",
+        "image": "images/products/capri_lycra_combinado_estampado_7_delivery.webp",
         "variantId": "estampado-7"
       }
     ]
@@ -3148,7 +3147,7 @@
     "type": "capri",
     "name": "Capri CEY",
     "season": "verano",
-    "image": "images/products/capri_cey_negro.webp",
+    "image": "images/products/capri_cey_negro_delivery.webp",
     "price": 7200,
     "priceByGroup": {
       "common": 7200,
@@ -3168,29 +3167,28 @@
       {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/capri_cey_negro.webp"
+        "image": "images/products/capri_cey_negro_delivery.webp"
       },
       {
         "name": "Gris",
         "hex": "#808080",
-        "image": "images/products/capri_cey_gris.webp"
+        "image": "images/products/capri_cey_gris_delivery.webp"
       },
       {
         "name": "Verde",
         "hex": "#2E7D32",
-        "image": "images/products/capri_cey_verde.webp"
+        "image": "images/products/capri_cey_verde_delivery.webp"
       },
       {
         "name": "Azul",
         "hex": "#1E4ED8",
-        "image": "images/products/capri_cey_azul.webp"
+        "image": "images/products/capri_cey_azul_delivery.webp"
       },
       {
         "name": "Camel",
         "hex": "#C19A6B",
-        "image": "images/products/capri_cey_camel.webp"
+        "image": "images/products/capri_cey_camel_delivery.webp"
       }
-
     ],
     "sizes": [
       "1",
@@ -3210,7 +3208,7 @@
     "type": "bermudas",
     "name": "Bermuda fibrana liso",
     "season": "verano",
-    "image": "images/products/bermuda_fibrana_liso_negro.webp",
+    "image": "images/products/bermuda_fibrana_liso_negro_delivery.webp",
     "price": 7000,
     "priceByGroup": {
       "common": 7000,
@@ -3230,32 +3228,32 @@
       {
         "name": "Verde",
         "hex": "#2E7D32",
-        "image": "images/products/bermuda_fibrana_liso_verde.webp"
+        "image": "images/products/bermuda_fibrana_liso_verde_delivery.webp"
       },
       {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/bermuda_fibrana_liso_negro.webp"
+        "image": "images/products/bermuda_fibrana_liso_negro_delivery.webp"
       },
       {
         "name": "Camel",
         "hex": "#C19A6B",
-        "image": "images/products/bermuda_fibrana_liso_camel.webp"
+        "image": "images/products/bermuda_fibrana_liso_camel_delivery.webp"
       },
       {
         "name": "Azul",
         "hex": "#1E4ED8",
-        "image": "images/products/bermuda_fibrana_liso_azul.webp"
+        "image": "images/products/bermuda_fibrana_liso_azul_delivery.webp"
       },
       {
         "name": "Beige",
         "hex": "#E5D3B3",
-        "image": "images/products/bermuda_fibrana_liso_beige.webp"
+        "image": "images/products/bermuda_fibrana_liso_beige_delivery.webp"
       },
       {
         "name": "Verde claro",
         "hex": "#8BC34A",
-        "image": "images/products/bermuda_fibrana_liso_verde_claro.webp"
+        "image": "images/products/bermuda_fibrana_liso_verde_claro_delivery.webp"
       }
     ],
     "sizes": [
@@ -3276,7 +3274,7 @@
     "type": "bermudas",
     "name": "Bermuda fibrana estampado",
     "season": "verano",
-    "image": "images/products/bermuda_fibrana_estampado_1.webp",
+    "image": "images/products/bermuda_fibrana_estampado_1_delivery.webp",
     "price": 7000,
     "priceByGroup": {
       "common": 7000,
@@ -3296,62 +3294,62 @@
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/bermuda_fibrana_estampado_1.webp",
-        "image": "images/products/bermuda_fibrana_estampado_1.webp"
+        "swatch": "images/products/bermuda_fibrana_estampado_1_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_1_delivery.webp"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/bermuda_fibrana_estampado_2.webp",
-        "image": "images/products/bermuda_fibrana_estampado_2.webp"
+        "swatch": "images/products/bermuda_fibrana_estampado_2_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_2_delivery.webp"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/bermuda_fibrana_estampado_3.webp",
-        "image": "images/products/bermuda_fibrana_estampado_3.webp"
+        "swatch": "images/products/bermuda_fibrana_estampado_3_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_3_delivery.webp"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/bermuda_fibrana_estampado_4.webp",
-        "image": "images/products/bermuda_fibrana_estampado_4.webp"
+        "swatch": "images/products/bermuda_fibrana_estampado_4_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_4_delivery.webp"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/bermuda_fibrana_estampado_5.webp",
-        "image": "images/products/bermuda_fibrana_estampado_5.webp"
+        "swatch": "images/products/bermuda_fibrana_estampado_5_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_5_delivery.webp"
       },
       {
         "name": "Estampado 6",
         "hex": "#1D3557",
-        "swatch": "images/products/bermuda_fibrana_estampado_6.webp",
-        "image": "images/products/bermuda_fibrana_estampado_6.webp"
+        "swatch": "images/products/bermuda_fibrana_estampado_6_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_6_delivery.webp"
       },
       {
         "name": "Estampado 7",
         "hex": "#2A9D8F",
-        "swatch": "images/products/bermuda_fibrana_estampado_7.webp",
-        "image": "images/products/bermuda_fibrana_estampado_7.webp"
+        "swatch": "images/products/bermuda_fibrana_estampado_7_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_7_delivery.webp"
       },
       {
         "name": "Estampado 8",
         "hex": "#8A2BE2",
-        "swatch": "images/products/bermuda_fibrana_estampado_8.webp",
-        "image": "images/products/bermuda_fibrana_estampado_8.webp"
+        "swatch": "images/products/bermuda_fibrana_estampado_8_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_8_delivery.webp"
       },
       {
         "name": "Estampado 9",
         "hex": "#004643",
-        "swatch": "images/products/bermuda_fibrana_estampado_9.webp",
-        "image": "images/products/bermuda_fibrana_estampado_9.webp"
+        "swatch": "images/products/bermuda_fibrana_estampado_9_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_9_delivery.webp"
       },
       {
         "name": "Estampado 10",
         "hex": "#4B4B4B",
-        "swatch": "images/products/bermuda_fibrana_estampado_10.webp",
-        "image": "images/products/bermuda_fibrana_estampado_10.webp"
+        "swatch": "images/products/bermuda_fibrana_estampado_10_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_10_delivery.webp"
       }
     ],
     "sizes": [
@@ -3370,71 +3368,71 @@
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/bermuda_fibrana_estampado_1.webp",
-        "image": "images/products/bermuda_fibrana_estampado_1.webp",
+        "swatch": "images/products/bermuda_fibrana_estampado_1_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_1_delivery.webp",
         "variantId": "estampado-1"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/bermuda_fibrana_estampado_2.webp",
-        "image": "images/products/bermuda_fibrana_estampado_2.webp",
+        "swatch": "images/products/bermuda_fibrana_estampado_2_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_2_delivery.webp",
         "variantId": "estampado-2"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/bermuda_fibrana_estampado_3.webp",
-        "image": "images/products/bermuda_fibrana_estampado_3.webp",
+        "swatch": "images/products/bermuda_fibrana_estampado_3_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_3_delivery.webp",
         "variantId": "estampado-3"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/bermuda_fibrana_estampado_4.webp",
-        "image": "images/products/bermuda_fibrana_estampado_4.webp",
+        "swatch": "images/products/bermuda_fibrana_estampado_4_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_4_delivery.webp",
         "variantId": "estampado-4"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/bermuda_fibrana_estampado_5.webp",
-        "image": "images/products/bermuda_fibrana_estampado_5.webp",
+        "swatch": "images/products/bermuda_fibrana_estampado_5_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_5_delivery.webp",
         "variantId": "estampado-5"
       },
       {
         "name": "Estampado 6",
         "hex": "#1D3557",
-        "swatch": "images/products/bermuda_fibrana_estampado_6.webp",
-        "image": "images/products/bermuda_fibrana_estampado_6.webp",
+        "swatch": "images/products/bermuda_fibrana_estampado_6_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_6_delivery.webp",
         "variantId": "estampado-6"
       },
       {
         "name": "Estampado 7",
         "hex": "#2A9D8F",
-        "swatch": "images/products/bermuda_fibrana_estampado_7.webp",
-        "image": "images/products/bermuda_fibrana_estampado_7.webp",
+        "swatch": "images/products/bermuda_fibrana_estampado_7_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_7_delivery.webp",
         "variantId": "estampado-7"
       },
       {
         "name": "Estampado 8",
         "hex": "#8A2BE2",
-        "swatch": "images/products/bermuda_fibrana_estampado_8.webp",
-        "image": "images/products/bermuda_fibrana_estampado_8.webp",
+        "swatch": "images/products/bermuda_fibrana_estampado_8_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_8_delivery.webp",
         "variantId": "estampado-8"
       },
       {
         "name": "Estampado 9",
         "hex": "#004643",
-        "swatch": "images/products/bermuda_fibrana_estampado_9.webp",
-        "image": "images/products/bermuda_fibrana_estampado_9.webp",
+        "swatch": "images/products/bermuda_fibrana_estampado_9_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_9_delivery.webp",
         "variantId": "estampado-9"
       },
       {
         "name": "Estampado 10",
         "hex": "#4B4B4B",
-        "swatch": "images/products/bermuda_fibrana_estampado_10.webp",
-        "image": "images/products/bermuda_fibrana_estampado_10.webp",
+        "swatch": "images/products/bermuda_fibrana_estampado_10_delivery.webp",
+        "image": "images/products/bermuda_fibrana_estampado_10_delivery.webp",
         "variantId": "estampado-10"
       }
     ]
@@ -3444,7 +3442,7 @@
     "type": "shorts",
     "name": "Short fibrana poplin liso dama",
     "season": "verano",
-    "image": "images/products/short_fibrana_liso_negro.webp",
+    "image": "images/products/short_fibrana_liso_negro_delivery.webp",
     "price": 5600,
     "priceByGroup": {
       "common": 5600,
@@ -3461,35 +3459,35 @@
       10
     ],
     "colors": [
-       {
+      {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/short_fibrana_liso_negro.webp"
+        "image": "images/products/short_fibrana_liso_negro_delivery.webp"
       },
       {
         "name": "Verde",
         "hex": "#2E7D32",
-        "image": "images/products/short_fibrana_liso_verde.webp"
+        "image": "images/products/short_fibrana_liso_verde_delivery.webp"
       },
       {
         "name": "Camel",
         "hex": "#C19A6B",
-        "image": "images/products/short_fibrana_liso_camel.webp"
+        "image": "images/products/short_fibrana_liso_camel_delivery.webp"
       },
       {
         "name": "Azul",
         "hex": "#1E4ED8",
-        "image": "images/products/short_fibrana_liso_azul.webp"
+        "image": "images/products/short_fibrana_liso_azul_delivery.webp"
       },
       {
         "name": "Beige",
         "hex": "#E5D3B3",
-        "image": "images/products/short_fibrana_liso_beige.webp"
+        "image": "images/products/short_fibrana_liso_beige_delivery.webp"
       },
       {
         "name": "Verde claro",
         "hex": "#8BC34A",
-        "image": "images/products/short_fibrana_liso_verde_claro.webp"
+        "image": "images/products/short_fibrana_liso_verde_claro_delivery.webp"
       }
     ],
     "sizes": [
@@ -3510,7 +3508,7 @@
     "type": "shorts",
     "name": "Short fibrana poplin estampado dama",
     "season": "verano",
-    "image": "images/products/short_fibrana_estampado_dama_1.webp",
+    "image": "images/products/short_fibrana_estampado_dama_1_delivery.webp",
     "price": 5600,
     "priceByGroup": {
       "common": 5600,
@@ -3530,92 +3528,92 @@
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/short_fibrana_estampado_dama_1.webp",
-        "image": "images/products/short_fibrana_estampado_dama_1.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_1_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_1_delivery.webp"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/short_fibrana_estampado_dama_2.webp",
-        "image": "images/products/short_fibrana_estampado_dama_2.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_2_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_2_delivery.webp"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/short_fibrana_estampado_dama_3.webp",
-        "image": "images/products/short_fibrana_estampado_dama_3.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_3_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_3_delivery.webp"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/short_fibrana_estampado_dama_4.webp",
-        "image": "images/products/short_fibrana_estampado_dama_4.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_4_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_4_delivery.webp"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/short_fibrana_estampado_dama_5.webp",
-        "image": "images/products/short_fibrana_estampado_dama_5.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_5_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_5_delivery.webp"
       },
       {
         "name": "Estampado 6",
         "hex": "#1D3557",
-        "swatch": "images/products/short_fibrana_estampado_dama_6.webp",
-        "image": "images/products/short_fibrana_estampado_dama_6.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_6_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_6_delivery.webp"
       },
       {
         "name": "Estampado 7",
         "hex": "#2A9D8F",
-        "swatch": "images/products/short_fibrana_estampado_dama_7.webp",
-        "image": "images/products/short_fibrana_estampado_dama_7.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_7_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_7_delivery.webp"
       },
       {
         "name": "Estampado 8",
         "hex": "#8A2BE2",
-        "swatch": "images/products/short_fibrana_estampado_dama_8.webp",
-        "image": "images/products/short_fibrana_estampado_dama_8.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_8_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_8_delivery.webp"
       },
       {
         "name": "Estampado 9",
         "hex": "#004643",
-        "swatch": "images/products/short_fibrana_estampado_dama_9.webp",
-        "image": "images/products/short_fibrana_estampado_dama_9.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_9_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_9_delivery.webp"
       },
       {
         "name": "Estampado 10",
         "hex": "#C1121F",
-        "swatch": "images/products/short_fibrana_estampado_dama_10.webp",
-        "image": "images/products/short_fibrana_estampado_dama_10.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_10_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_10_delivery.webp"
       },
       {
         "name": "Estampado 11",
         "hex": "#4B4B4B",
-        "swatch": "images/products/short_fibrana_estampado_dama_11.webp",
-        "image": "images/products/short_fibrana_estampado_dama_11.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_11_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_11_delivery.webp"
       },
       {
         "name": "Estampado 12",
         "hex": "#A9A9A9",
-        "swatch": "images/products/short_fibrana_estampado_dama_12.webp",
-        "image": "images/products/short_fibrana_estampado_dama_12.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_12_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_12_delivery.webp"
       },
       {
         "name": "Estampado 13",
         "hex": "#6B8EFF",
-        "swatch": "images/products/short_fibrana_estampado_dama_13.webp",
-        "image": "images/products/short_fibrana_estampado_dama_13.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_13_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_13_delivery.webp"
       },
       {
         "name": "Estampado 14",
         "hex": "#E07A5F",
-        "swatch": "images/products/short_fibrana_estampado_dama_14.webp",
-        "image": "images/products/short_fibrana_estampado_dama_14.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_14_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_14_delivery.webp"
       },
       {
         "name": "Estampado 15",
         "hex": "#81B29A",
-        "swatch": "images/products/short_fibrana_estampado_dama_15.webp",
-        "image": "images/products/short_fibrana_estampado_dama_15.webp"
+        "swatch": "images/products/short_fibrana_estampado_dama_15_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_15_delivery.webp"
       }
     ],
     "sizes": [
@@ -3634,106 +3632,106 @@
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/short_fibrana_estampado_dama_1.webp",
-        "image": "images/products/short_fibrana_estampado_dama_1.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_1_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_1_delivery.webp",
         "variantId": "estampado-1"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/short_fibrana_estampado_dama_2.webp",
-        "image": "images/products/short_fibrana_estampado_dama_2.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_2_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_2_delivery.webp",
         "variantId": "estampado-2"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/short_fibrana_estampado_dama_3.webp",
-        "image": "images/products/short_fibrana_estampado_dama_3.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_3_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_3_delivery.webp",
         "variantId": "estampado-3"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/short_fibrana_estampado_dama_4.webp",
-        "image": "images/products/short_fibrana_estampado_dama_4.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_4_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_4_delivery.webp",
         "variantId": "estampado-4"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/short_fibrana_estampado_dama_5.webp",
-        "image": "images/products/short_fibrana_estampado_dama_5.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_5_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_5_delivery.webp",
         "variantId": "estampado-5"
       },
       {
         "name": "Estampado 6",
         "hex": "#1D3557",
-        "swatch": "images/products/short_fibrana_estampado_dama_6.webp",
-        "image": "images/products/short_fibrana_estampado_dama_6.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_6_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_6_delivery.webp",
         "variantId": "estampado-6"
       },
       {
         "name": "Estampado 7",
         "hex": "#2A9D8F",
-        "swatch": "images/products/short_fibrana_estampado_dama_7.webp",
-        "image": "images/products/short_fibrana_estampado_dama_7.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_7_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_7_delivery.webp",
         "variantId": "estampado-7"
       },
       {
         "name": "Estampado 8",
         "hex": "#8A2BE2",
-        "swatch": "images/products/short_fibrana_estampado_dama_8.webp",
-        "image": "images/products/short_fibrana_estampado_dama_8.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_8_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_8_delivery.webp",
         "variantId": "estampado-8"
       },
       {
         "name": "Estampado 9",
         "hex": "#004643",
-        "swatch": "images/products/short_fibrana_estampado_dama_9.webp",
-        "image": "images/products/short_fibrana_estampado_dama_9.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_9_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_9_delivery.webp",
         "variantId": "estampado-9"
       },
       {
         "name": "Estampado 10",
         "hex": "#C1121F",
-        "swatch": "images/products/short_fibrana_estampado_dama_10.webp",
-        "image": "images/products/short_fibrana_estampado_dama_10.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_10_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_10_delivery.webp",
         "variantId": "estampado-10"
       },
       {
         "name": "Estampado 11",
         "hex": "#4B4B4B",
-        "swatch": "images/products/short_fibrana_estampado_dama_11.webp",
-        "image": "images/products/short_fibrana_estampado_dama_11.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_11_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_11_delivery.webp",
         "variantId": "estampado-11"
       },
       {
         "name": "Estampado 12",
         "hex": "#A9A9A9",
-        "swatch": "images/products/short_fibrana_estampado_dama_12.webp",
-        "image": "images/products/short_fibrana_estampado_dama_12.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_12_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_12_delivery.webp",
         "variantId": "estampado-12"
       },
       {
         "name": "Estampado 13",
         "hex": "#6B8EFF",
-        "swatch": "images/products/short_fibrana_estampado_dama_13.webp",
-        "image": "images/products/short_fibrana_estampado_dama_13.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_13_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_13_delivery.webp",
         "variantId": "estampado-13"
       },
       {
         "name": "Estampado 14",
         "hex": "#E07A5F",
-        "swatch": "images/products/short_fibrana_estampado_dama_14.webp",
-        "image": "images/products/short_fibrana_estampado_dama_14.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_14_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_14_delivery.webp",
         "variantId": "estampado-14"
       },
       {
         "name": "Estampado 15",
         "hex": "#81B29A",
-        "swatch": "images/products/short_fibrana_estampado_dama_15.webp",
-        "image": "images/products/short_fibrana_estampado_dama_15.webp",
+        "swatch": "images/products/short_fibrana_estampado_dama_15_delivery.webp",
+        "image": "images/products/short_fibrana_estampado_dama_15_delivery.webp",
         "variantId": "estampado-15"
       }
     ]
@@ -3898,7 +3896,7 @@
     "type": "shorts",
     "name": "Short lycra estampado",
     "season": "verano",
-    "image": "images/products/short_lycra_estampado_1.webp",
+    "image": "images/products/short_lycra_estampado_1_delivery.webp",
     "price": 9000,
     "priceByGroup": {
       "common": 9000
@@ -3907,50 +3905,50 @@
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/short_lycra_estampado_1.webp",
-        "image": "images/products/short_lycra_estampado_1.webp"
+        "swatch": "images/products/short_lycra_estampado_1_delivery.webp",
+        "image": "images/products/short_lycra_estampado_1_delivery.webp"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/short_lycra_estampado_2.webp",
-        "image": "images/products/short_lycra_estampado_2.webp"
+        "swatch": "images/products/short_lycra_estampado_2_delivery.webp",
+        "image": "images/products/short_lycra_estampado_2_delivery.webp"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/short_lycra_estampado_3.webp",
-        "image": "images/products/short_lycra_estampado_3.webp"
+        "swatch": "images/products/short_lycra_estampado_3_delivery.webp",
+        "image": "images/products/short_lycra_estampado_3_delivery.webp"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/short_lycra_estampado_4.webp",
-        "image": "images/products/short_lycra_estampado_4.webp"
+        "swatch": "images/products/short_lycra_estampado_4_delivery.webp",
+        "image": "images/products/short_lycra_estampado_4_delivery.webp"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/short_lycra_estampado_5.webp",
-        "image": "images/products/short_lycra_estampado_5.webp"
+        "swatch": "images/products/short_lycra_estampado_5_delivery.webp",
+        "image": "images/products/short_lycra_estampado_5_delivery.webp"
       },
       {
         "name": "Estampado 6",
         "hex": "#1D3557",
-        "swatch": "images/products/short_lycra_estampado_6.webp",
-        "image": "images/products/short_lycra_estampado_6.webp"
+        "swatch": "images/products/short_lycra_estampado_6_delivery.webp",
+        "image": "images/products/short_lycra_estampado_6_delivery.webp"
       },
       {
         "name": "Estampado 7",
         "hex": "#2A9D8F",
-        "swatch": "images/products/short_lycra_estampado_7.webp",
-        "image": "images/products/short_lycra_estampado_7.webp"
+        "swatch": "images/products/short_lycra_estampado_7_delivery.webp",
+        "image": "images/products/short_lycra_estampado_7_delivery.webp"
       },
       {
         "name": "Estampado 8",
         "hex": "#8A2BE2",
-        "swatch": "images/products/short_lycra_estampado_8.webp",
-        "image": "images/products/short_lycra_estampado_8.webp"
+        "swatch": "images/products/short_lycra_estampado_8_delivery.webp",
+        "image": "images/products/short_lycra_estampado_8_delivery.webp"
       }
     ],
     "sizes": [
@@ -3964,57 +3962,57 @@
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/short_lycra_estampado_1.webp",
-        "image": "images/products/short_lycra_estampado_1.webp",
+        "swatch": "images/products/short_lycra_estampado_1_delivery.webp",
+        "image": "images/products/short_lycra_estampado_1_delivery.webp",
         "variantId": "estampado-1"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/short_lycra_estampado_2.webp",
-        "image": "images/products/short_lycra_estampado_2.webp",
+        "swatch": "images/products/short_lycra_estampado_2_delivery.webp",
+        "image": "images/products/short_lycra_estampado_2_delivery.webp",
         "variantId": "estampado-2"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/short_lycra_estampado_3.webp",
-        "image": "images/products/short_lycra_estampado_3.webp",
+        "swatch": "images/products/short_lycra_estampado_3_delivery.webp",
+        "image": "images/products/short_lycra_estampado_3_delivery.webp",
         "variantId": "estampado-3"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/short_lycra_estampado_4.webp",
-        "image": "images/products/short_lycra_estampado_4.webp",
+        "swatch": "images/products/short_lycra_estampado_4_delivery.webp",
+        "image": "images/products/short_lycra_estampado_4_delivery.webp",
         "variantId": "estampado-4"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/short_lycra_estampado_5.webp",
-        "image": "images/products/short_lycra_estampado_5.webp",
+        "swatch": "images/products/short_lycra_estampado_5_delivery.webp",
+        "image": "images/products/short_lycra_estampado_5_delivery.webp",
         "variantId": "estampado-5"
       },
       {
         "name": "Estampado 6",
         "hex": "#1D3557",
-        "swatch": "images/products/short_lycra_estampado_6.webp",
-        "image": "images/products/short_lycra_estampado_6.webp",
+        "swatch": "images/products/short_lycra_estampado_6_delivery.webp",
+        "image": "images/products/short_lycra_estampado_6_delivery.webp",
         "variantId": "estampado-6"
       },
       {
         "name": "Estampado 7",
         "hex": "#2A9D8F",
-        "swatch": "images/products/short_lycra_estampado_7.webp",
-        "image": "images/products/short_lycra_estampado_7.webp",
+        "swatch": "images/products/short_lycra_estampado_7_delivery.webp",
+        "image": "images/products/short_lycra_estampado_7_delivery.webp",
         "variantId": "estampado-7"
       },
       {
         "name": "Estampado 8",
         "hex": "#8A2BE2",
-        "swatch": "images/products/short_lycra_estampado_8.webp",
-        "image": "images/products/short_lycra_estampado_8.webp",
+        "swatch": "images/products/short_lycra_estampado_8_delivery.webp",
+        "image": "images/products/short_lycra_estampado_8_delivery.webp",
         "variantId": "estampado-8"
       }
     ]
@@ -4399,9 +4397,9 @@
     "type": "ciclistas",
     "name": "Ciclista lycra suplex con bolsillo dama",
     "season": "verano",
-    "featured":true,
-    "featuredBadge":"Nuevo",
-    "image": "images/products/ciclista_lycra_suplex_con_bolsillo_dama.webp",
+    "featured": true,
+    "featuredBadge": "Nuevo",
+    "image": "images/products/ciclista_lycra_suplex_con_bolsillo_dama_delivery.webp",
     "price": 9500,
     "priceByGroup": {
       "common": 9500,
@@ -4416,7 +4414,7 @@
       {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/ciclista_lycra_suplex_con_bolsillo_dama.webp"
+        "image": "images/products/ciclista_lycra_suplex_con_bolsillo_dama_delivery.webp"
       }
     ],
     "sizes": [
@@ -4766,7 +4764,7 @@
     "type": "ciclistas",
     "name": "Ciclista lycra combinado",
     "season": "verano",
-    "image": "images/products/ciclista_lycra_combinado_estampado_1.webp",
+    "image": "images/products/ciclista_lycra_combinado_estampado_1_delivery.webp",
     "price": 9500,
     "priceByGroup": {
       "common": 9500,
@@ -4781,68 +4779,68 @@
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_1.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_1.webp"
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_1_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_1_delivery.webp"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_2.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_2.webp"
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_2_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_2_delivery.webp"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_3.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_3.webp"
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_3_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_3_delivery.webp"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_4.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_4.webp"
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_4_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_4_delivery.webp"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_5.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_5.webp"
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_5_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_5_delivery.webp"
       },
       {
         "name": "Estampado 6",
         "hex": "#1D3557",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_6.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_6.webp"
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_6_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_6_delivery.webp"
       },
       {
         "name": "Estampado 7",
         "hex": "#2A9D8F",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_7.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_7.webp"
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_7_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_7_delivery.webp"
       },
       {
         "name": "Estampado 8",
         "hex": "#8A2BE2",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_8.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_8.webp"
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_8_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_8_delivery.webp"
       },
       {
         "name": "Estampado 9",
         "hex": "#4B4B4B",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_9.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_9.webp"
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_9_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_9_delivery.webp"
       },
       {
         "name": "Estampado 10",
         "hex": "#004643",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_10.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_10.webp"
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_10_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_10_delivery.webp"
       },
       {
         "name": "Estampado 11",
         "hex": "#C1121F",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_11.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_11.webp"
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_11_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_11_delivery.webp"
       }
     ],
     "sizes": [
@@ -4859,78 +4857,78 @@
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_1.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_1.webp",
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_1_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_1_delivery.webp",
         "variantId": "estampado-1"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_2.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_2.webp",
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_2_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_2_delivery.webp",
         "variantId": "estampado-2"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_3.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_3.webp",
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_3_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_3_delivery.webp",
         "variantId": "estampado-3"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_4.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_4.webp",
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_4_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_4_delivery.webp",
         "variantId": "estampado-4"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_5.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_5.webp",
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_5_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_5_delivery.webp",
         "variantId": "estampado-5"
       },
       {
         "name": "Estampado 6",
         "hex": "#1D3557",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_6.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_6.webp",
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_6_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_6_delivery.webp",
         "variantId": "estampado-6"
       },
       {
         "name": "Estampado 7",
         "hex": "#2A9D8F",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_7.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_7.webp",
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_7_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_7_delivery.webp",
         "variantId": "estampado-7"
       },
       {
         "name": "Estampado 8",
         "hex": "#8A2BE2",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_8.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_8.webp",
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_8_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_8_delivery.webp",
         "variantId": "estampado-8"
       },
       {
         "name": "Estampado 9",
         "hex": "#4B4B4B",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_9.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_9.webp",
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_9_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_9_delivery.webp",
         "variantId": "estampado-9"
       },
       {
         "name": "Estampado 10",
         "hex": "#004643",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_10.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_10.webp",
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_10_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_10_delivery.webp",
         "variantId": "estampado-10"
       },
       {
         "name": "Estampado 11",
         "hex": "#C1121F",
-        "swatch": "images/products/ciclista_lycra_combinado_estampado_11.webp",
-        "image": "images/products/ciclista_lycra_combinado_estampado_11.webp",
+        "swatch": "images/products/ciclista_lycra_combinado_estampado_11_delivery.webp",
+        "image": "images/products/ciclista_lycra_combinado_estampado_11_delivery.webp",
         "variantId": "estampado-11"
       }
     ]
@@ -5121,7 +5119,7 @@
     "section": "mujer",
     "type": "remeras",
     "name": "Remera manga larga morley viscosa",
-    "season": "media-estacion",
+    "season": "invierno",
     "image": "images/products/remera_manga_larga_morley_viscosa_negro.webp",
     "price": 4600,
     "priceByGroup": {
@@ -5169,7 +5167,8 @@
       "6",
       "7",
       "8"
-    ]
+    ],
+    "visible": false
   },
   {
     "section": "mujer",
@@ -5360,7 +5359,7 @@
     "season": "media-estacion",
     "featured": true,
     "featuredBadge": "Nuevo",
-    "image": "images/products/remera_peinado_dama_negro.webp",
+    "image": "images/products/remera_peinado_dama_negro_delivery.webp",
     "price": 8500,
     "priceByGroup": {
       "common": 8500,
@@ -5375,27 +5374,27 @@
       {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/remera_peinado_dama_negro.webp"
+        "image": "images/products/remera_peinado_dama_negro_delivery.webp"
       },
       {
         "name": "Azul",
         "hex": "#0B1F5B",
-        "image": "images/products/remera_peinado_dama_azul.webp"
+        "image": "images/products/remera_peinado_dama_azul_delivery.webp"
       },
       {
         "name": "Gris melange",
         "hex": "#A9A9A9",
-        "image": "images/products/remera_peinado_dama_gris_melange.webp"
+        "image": "images/products/remera_peinado_dama_gris_melange_delivery.webp"
       },
       {
         "name": "Gris oscuro",
         "hex": "#4B4B4B",
-        "image": "images/products/remera_peinado_dama_gris_oscuro.webp"
+        "image": "images/products/remera_peinado_dama_gris_oscuro_delivery.webp"
       },
       {
         "name": "Verde",
         "hex": "#008000",
-        "image": "images/products/remera_peinado_dama_verde.webp"
+        "image": "images/products/remera_peinado_dama_verde_delivery.webp"
       }
     ],
     "sizes": [
@@ -5414,7 +5413,7 @@
     "type": "musculosas",
     "name": "Musculosa viscosa morley",
     "season": "verano",
-    "image": "images/products/musculosa_viscosa_morley_negro.webp",
+    "image": "images/products/musculosa_viscosa_morley_negro_delivery.webp",
     "price": 4600,
     "priceByGroup": {
       "common": 4600,
@@ -5429,32 +5428,32 @@
       {
         "name": "Rojo",
         "hex": "#FF0000",
-        "image": "images/products/musculosa_viscosa_morley_rojo.webp"
+        "image": "images/products/musculosa_viscosa_morley_rojo_delivery.webp"
       },
       {
         "name": "Verde",
         "hex": "#2E7D32",
-        "image": "images/products/musculosa_viscosa_morley_verde.webp"
+        "image": "images/products/musculosa_viscosa_morley_verde_delivery.webp"
       },
       {
         "name": "Mostaza",
         "hex": "#D4A017",
-        "image": "images/products/musculosa_viscosa_morley_mostaza.webp"
+        "image": "images/products/musculosa_viscosa_morley_mostaza_delivery.webp"
       },
       {
         "name": "Azul",
         "hex": "#1E4ED8",
-        "image": "images/products/musculosa_viscosa_morley_azul.webp"
+        "image": "images/products/musculosa_viscosa_morley_azul_delivery.webp"
       },
       {
         "name": "Gris",
         "hex": "#808080",
-        "image": "images/products/musculosa_viscosa_morley_gris.webp"
+        "image": "images/products/musculosa_viscosa_morley_gris_delivery.webp"
       },
       {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/musculosa_viscosa_morley_negro.webp"
+        "image": "images/products/musculosa_viscosa_morley_negro_delivery.webp"
       }
     ],
     "sizes": [
@@ -5674,7 +5673,7 @@
     "type": "remeras",
     "name": "Camisola fibrana poplin dama",
     "season": "verano",
-    "image": "images/products/camisola_fibrana_dama_estampado_1.webp",
+    "image": "images/products/camisola_fibrana_dama_estampado_1_delivery.webp",
     "price": 8000,
     "priceByGroup": {
       "common": 8000,
@@ -5694,38 +5693,38 @@
       {
         "name": "Negro",
         "hex": "#000000",
-        "swatch": "images/products/camisola_fibrana_dama_negro.webp",
-        "image": "images/products/camisola_fibrana_dama_negro.webp"
+        "swatch": "images/products/camisola_fibrana_dama_negro_delivery.webp",
+        "image": "images/products/camisola_fibrana_dama_negro_delivery.webp"
       },
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/camisola_fibrana_dama_estampado_1.webp",
-        "image": "images/products/camisola_fibrana_dama_estampado_1.webp"
+        "swatch": "images/products/camisola_fibrana_dama_estampado_1_delivery.webp",
+        "image": "images/products/camisola_fibrana_dama_estampado_1_delivery.webp"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/camisola_fibrana_dama_estampado_2.webp",
-        "image": "images/products/camisola_fibrana_dama_estampado_2.webp"
+        "swatch": "images/products/camisola_fibrana_dama_estampado_2_delivery.webp",
+        "image": "images/products/camisola_fibrana_dama_estampado_2_delivery.webp"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/camisola_fibrana_dama_estampado_3.webp",
-        "image": "images/products/camisola_fibrana_dama_estampado_3.webp"
+        "swatch": "images/products/camisola_fibrana_dama_estampado_3_delivery.webp",
+        "image": "images/products/camisola_fibrana_dama_estampado_3_delivery.webp"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/camisola_fibrana_dama_estampado_4.webp",
-        "image": "images/products/camisola_fibrana_dama_estampado_4.webp"
+        "swatch": "images/products/camisola_fibrana_dama_estampado_4_delivery.webp",
+        "image": "images/products/camisola_fibrana_dama_estampado_4_delivery.webp"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/camisola_fibrana_dama_estampado_5.webp",
-        "image": "images/products/camisola_fibrana_dama_estampado_5.webp"
+        "swatch": "images/products/camisola_fibrana_dama_estampado_5_delivery.webp",
+        "image": "images/products/camisola_fibrana_dama_estampado_5_delivery.webp"
       }
     ],
     "sizes": [
@@ -5742,36 +5741,36 @@
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/camisola_fibrana_dama_estampado_1.webp",
-        "image": "images/products/camisola_fibrana_dama_estampado_1.webp",
+        "swatch": "images/products/camisola_fibrana_dama_estampado_1_delivery.webp",
+        "image": "images/products/camisola_fibrana_dama_estampado_1_delivery.webp",
         "variantId": "estampado-1"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/camisola_fibrana_dama_estampado_2.webp",
-        "image": "images/products/camisola_fibrana_dama_estampado_2.webp",
+        "swatch": "images/products/camisola_fibrana_dama_estampado_2_delivery.webp",
+        "image": "images/products/camisola_fibrana_dama_estampado_2_delivery.webp",
         "variantId": "estampado-2"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/camisola_fibrana_dama_estampado_3.webp",
-        "image": "images/products/camisola_fibrana_dama_estampado_3.webp",
+        "swatch": "images/products/camisola_fibrana_dama_estampado_3_delivery.webp",
+        "image": "images/products/camisola_fibrana_dama_estampado_3_delivery.webp",
         "variantId": "estampado-3"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/camisola_fibrana_dama_estampado_4.webp",
-        "image": "images/products/camisola_fibrana_dama_estampado_4.webp",
+        "swatch": "images/products/camisola_fibrana_dama_estampado_4_delivery.webp",
+        "image": "images/products/camisola_fibrana_dama_estampado_4_delivery.webp",
         "variantId": "estampado-4"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/camisola_fibrana_dama_estampado_5.webp",
-        "image": "images/products/camisola_fibrana_dama_estampado_5.webp",
+        "swatch": "images/products/camisola_fibrana_dama_estampado_5_delivery.webp",
+        "image": "images/products/camisola_fibrana_dama_estampado_5_delivery.webp",
         "variantId": "estampado-5"
       }
     ]
@@ -5781,7 +5780,7 @@
     "type": "remeras",
     "name": "Camisola fibrana poplin con manga volado dama",
     "season": "verano",
-    "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_negro.webp",
+    "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_negro_delivery.webp",
     "price": 8000,
     "priceByGroup": {
       "common": 8000,
@@ -5796,38 +5795,38 @@
       {
         "name": "Negro",
         "hex": "#000000",
-        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_negro.webp",
-        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_negro.webp"
+        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_negro_delivery.webp",
+        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_negro_delivery.webp"
       },
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_1.webp",
-        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_1.webp"
+        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_1_delivery.webp",
+        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_1_delivery.webp"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_2.webp",
-        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_2.webp"
+        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_2_delivery.webp",
+        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_2_delivery.webp"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_3.webp",
-        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_3.webp"
+        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_3_delivery.webp",
+        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_3_delivery.webp"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_4.webp",
-        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_4.webp"
+        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_4_delivery.webp",
+        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_4_delivery.webp"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_5.webp",
-        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_5.webp"
+        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_5_delivery.webp",
+        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_5_delivery.webp"
       }
     ],
     "sizes": [
@@ -5843,36 +5842,36 @@
       {
         "name": "Estampado 1",
         "hex": "#1F4FA8",
-        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_1.webp",
-        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_1.webp",
+        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_1_delivery.webp",
+        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_1_delivery.webp",
         "variantId": "estampado-1"
       },
       {
         "name": "Estampado 2",
         "hex": "#FF5FA2",
-        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_2.webp",
-        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_2.webp",
+        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_2_delivery.webp",
+        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_2_delivery.webp",
         "variantId": "estampado-2"
       },
       {
         "name": "Estampado 3",
         "hex": "#3F7246",
-        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_3.webp",
-        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_3.webp",
+        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_3_delivery.webp",
+        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_3_delivery.webp",
         "variantId": "estampado-3"
       },
       {
         "name": "Estampado 4",
         "hex": "#2B2D42",
-        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_4.webp",
-        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_4.webp",
+        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_4_delivery.webp",
+        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_4_delivery.webp",
         "variantId": "estampado-4"
       },
       {
         "name": "Estampado 5",
         "hex": "#F7B267",
-        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_5.webp",
-        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_5.webp",
+        "swatch": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_5_delivery.webp",
+        "image": "images/products/camisola_fibrana_poplin_con_manga_volado_dama_estampado_5_delivery.webp",
         "variantId": "estampado-5"
       }
     ]
@@ -6975,7 +6974,7 @@
     "season": "media-estacion",
     "featured": true,
     "featuredBadge": "Nuevo",
-    "image": "images/products/remera_peinado_hombre_negro.webp",
+    "image": "images/products/remera_peinado_hombre_negro_delivery.webp",
     "price": 8500,
     "priceByGroup": {
       "common": 8500,
@@ -6990,27 +6989,27 @@
       {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/remera_peinado_hombre_negro.webp"
+        "image": "images/products/remera_peinado_hombre_negro_delivery.webp"
       },
       {
         "name": "Azul",
         "hex": "#0B1F5B",
-        "image": "images/products/remera_peinado_hombre_azul.webp"
+        "image": "images/products/remera_peinado_hombre_azul_delivery.webp"
       },
       {
         "name": "Gris melange",
         "hex": "#A9A9A9",
-        "image": "images/products/remera_peinado_hombre_gris_melange.webp"
+        "image": "images/products/remera_peinado_hombre_gris_melange_delivery.webp"
       },
       {
         "name": "Gris oscuro",
         "hex": "#4B4B4B",
-        "image": "images/products/remera_peinado_hombre_gris_oscuro.webp"
+        "image": "images/products/remera_peinado_hombre_gris_oscuro_delivery.webp"
       },
       {
         "name": "Verde",
         "hex": "#008000",
-        "image": "images/products/remera_peinado_hombre_verde.webp"
+        "image": "images/products/remera_peinado_hombre_verde_delivery.webp"
       }
     ],
     "sizes": [
@@ -7718,7 +7717,7 @@
     "season": "media-estacion",
     "featured": true,
     "featuredBadge": "Nuevo",
-    "image": "images/products/pantalon_algodon_rustico_chico_negro.webp",
+    "image": "images/products/pantalon_algodon_rustico_chico_negro_delivery.webp",
     "price": 9000,
     "priceByGroup": {
       "common": 9000,
@@ -7733,22 +7732,22 @@
       {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/pantalon_algodon_rustico_chico_negro.webp"
+        "image": "images/products/pantalon_algodon_rustico_chico_negro_delivery.webp"
       },
       {
         "name": "Azul",
         "hex": "#0000FF",
-        "image": "images/products/pantalon_algodon_rustico_chico_azul.webp"
+        "image": "images/products/pantalon_algodon_rustico_chico_azul_delivery.webp"
       },
       {
         "name": "Gris melange",
         "hex": "#A9A9A9",
-        "image": "images/products/pantalon_algodon_rustico_chico_gris_melange.webp"
+        "image": "images/products/pantalon_algodon_rustico_chico_gris_melange_delivery.webp"
       },
       {
         "name": "Gris oscuro",
         "hex": "#4B4B4B",
-        "image": "images/products/pantalon_algodon_rustico_chico_gris_oscuro.webp"
+        "image": "images/products/pantalon_algodon_rustico_chico_gris_oscuro_delivery.webp"
       }
     ],
     "sizes": [
@@ -8969,7 +8968,7 @@
     "season": "media-estacion",
     "featured": true,
     "featuredBadge": "Nuevo",
-    "image": "images/products/calza_lycra_morley_con_bolsillos_negro.webp",
+    "image": "images/products/calza_lycra_morley_con_bolsillos_negro_delivery.webp",
     "price": 12000,
     "priceByGroup": {
       "common": 12000
@@ -8978,44 +8977,43 @@
       {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/calza_lycra_morley_con_bolsillos_negro.webp"
+        "image": "images/products/calza_lycra_morley_con_bolsillos_negro_delivery.webp"
       },
       {
         "name": "Fucsia",
         "hex": "#FF00A8",
-        "image": "images/products/calza_lycra_morley_con_bolsillos_fucsia.webp"
+        "image": "images/products/calza_lycra_morley_con_bolsillos_fucsia_delivery.webp"
       },
       {
         "name": "Verde",
         "hex": "#6bff6b",
-        "image": "images/products/calza_lycra_morley_con_bolsillos_verde.webp"
+        "image": "images/products/calza_lycra_morley_con_bolsillos_verde_delivery.webp"
       },
       {
         "name": "Azul",
         "hex": "#6b8cff",
-        "image": "images/products/calza_lycra_morley_con_bolsillos_azul.webp"
+        "image": "images/products/calza_lycra_morley_con_bolsillos_azul_delivery.webp"
       },
       {
         "name": "Azul lavanda",
         "hex": "#CCCCFF",
-        "image": "images/products/calza_lycra_morley_con_bolsillos_azul lavanda.webp"
+        "image": "images/products/calza_lycra_morley_con_bolsillos_azul lavanda_delivery.webp"
       },
       {
         "name": "Gris",
         "hex": "#6c757d",
-        "image": "images/products/calza_lycra_morley_con_bolsillos_gris.webp"
+        "image": "images/products/calza_lycra_morley_con_bolsillos_gris_delivery.webp"
       },
       {
         "name": "Bordo",
         "hex": "#800040",
-        "image": "images/products/calza_lycra_morley_con_bolsillos_bordo.webp"
+        "image": "images/products/calza_lycra_morley_con_bolsillos_bordo_delivery.webp"
       },
       {
         "name": "Chocolate",
         "hex": "#45322e",
-        "image": "images/products/calza_lycra_morley_con_bolsillos_chocolate.webp"
+        "image": "images/products/calza_lycra_morley_con_bolsillos_chocolate_delivery.webp"
       }
-
     ],
     "sizes": [
       "1",
@@ -9064,9 +9062,9 @@
     "type": "calzas",
     "name": "Calza oxford algodon con lycra dama",
     "season": "media-estacion",
-    "featured":true,
-    "featuredBadge":"Nuevo",
-    "image": "images/products/calza_oxford_algodon_con_lycra_negro.webp",
+    "featured": true,
+    "featuredBadge": "Nuevo",
+    "image": "images/products/calza_oxford_algodon_con_lycra_negro_delivery.webp",
     "price": 13500,
     "priceByGroup": {
       "common": 13500,
@@ -9081,7 +9079,7 @@
       {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/calza_oxford_algodon_con_lycra_negro.webp"
+        "image": "images/products/calza_oxford_algodon_con_lycra_negro_delivery.webp"
       }
     ],
     "sizes": [
@@ -9451,7 +9449,7 @@
     "season": "media-estacion",
     "featured": true,
     "featuredBadge": "Más vendido",
-    "image": "images/products/campera_lycra_estampado_1.webp",
+    "image": "images/products/campera_lycra_estampado_1_delivery.webp",
     "price": 24000,
     "priceByGroup": {
       "common": 24000,
@@ -9466,62 +9464,62 @@
       {
         "name": "Estampado 1",
         "hex": "#888888",
-        "swatch": "images/products/campera_lycra_estampado_1.webp",
-        "image": "images/products/campera_lycra_estampado_1.webp"
+        "swatch": "images/products/campera_lycra_estampado_1_delivery.webp",
+        "image": "images/products/campera_lycra_estampado_1_delivery.webp"
       },
       {
         "name": "Estampado 2",
         "hex": "#888888",
-        "swatch": "images/products/campera_lycra_estampado_2.webp",
-        "image": "images/products/campera_lycra_estampado_2.webp"
+        "swatch": "images/products/campera_lycra_estampado_2_delivery.webp",
+        "image": "images/products/campera_lycra_estampado_2_delivery.webp"
       },
       {
         "name": "Estampado 3",
         "hex": "#888888",
-        "swatch": "images/products/campera_lycra_estampado_3.webp",
-        "image": "images/products/campera_lycra_estampado_3.webp"
+        "swatch": "images/products/campera_lycra_estampado_3_delivery.webp",
+        "image": "images/products/campera_lycra_estampado_3_delivery.webp"
       },
       {
         "name": "Estampado 4",
         "hex": "#888888",
-        "swatch": "images/products/campera_lycra_estampado_4.webp",
-        "image": "images/products/campera_lycra_estampado_4.webp"
+        "swatch": "images/products/campera_lycra_estampado_4_delivery.webp",
+        "image": "images/products/campera_lycra_estampado_4_delivery.webp"
       },
       {
         "name": "Estampado 5",
         "hex": "#888888",
-        "swatch": "images/products/campera_lycra_estampado_5.webp",
-        "image": "images/products/campera_lycra_estampado_5.webp"
+        "swatch": "images/products/campera_lycra_estampado_5_delivery.webp",
+        "image": "images/products/campera_lycra_estampado_5_delivery.webp"
       },
       {
         "name": "Estampado 6",
         "hex": "#888888",
-        "swatch": "images/products/campera_lycra_estampado_6.webp",
-        "image": "images/products/campera_lycra_estampado_6.webp"
+        "swatch": "images/products/campera_lycra_estampado_6_delivery.webp",
+        "image": "images/products/campera_lycra_estampado_6_delivery.webp"
       },
       {
         "name": "Estampado 7",
         "hex": "#888888",
-        "swatch": "images/products/campera_lycra_estampado_7.webp",
-        "image": "images/products/campera_lycra_estampado_7.webp"
+        "swatch": "images/products/campera_lycra_estampado_7_delivery.webp",
+        "image": "images/products/campera_lycra_estampado_7_delivery.webp"
       },
       {
         "name": "Estampado 8",
         "hex": "#888888",
-        "swatch": "images/products/campera_lycra_estampado_8.webp",
-        "image": "images/products/campera_lycra_estampado_8.webp"
+        "swatch": "images/products/campera_lycra_estampado_8_delivery.webp",
+        "image": "images/products/campera_lycra_estampado_8_delivery.webp"
       },
       {
         "name": "Estampado 9",
         "hex": "#888888",
-        "swatch": "images/products/campera_lycra_estampado_9.webp",
-        "image": "images/products/campera_lycra_estampado_9.webp"
+        "swatch": "images/products/campera_lycra_estampado_9_delivery.webp",
+        "image": "images/products/campera_lycra_estampado_9_delivery.webp"
       },
       {
         "name": "Estampado 10",
         "hex": "#888888",
-        "swatch": "images/products/campera_lycra_estampado_10.webp",
-        "image": "images/products/campera_lycra_estampado_10.webp"
+        "swatch": "images/products/campera_lycra_estampado_10_delivery.webp",
+        "image": "images/products/campera_lycra_estampado_10_delivery.webp"
       }
     ],
     "sizes": [
@@ -9601,7 +9599,7 @@
     "season": "media-estacion",
     "featured": true,
     "featuredBadge": "Nuevo",
-    "image": "images/products/campera_corto_lycra_morley_negro.webp",
+    "image": "images/products/campera_corto_lycra_morley_negro_delivery.webp",
     "price": 14000,
     "priceByGroup": {
       "common": 14000
@@ -9610,17 +9608,17 @@
       {
         "name": "Negro",
         "hex": "#000000",
-        "image": "images/products/campera_corto_lycra_morley_negro.webp"
+        "image": "images/products/campera_corto_lycra_morley_negro_delivery.webp"
       },
       {
         "name": "Fucsia",
         "hex": "#FF00A8",
-        "image": "images/products/campera_corto_lycra_morley_fucsia.webp"
+        "image": "images/products/campera_corto_lycra_morley_fucsia_delivery.webp"
       },
       {
         "name": "Lila",
         "hex": "#C8A2C8",
-        "image": "images/products/campera_corto_lycra_morley_lila.webp"
+        "image": "images/products/campera_corto_lycra_morley_lila_delivery.webp"
       }
     ],
     "sizes": [

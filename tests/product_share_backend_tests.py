@@ -62,7 +62,7 @@ def run() -> None:
             response = main.product_page(request_for(f"/product/{slug}"), slug)
             html_text = bytes(response.body).decode("utf-8")
             encoded_name = quote(product["name"], safe="-_.!~*'()")
-            expected_url = f"https://romix.example/product.html?id={slug}&slug={slug}&name={encoded_name}"
+            expected_url = f"https://romix.example/productos/{slug}/"
 
             assert_true(response.status_code == 200, f"{section}: status incorrecto")
             assert_true(meta(html_text, "property", "og:type") == "product", f"{section}: og:type")

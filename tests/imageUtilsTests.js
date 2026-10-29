@@ -125,5 +125,13 @@ function loadImageUtils() {
     'Si agota las fuentes debe terminar en placeholder'
   );
 
+  const unusualPath = 'images/products/Calza_algodon con_lycra gris, oscuro.webp';
+  const encodedPath = 'images/products/Calza_algodon%20con_lycra%20gris%2C%20oscuro.webp';
+  assert(utils.srcsetUrl(unusualPath) === encodedPath, 'Srcset candidates must encode spaces and commas');
+  assert(utils.srcsetUrl(encodedPath) === encodedPath, 'Already encoded filenames must not be double encoded');
+  const picture = utils.createPicture({src: 'images/fallback.png', webpSrc: unusualPath, avifSrc: unusualPath.replace('.webp', '.avif')});
+  assert(picture.picture.querySelector('source[type="image/webp"]').getAttribute('srcset') === encodedPath, 'Picture sources must use the complete encoded URL');
+  assert(picture.img.getAttribute('src') === 'images/fallback.png', 'Srcset repair must preserve the original fallback');
+
   console.log('imageUtilsTests: passed');
 })();

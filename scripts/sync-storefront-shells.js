@@ -3,7 +3,7 @@ const path = require('node:path');
 
 const templateDir = path.join(__dirname, '..', 'frontend', 'src', 'templates');
 const publicDir = path.join(__dirname, '..', 'frontend', 'public');
-const pages = ['index.html', 'catalogo.html', 'product.html', 'cart.html', 'ayuda.html', '404.html'];
+const pages = ['index.html', 'catalogo.html', 'product.html', 'cart.html', 'ayuda.html', 'privacidad.html', 'terminos.html', '404.html'];
 const generatedPages = [...pages, ...require('../frontend/public/assets/js/catalog-sections').categories.map(category => `${category.key}/index.html`)];
 const partials = ['header', 'footer'];
 
@@ -19,26 +19,19 @@ function renderPage(page, sourceDir = templateDir) {
   if (html.includes('<!-- ROMIX:INCLUDE:')) throw new Error(page + ': unresolved include');
   const origin = require('./generate-share-pages').deploymentSiteUrl();
   html = html.replaceAll('%%ROMIX_SITE_ORIGIN%%', origin);
+  html = html.replace('<head>', '<head>\n  <script src="/assets/js/product-url.js?v=1"></script>');
+  if (page === 'catalogo.html') html = require('./generate-category-pages').renderCatalog(html);
   return html;
 }
 
 function main() {
-  const configured = String(process.env.ROMIX_API_ORIGIN || '').trim();
-  if (configured) {
-    const url = new URL(configured);
-    if (url.protocol !== 'https:' && !['localhost','127.0.0.1'].includes(url.hostname)) throw new Error('ROMIX_API_ORIGIN must use HTTPS');
-    if (url.pathname !== '/' || url.search || url.hash || url.username || url.password) throw new Error('ROMIX_API_ORIGIN must be an origin without credentials or paths');
-  }
-  fs.writeFileSync(path.join(publicDir,'assets/js/romix-api-config.js'),
-    'window.ROMIX_API_ORIGIN = '+JSON.stringify(configured.replace(/\/$/,''))+';\n'+
-    'window.romixApiUrl = path => (window.ROMIX_API_ORIGIN || "") + path;\n');
   const cssDir = path.join(publicDir, "assets", "css");
-  const homeStyles = ["romix-design-system.css", "romix-home-pro.css", "romix-minimal-theme.css", "romix-pricing.css", "romix-header.css"];
+  const homeStyles = ["romix-design-system.css", "romix-home-pro.css", "romix-minimal-theme.css", "romix-pricing.css", "romix-header.css", "romix-product-card.css"];
   fs.writeFileSync(path.join(cssDir, "romix-home-bundle.css"), homeStyles.map(file => fs.readFileSync(path.join(cssDir, file), "utf8")).join("\n"));
   // Render every page before writing, so invalid templates leave the output intact.
   const rendered = pages.map(page => ({page, html: renderPage(page)}));
   for (const {page, html} of rendered) fs.writeFileSync(path.join(publicDir, page), html, 'utf8');
-  require('./generate-category-pages').main(rendered.find(item => item.page === 'catalogo.html').html,
+  require('./generate-category-pages').main(renderPage('catalogo.html'),
     require('./generate-share-pages').deploymentSiteUrl());
   console.log('Storefront pages generated: ' + rendered.length);
 }

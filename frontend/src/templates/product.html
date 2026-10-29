@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <script src="/assets/js/romix-api-config.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- ROMIX:SHELL:CRITICAL:START -->
-<link rel="stylesheet" href="assets/css/romix-shell-base.css?v=18" data-romix-shell-critical />
+<link rel="stylesheet" href="assets/css/romix-shell-base.css?v=23" data-romix-shell-critical />
 <!-- ROMIX:SHELL:CRITICAL:END -->
   <title>ROMIX - Detalle</title>
   <meta name="romix-site-origin" content="%%ROMIX_SITE_ORIGIN%%" />
@@ -24,14 +23,16 @@
   </script>
   <link rel="icon" href="images/branding/romix-logo-icon.webp" type="image/webp" sizes="180x180" />
   <link rel="apple-touch-icon" href="images/branding/romix-logo-icon.webp" sizes="180x180" />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" /></noscript>
-  <link rel="stylesheet" href="assets/css/romix-design-system.css?v=20" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" /><noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" /></noscript>
+  <link rel="stylesheet" href="assets/css/romix-design-system.css?v=23" />
   <link rel="stylesheet" href="assets/css/size-guide-drawer.css?v=19">
-  <link rel="stylesheet" href="assets/css/romix-product-detail.css?v=20">
-  <link rel="stylesheet" href="assets/css/romix-pricing.css?v=19" />
-  <link rel="stylesheet" href="assets/css/romix-header.css?v=20" />
-  <link rel="stylesheet" href="assets/css/romix-footer.css?v=19" />
-  <script defer src="/assets/js/romix-analytics.js?v=1"></script>
+  <link rel="stylesheet" href="assets/css/romix-product-detail.css?v=23">
+  <link rel="stylesheet" href="assets/css/romix-pricing.css?v=23" />
+  <link rel="stylesheet" href="assets/css/romix-product-card.css?v=1" />
+  <link rel="stylesheet" href="assets/css/romix-header.css?v=25" />
+  <link rel="stylesheet" href="/assets/css/cookie-consent.css?v=2" />
+  <link rel="stylesheet" href="assets/css/romix-footer.css?v=23" />
+  <script defer src="/assets/js/romix-analytics.js?v=3"></script>
 </head>
 <body class="product-detail-page">
 <!-- ROMIX:INCLUDE:HEADER -->
@@ -98,11 +99,11 @@
   </main>
 <!-- ROMIX:INCLUDE:FOOTER -->
 
-  <script src="assets/js/romix-image-utils.js?v=20"></script>
+  <script src="assets/js/romix-image-utils.js?v=21"></script>
   <script src="assets/js/color-utils.js?v=19"></script>
   <script src="assets/js/slugify.js?v=19"></script>
   <script src="assets/js/share-versions.js?v=19"></script>
-  <script src="assets/js/cart.js?v=19"></script>
+  <script src="assets/js/cart.js?v=20"></script>
   <script src="assets/js/romix-pricing.js?v=19"></script>
   <script src="assets/js/products-store.js?v=20"></script>
   <script src="assets/js/inventory.js?v=19"></script>
@@ -136,6 +137,7 @@
         || isTemplatePlaceholder(document.getElementById('preloaded-products')?.textContent || '');
       const CART_KEY = 'cart';
       const imageUtils = window.romixImageUtils || {};
+      const srcsetUrl = imageUtils.srcsetUrl || (value => String(value || '').replace(/[\t\n\f\r ,]/g, character => encodeURIComponent(character)));
       const pricing = window.romixPricing || {};
       const productImageSize = imageUtils.dimensions && imageUtils.dimensions.productFull
         ? imageUtils.dimensions.productFull
@@ -422,6 +424,7 @@
       }
 
       function buildHref(product, buy){
+        if (window.romixProductUrl) return window.romixProductUrl.detailHref(product) + (buy ? '?buy=1' : '');
         const pid = encodeURIComponent(product && product.id ? String(product.id) : slugifyName(product && product.name));
         const slug = encodeURIComponent(slugifyName(product && product.name));
         const name = encodeURIComponent(String(product && product.name || ''));
@@ -430,6 +433,7 @@
       }
 
       function buildShareSlug(product) {
+        if (window.romixProductUrl) return window.romixProductUrl.productSlug(product);
         const baseSource = (product && (product.name || product.id)) ? (product.name || product.id) : 'producto';
         const baseSlug = slugifyName(baseSource) || 'producto';
         const rawId = String(product && product.id ? product.id : '').trim();
@@ -443,7 +447,7 @@
         const origin = document.querySelector('meta[name="romix-site-origin"]').content;
         const slug = buildShareSlug(product);
         const id = encodeURIComponent(String(product.id || slug));
-        const canonical = `${origin}/product.html?id=${id}&slug=${encodeURIComponent(slug)}&name=${encodeURIComponent(product.name || '')}`;
+        const canonical = origin + (window.romixProductUrl ? window.romixProductUrl.detailHref(product) : `/product.html?id=${id}&slug=${encodeURIComponent(slug)}&name=${encodeURIComponent(product.name || '')}`);
         const description = String(product.description || product.desc || product.subtitle
           || `${product.name}. Consultá talles, colores y precios de indumentaria ROMIX.`).replace(/\s+/g, ' ').trim().slice(0, 220);
         const image = new URL(product.image || 'images/branding/romix-logo-social.webp', origin + '/').href;
@@ -491,7 +495,7 @@
         const raw = String(value || '').trim();
         if (!raw) return '';
         if (/^https?:\/\//i.test(raw)) return raw;
-        return new URL(raw.replace(/^\/+/, ''), (window.ROMIX_PRODUCT_PREVIEW ? new URL(document.baseURI).origin : location.origin) + '/').href;
+        return new URL(raw.replace(/^\/+/, ''), location.origin + '/').href;
       }
 
       function ensureProductImagePreload(value) {
@@ -515,12 +519,12 @@
       function buildShareUrl(product) {
         const slug = buildShareSlug(product);
         if (slug) {
-          const url = new URL(`share/${encodeURIComponent(slug)}/`, (window.ROMIX_PRODUCT_PREVIEW ? new URL(document.baseURI).origin : location.origin) + '/');
+          const url = new URL(`share/${encodeURIComponent(slug)}/`, location.origin + '/');
           const version = window.ROMIX_SHARE_VERSIONS && window.ROMIX_SHARE_VERSIONS[slug];
           if (version) url.searchParams.set('v', version);
           return url.href;
         }
-        return new URL(buildHref(product, false), (window.ROMIX_PRODUCT_PREVIEW ? new URL(document.baseURI).origin : location.origin) + '/').href;
+        return new URL(buildHref(product, false), location.origin + '/').href;
       }
 
       function buildShareMessageBody(product) {
@@ -539,6 +543,8 @@
         const nativeBtn = document.getElementById('btn-share-native');
         const waBtn = document.getElementById('btn-share-whatsapp');
         const copyBtn = document.getElementById('btn-share-copy');
+        const telegramBtn = document.getElementById('btn-share-telegram');
+        const emailBtn = document.getElementById('btn-share-email');
         const shareInput = document.getElementById('share-link-input');
         if (!nativeBtn || !copyBtn || !shareInput) return;
 
@@ -546,6 +552,8 @@
         const shareText = buildShareText(product, shareUrl);
         shareInput.value = shareUrl;
         if (waBtn) waBtn.href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+        if (telegramBtn) telegramBtn.href = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(buildShareMessageBody(product))}`;
+        if (emailBtn) emailBtn.href = `mailto:?subject=${encodeURIComponent(product.name || "Producto ROMIX")}&body=${encodeURIComponent(shareText)}`;
 
         nativeBtn.onclick = async () => {
           if (!navigator.share) {
@@ -553,11 +561,9 @@
             return;
           }
           try {
-            const shareMessage = buildShareMessageBody(product);
             await navigator.share({
               title: String(product && product.name ? product.name : 'Producto ROMIX'),
-              text: shareMessage,
-              url: shareUrl
+              text: shareText
             });
           } catch (error) {
             if (error && error.name !== 'AbortError') {
@@ -569,19 +575,30 @@
         copyBtn.onclick = async () => {
           try {
             if (navigator.clipboard && navigator.clipboard.writeText) {
-              await navigator.clipboard.writeText(shareUrl);
+              await navigator.clipboard.writeText(shareText);
             } else {
-              shareInput.select();
-              document.execCommand('copy');
+              const copyArea = document.createElement("textarea");
+              copyArea.value = shareText;
+              copyArea.setAttribute("readonly", "");
+              copyArea.style.position = "fixed";
+              copyArea.style.opacity = "0";
+              document.body.appendChild(copyArea);
+              copyArea.select();
+              try {
+                if (!document.execCommand('copy')) throw new Error('No se pudo copiar');
+              } finally {
+                copyArea.remove();
+                copyBtn.focus();
+              }
             }
-            showToast('Link copiado para compartir.');
+            showToast('Producto, precios y link copiados para compartir.');
           } catch {
             showToast('No se pudo copiar el link.', 'error');
           }
         };
 
-        nativeBtn.removeAttribute('hidden');
-        nativeBtn.setAttribute('aria-label', navigator.share ? 'Compartir producto' : 'Copiar link del producto');
+        nativeBtn.hidden = typeof navigator.share !== 'function';
+        nativeBtn.setAttribute('aria-label', 'Otras opciones para compartir el producto');
 
       }
 
@@ -743,9 +760,6 @@
       }
 
       function getPriceForSize(product, sizeValue) {
-        const variant = (product.variants || []).find(v => String(v.color).toLowerCase() === String(currentSelectedColor).toLowerCase() && String(v.size) === String(sizeValue));
-        if (variant?.unitPrice != null) return Number(variant.unitPrice);
-        if (variant?.priceOverride != null) return Number(variant.priceOverride);
         const group = getPriceGroupForProductSize(product, sizeValue);
         const base = Number(product.price || 0);
         if (!group || !product.priceByGroup || typeof product.priceByGroup !== 'object') {
@@ -946,7 +960,6 @@
       }
 
       function addCurrentProductToCart() {
-        if (window.ROMIX_PRODUCT_PREVIEW) return null;
         let colorKey = currentSelectedColor || 'Unico';
         let colorId = null;
         const colorActive = document.querySelector('[data-color-option].is-active, [data-color-option].active, [data-color-option].selected');
@@ -1041,10 +1054,10 @@
           return window.romixProductsStore.load({
             preloadedScriptId: 'preloaded-products',
             dataUrl: DATA_URL,
-            useApi: true
+            useApi: !localStaticPreview
           });
         }
-        const response = await fetch(new URL(DATA_URL, location.href));
+        const response = await fetch(new URL(DATA_URL, document.baseURI));
         if (!response.ok) throw new Error('HTTP ' + response.status);
         const json = await response.json();
         return sanitizeList(Array.isArray(json) ? json : []);
@@ -1055,6 +1068,10 @@
         let product = null;
         if (idParam) {
           product = list.find(item => String(item.id) === idParam);
+          if (!product) product = list.find(item => !item.id && (
+            slugifyName(item.name || '') === idParam
+            || `${normalizeSlug(item.section)}-${slugifyName(item.name || '')}` === idParam
+          ));
         }
         if (!product && slugParam) {
           product = list.find(item => slugifyName(item.name || '') === slugParam);
@@ -1337,7 +1354,7 @@
         let items = Array.isArray(gallery)
           ? gallery.map(item => item && item.src).filter(Boolean).map(src => {
             try {
-              return new URL(src, window.ROMIX_PRODUCT_PREVIEW ? document.baseURI : window.location.href).href;
+              return new URL(src, document.baseURI).href;
             } catch {
               return src;
             }
@@ -1514,7 +1531,7 @@
           items = Array.isArray(nextGallery)
             ? nextGallery.map(item => item && item.src).filter(Boolean).map(src => {
               try {
-                return new URL(src, window.ROMIX_PRODUCT_PREVIEW ? document.baseURI : window.location.href).href;
+                return new URL(src, document.baseURI).href;
               } catch {
                 return src;
               }
@@ -1739,16 +1756,65 @@
         }
       }
 
-      function buildProductDescription(product) {
-        const span = document.createElement('span');
-        span.textContent = String(product.description || product.specs?.short_description || '');
-        return span.innerHTML;
+      function buildProductDescription(product){
+        if (hasProductValue(product?.description)) return String(product.description).trim();
+
+        const name = String(product?.name || 'Prenda ROMIX').trim();
+        const haystack = normalizeProductCopy([
+          name,
+          product?.type,
+          product?.section,
+          product?.season,
+          ...(Array.isArray(product?.features) ? product.features : []),
+          ...(product?.specs && typeof product.specs === 'object' ? Object.values(product.specs) : [])
+        ].join(' '));
+        const isKids = /nino|nina|kids|infantil/.test(haystack);
+
+        if (isKids) {
+          return `${name} es una prenda cómoda y práctica para acompañar el movimiento y las actividades de todos los días. Su diseño se integra fácilmente a los conjuntos de la línea ROMIX.`;
+        }
+        if (/calza/.test(haystack)) {
+          const base = `${name} es una opción cómoda y versátil para acompañarte en el día a día. Su diseño se adapta fácilmente a looks deportivos y urbanos y combina con distintas prendas ROMIX.`;
+          return /lycra/.test(haystack)
+            ? `${base} La presencia de lycra aporta elasticidad y libertad de movimiento.`
+            : base;
+        }
+        if (/algodon/.test(haystack)) {
+          return `${name} es una prenda de algodón pensada para el uso cotidiano, con una sensación suave y un diseño fácil de combinar. Una propuesta versátil para acompañarte en distintos momentos del día.`;
+        }
+        if (/buzo/.test(haystack)) {
+          return `${name} es un buzo versátil para sumar una capa cómoda a tus conjuntos diarios. Ideal para combinar con pantalones, calzas o prendas deportivas ROMIX.`;
+        }
+        if (/campera/.test(haystack)) {
+          return `${name} es una campera pensada para completar looks deportivos y urbanos, con un diseño práctico y fácil de combinar. Una capa versátil para acompañarte durante el día.`;
+        }
+        if (/remera|camiseta|top|musculosa/.test(haystack)) {
+          return `${name} es una prenda versátil para acompañar tus actividades y el uso cotidiano, con un diseño simple que permite combinarla fácilmente. Una base cómoda para distintos looks ROMIX.`;
+        }
+        if (/pantalon|jogger|babucha|short|bermuda/.test(haystack)) {
+          return `${name} está pensado para acompañarte con comodidad en tus actividades y en el uso cotidiano. Su diseño versátil se integra fácilmente a conjuntos deportivos y urbanos.`;
+        }
+        return `${name} es una prenda versátil pensada para acompañarte en tus actividades y el uso cotidiano. Su diseño se integra fácilmente a distintas combinaciones deportivas o urbanas.`;
       }
 
-      function buildProductFeatureFallbacks(product) {
-        return (Array.isArray(product.features) ? product.features : []).filter(Boolean).map(value => {
-          const span = document.createElement('span'); span.textContent = String(value); return span.innerHTML;
-        });
+      function buildProductFeatureFallbacks(product){
+        if (Array.isArray(product?.features)) {
+          const realFeatures = product.features.filter(hasProductValue).map(value => String(value).trim());
+          if (realFeatures.length) return realFeatures.slice(0, 4);
+        }
+
+        const haystack = normalizeProductCopy([
+          product?.name,
+          product?.type,
+          product?.section,
+          ...(product?.specs && typeof product.specs === 'object' ? Object.values(product.specs) : [])
+        ].join(' '));
+        const fallbacks = [];
+        if (/lycra/.test(haystack)) fallbacks.push('Elasticidad y libertad de movimiento');
+        if (/algodon/.test(haystack)) fallbacks.push('Sensación suave');
+        if (/jogger|rustico|pantalon|babucha/.test(haystack)) fallbacks.push('Pensado para uso diario');
+        if (/calza/.test(haystack)) fallbacks.push('Diseño versátil');
+        return fallbacks.slice(0, 4);
       }
 
       function buildProductAccordionItems(product){
@@ -1898,7 +1964,7 @@
             <div class="gallery">
               <div class="main-image">
                 <picture id="main-image-picture">
-                  ${primaryImage.webpSrc ? `<source srcset="${primaryImage.webpSrc}" sizes="${PRODUCT_IMAGE_SIZES}" type="image/webp" />` : ''}
+                  ${primaryImage.webpSrc ? `<source srcset="${srcsetUrl(primaryImage.webpSrc)}" sizes="${PRODUCT_IMAGE_SIZES}" type="image/webp" />` : ''}
                   <img id="main-image" role="button" tabindex="0" aria-haspopup="dialog" src="${primaryImageSrc}" alt="${product.name || 'Producto'}" width="${productImageSize.width}" height="${productImageSize.height}" loading="eager" decoding="async" fetchpriority="high" sizes="${PRODUCT_IMAGE_SIZES}" onerror="this.onerror=null;this.src='${primaryImageFallback}';" />
                 </picture>
                 <button type="button" class="romix-icon-btn zoom-btn" id="zoom-open" aria-label="Acercar imagen" aria-haspopup="dialog">
@@ -1959,16 +2025,26 @@
                 </div>
               </div>
               <div class="share-panel" id="share-panel">
+                <p class="share-heading">Compartir producto</p>
                 <div class="share-actions">
-                  <button type="button" class="share-btn romix-btn romix-btn--outline" id="btn-share-native">
-                    ${window.romixIcon("Share2", { size: "sm" })}<span>Compartir</span>
-                  </button>
-                  <a class="share-btn romix-btn romix-btn--outline" id="btn-contact" href="ayuda.html#contact">
-                    ${window.romixIcon("MessageCircle", { size: "sm" })}<span>Consultar</span>
+                  <a class="share-btn romix-btn romix-btn--outline" id="btn-share-whatsapp" href="#" target="_blank" rel="noopener noreferrer">
+                    ${window.romixIcon("MessageCircle", { size: "sm" })}<span>WhatsApp</span>
                   </a>
+                  <button type="button" class="share-btn romix-btn romix-btn--outline" id="btn-share-copy">
+                    ${window.romixIcon("Copy", { size: "sm" })}<span>Copiar mensaje</span>
+                  </button>
+                  <a class="share-btn romix-btn romix-btn--outline" id="btn-share-telegram" href="#" target="_blank" rel="noopener noreferrer">
+                    ${window.romixIcon("Send", { size: "sm" })}<span>Telegram</span>
+                  </a>
+                  <a class="share-btn romix-btn romix-btn--outline" id="btn-share-email" href="#">
+                    ${window.romixIcon("Mail", { size: "sm" })}<span>Correo</span>
+                  </a>
+                  <button type="button" class="share-btn romix-btn romix-btn--outline" id="btn-share-native" hidden>
+                    ${window.romixIcon("Share2", { size: "sm" })}<span>Otras opciones</span>
+                  </button>
                 </div>
-                <a id="btn-share-whatsapp" href="#" hidden aria-hidden="true" tabindex="-1">WhatsApp</a>
-                <button type="button" id="btn-share-copy" hidden aria-hidden="true">Copiar link</button>
+                <p class="share-help">Incluye nombre, precios por talle y enlace.</p>
+                <a class="share-contact" id="btn-contact" href="ayuda.html#contact">Consultar sobre este producto</a>
                 <input id="share-link-input" type="text" readonly aria-label="Link para compartir" tabindex="-1" />
               </div>
             </div>
@@ -2160,13 +2236,13 @@
             return;
           }
           if (current) {
-            current.srcset = src;
+            current.srcset = srcsetUrl(src);
             current.sizes = PRODUCT_IMAGE_SIZES;
             return;
           }
           const sourceTag = document.createElement('source');
           sourceTag.type = type;
-          sourceTag.srcset = src;
+          sourceTag.srcset = srcsetUrl(src);
           sourceTag.sizes = PRODUCT_IMAGE_SIZES;
           picture.insertBefore(sourceTag, picture.firstChild);
         }
@@ -2262,7 +2338,10 @@
 
         function selectVariant(index, options = {}) {
           const targetIndex = Math.max(0, Math.min(Number(index) || 0, Math.max(0, gallery.length - 1)));
-          const item = gallery[targetIndex] || gallery[0] || {};
+          const galleryItem = gallery[targetIndex] || gallery[0] || {};
+          const item = options.colorName
+            ? { ...galleryItem, colorName: options.colorName, colorKey: options.colorName }
+            : galleryItem;
           const colorName = item.colorName || item.label || 'Unico';
           const displayName = getDisplayColorName(product, colorName);
 
@@ -2443,6 +2522,7 @@
           const opts = options || {};
           if (zoomApi && typeof zoomApi.setGallery === 'function') zoomApi.setGallery(gallery);
           selectVariant(findGalleryIndexForColor(colorName), {
+            colorName,
             skipPickerSync: !!opts.skipPickerSync,
             skipLabelUpdate: !!opts.skipLabelUpdate
           });
@@ -2520,7 +2600,7 @@
             if (isDuplicatePurchaseAction()) return;
             const added = addCurrentProductToCart();
             if (!added) return;
-            window.location.href = 'cart.html';
+            window.location.href = new URL('cart.html', document.baseURI).href;
           });
         }
         minusBtn?.addEventListener('click', () => setQuantity(currentQty - 1));
@@ -2680,7 +2760,7 @@
         gallery.forEach((item) => {
           if (!item || !item.src) return;
           if (thumbs.some((thumb) => thumb.src === item.thumbSrc)) return;
-          thumbs.push({ src: item.thumbSrc || item.src, alt: item.label || product.name || 'Variante' });
+          thumbs.push({ src: item.thumbSrc || item.src, mainSrc: item.src, alt: item.label || product.name || 'Variante' });
         });
         return thumbs.slice(0, 4);
       };
@@ -2709,13 +2789,15 @@
           return;
         }
 
-        const card = document.createElement('a');
-        card.className = 'related-products__card';
-        card.setAttribute('aria-label', p.name || 'Producto relacionado');
-        card.href = href;
+        const card = document.createElement('article');
+        card.className = 'related-products__card romix-product-card';
 
         const imageWrap = document.createElement('div');
         imageWrap.className = 'related-products__image-wrap';
+
+        const imageLink = document.createElement('a');
+        imageLink.className = 'related-products__media-link';
+        imageLink.href = href;
 
         const badgeLabel = getBadgeLabel(p);
         const badge = badgeLabel ? document.createElement('span') : null;
@@ -2739,6 +2821,7 @@
         };
         if (badge) imageWrap.appendChild(badge);
         imageWrap.appendChild(img);
+        imageLink.appendChild(imageWrap);
 
         const content = document.createElement('div');
         content.className = 'related-products__content';
@@ -2746,12 +2829,15 @@
         const thumbs = document.createElement('div');
         thumbs.className = 'related-products__thumbs';
         const variantThumbs = getVariantThumbs(p);
-        if (!variantThumbs.length || variantThumbs.length <= 1) {
-          thumbs.hidden = true;
-        } else {
-          variantThumbs.slice(0, 3).forEach((variant) => {
-            const thumb = document.createElement('span');
+        const thumbControls = [];
+        variantThumbs.slice(0, 4).forEach((variant, index) => {
+            const thumb = document.createElement('button');
+            thumb.type = 'button';
             thumb.className = 'related-products__thumb';
+            thumb.classList.toggle('is-active', index === 0);
+            thumb.setAttribute('aria-label', 'Ver variante ' + (variant.alt || p.name || 'Producto'));
+            thumb.setAttribute('aria-pressed', index === 0 ? 'true' : 'false');
+            thumb.setAttribute('aria-current', index === 0 ? 'true' : 'false');
             const thumbImg = document.createElement('img');
             thumbImg.src = variant.src || PLACEHOLDER;
             thumbImg.alt = variant.alt || p.name || 'Variante';
@@ -2765,32 +2851,44 @@
               thumbImg.src = PLACEHOLDER;
             };
             thumb.appendChild(thumbImg);
+            thumb.addEventListener('click', (event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              const variantMainSrc = variant.mainSrc || variant.src || PLACEHOLDER;
+              img.src = typeof imageUtils.getThumbPath === 'function'
+                ? imageUtils.getThumbPath(variantMainSrc)
+                : toThumbImage(variantMainSrc);
+              img.alt = variant.alt || p.name || 'Producto';
+              thumbControls.forEach((control, controlIndex) => {
+                const active = controlIndex === index;
+                control.classList.toggle('is-active', active);
+                control.setAttribute('aria-pressed', active ? 'true' : 'false');
+                control.setAttribute('aria-current', active ? 'true' : 'false');
+              });
+            });
             thumbs.appendChild(thumb);
+            thumbControls.push(thumb);
           });
-          if (variantThumbs.length > 3) {
+          if (variantThumbs.length > 4) {
             const more = document.createElement('span');
             more.className = 'related-products__more';
-            more.textContent = '+' + (variantThumbs.length - 3);
+            more.textContent = '+' + (variantThumbs.length - 4);
+            more.setAttribute('aria-label', 'Hay ' + (variantThumbs.length - 4) + ' variantes adicionales');
             thumbs.appendChild(more);
           }
-        }
 
-        const name = document.createElement('div');
+        const name = document.createElement('a');
         name.className = 'related-products__name';
+        name.href = href;
         name.textContent = p.name || 'Producto';
-
-        const meta = document.createElement('div');
-        meta.className = 'related-products__meta';
-        meta.textContent = getMetaLabel(p);
 
         const footer = document.createElement('div');
         footer.className = 'related-products__footer';
 
-        const priceDisplay = typeof pricing.createPriceDisplay === 'function'
-          ? pricing.createPriceDisplay(p, {
+        const priceDisplay = typeof pricing.createCardPriceDisplay === 'function'
+          ? pricing.createCardPriceDisplay(p, {
               currentClass: 'related-products__price',
-              currentTag: 'span',
-              variant: 'mini'
+              currentTag: 'span'
             })
           : null;
         const price = priceDisplay || document.createElement('strong');
@@ -2799,18 +2897,16 @@
           price.textContent = '$' + Number(p.price || 0).toLocaleString('es-AR');
         }
 
-        const stock = document.createElement('span');
-        const stockMeta = getStockMeta(p);
-        stock.className = 'related-products__stock ' + stockMeta.css;
-        stock.textContent = stockMeta.label;
-
         content.appendChild(thumbs);
         content.appendChild(name);
-        content.appendChild(meta);
         footer.appendChild(price);
-        footer.appendChild(stock);
         content.appendChild(footer);
-        card.appendChild(imageWrap);
+        const cta = document.createElement('a');
+        cta.className = 'related-products__cta';
+        cta.href = href;
+        cta.textContent = 'Ver producto';
+        content.appendChild(cta);
+        card.appendChild(imageLink);
         card.appendChild(content);
 
         container.appendChild(card);
@@ -2868,12 +2964,12 @@
             window.history.back();
             return;
           }
-          window.location.href = backLink.getAttribute('href') || 'index.html';
+          window.location.href = backLink.href || new URL('index.html', document.baseURI).href;
         });
       }
 
-      const productsRequest = window.ROMIX_PRODUCT_PREVIEW ? Promise.resolve([window.ROMIX_PRODUCT_PREVIEW]) : loadProducts();
-      const inventoryRequest = !window.ROMIX_PRODUCT_PREVIEW && window.romixInventory && typeof window.romixInventory.syncFromApi === 'function'
+      const productsRequest = loadProducts();
+      const inventoryRequest = !localStaticPreview && window.romixInventory && typeof window.romixInventory.syncFromApi === 'function'
         ? window.romixInventory.syncFromApi()
         : Promise.resolve({ ok: false });
 
@@ -2884,13 +2980,14 @@
         try {
           const [list] = await Promise.all([productsRequest, inventoryRequest]);
           const safeList = Array.isArray(list) ? list.filter(item => !isHiddenProduct(item)) : [];
-          const product = window.ROMIX_PRODUCT_PREVIEW || findProduct(safeList) || (serverProduct && !isHiddenProduct(serverProduct) ? serverProduct : null);
+          const product = (serverProduct && !isHiddenProduct(serverProduct))
+            ? serverProduct
+            : findProduct(safeList);
           if (!product) {
             showNotFound();
             return;
           }
           renderProduct(product);
-          if (window.ROMIX_PRODUCT_PREVIEW) document.querySelectorAll('#btn-add, #btn-buy').forEach(button => { button.disabled = true; });
           renderFeatures(product);
           scheduleRelatedProducts(safeList, product);
           if (buyParam === '1') {
@@ -2905,7 +3002,7 @@
           if (detail) {
             detail.classList.remove('is-loading');
             detail.setAttribute('aria-busy', 'false');
-            detail.innerHTML = '<p>Error al cargar el producto. Intenta recargar la página.</p>';
+            if (!detail.querySelector('[data-romix-static-product]')) detail.innerHTML = '<p>Error al cargar el producto. Intenta recargar la página.</p>';
           }
         }
       }

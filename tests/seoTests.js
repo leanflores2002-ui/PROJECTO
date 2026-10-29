@@ -9,7 +9,7 @@ const products = require('../frontend/public/assets/data/products.json');
 const origin = require('../config/site.json').origin;
 const xml = new JSDOM(sitemap(products, origin), {contentType: 'application/xml'}).window.document;
 const urls = [...xml.querySelectorAll('loc')].map(node => node.textContent);
-assert.equal(urls.length, products.filter(p => p.visible !== false).length + 6);
+assert.equal(urls.length, products.filter(p => p.visible !== false).length + 8);
 assert.equal(new Set(urls).size, urls.length);
 for (const product of products) {
   const url = origin + detailHref(product, productSlug(product));
@@ -24,7 +24,7 @@ assert(isPreview({VERCEL_ENV: 'preview'}));
 assert(isPreview({CONTEXT: 'deploy-preview'}));
 assert(!isPreview({VERCEL_ENV: 'production'}));
 assert(!isPreview({CONTEXT: 'production'}));
-for (const file of ['index.html', 'catalogo.html', 'ayuda.html', 'product.html', 'cart.html', '404.html']) {
+for (const file of ['index.html', 'catalogo.html', 'ayuda.html', 'privacidad.html', 'terminos.html', 'product.html', 'cart.html', '404.html']) {
   const html = renderPage(file);
   assert(!html.includes('romi-damas.netlify.app'));
   const preview = new JSDOM(previewHtml(html)).window.document;

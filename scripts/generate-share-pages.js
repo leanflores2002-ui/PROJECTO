@@ -36,15 +36,7 @@ function slugify(value) {
     .replace(/^-+|-+$/g, "") || "producto";
 }
 
-function productSlug(product) {
-  const baseSource = (product && (product.name || product.id)) ? (product.name || product.id) : "producto";
-  const baseSlug = slugify(baseSource) || "producto";
-  const rawId = String((product && product.id) || "").trim();
-  if (!rawId) return baseSlug;
-  const idSlug = slugify(rawId);
-  if (!idSlug || idSlug === baseSlug || baseSlug.endsWith(`-${idSlug}`)) return baseSlug;
-  return `${baseSlug}-${idSlug}`;
-}
+const {productSlug, detailHref} = require('../frontend/public/assets/js/product-url');
 
 function escapeHtml(value) {
   return String(value || "")
@@ -95,6 +87,12 @@ function productImage(product) {
 }
 
 function productDescription(product) {
+  const prices = require("./share-prices").sharePrices(product || {});
+  const details = productDetailsDescription(product);
+  return (prices ? `${prices}. ${details}` : details).slice(0, 220);
+}
+
+function productDetailsDescription(product) {
   const candidates = [
     product && product.description,
     product && product.desc,
@@ -114,12 +112,6 @@ function productTitle(product) {
   return `${name} | ROMIX`;
 }
 
-function detailHref(product, slug) {
-  const pid = encodeURIComponent(String((product && product.id) || slug || "producto"));
-  const safeSlug = encodeURIComponent(String(slug || "producto"));
-  const name = encodeURIComponent(String((product && product.name) || "").trim());
-  return `/product.html?id=${pid}&slug=${safeSlug}&name=${name}`;
-}
 
 function scriptString(value) {
   return JSON.stringify(value).replaceAll('<', String.raw`\u003c`).replaceAll('>', String.raw`\u003e`)
@@ -128,12 +120,14 @@ function scriptString(value) {
 
 function shareHtml({ title, description, imageUrl, shareUrl, detailUrl, social, alt }) {
   const detail = new URL(detailUrl);
-  if (detail.origin !== new URL(shareUrl).origin || detail.pathname !== '/product.html' || detail.username || detail.password || !['http:', 'https:'].includes(detail.protocol)) throw new Error('Invalid product redirect');
+  if (detail.origin !== new URL(shareUrl).origin || (detail.pathname !== '/product.html' && !/^\/productos\/[a-z0-9-]+\/$/.test(detail.pathname)) || detail.username || detail.password || !['http:', 'https:'].includes(detail.protocol)) throw new Error('Invalid product redirect');
   const safeTitle = escapeHtml(title);
   const safeDescription = escapeHtml(description);
   const safeImage = escapeHtml(imageUrl);
   const safeShare = escapeHtml(shareUrl);
   const safeDetail = escapeHtml(detailUrl);
+  const navigationPath = detail.pathname + detail.search;
+  const safeNavigation = escapeHtml(navigationPath);
 
   return `<!DOCTYPE html>
 <html lang="es">
@@ -162,11 +156,11 @@ function shareHtml({ title, description, imageUrl, shareUrl, detailUrl, social, 
   <meta name="twitter:image:alt" content="${escapeHtml(alt)}" />
   <meta name="twitter:url" content="${safeShare}" />
   <link rel="canonical" href="${safeDetail}" />
-  <script>window.location.replace(${scriptString(detailUrl)});</script>
+  <script>window.location.replace(${scriptString(navigationPath)});</script>
 </head>
 <body>
   <p>Redirigiendo al producto...</p>
-  <p><a href="${safeDetail}">Abrir producto</a></p>
+  <p><a href="${safeNavigation}">Abrir producto</a></p>
 </body>
 </html>
 `;
@@ -189,7 +183,7 @@ function buildSharePage(product, siteUrl, social) {
   const imageUrl = image.href;
   const title = productTitle(product);
   const description = productDescription(product);
-  const version = hash(JSON.stringify({id:product.id,title,description,imageHash:social.imageHash,source:social.source,updatedAt:product.updated_at || '',schema:1})).slice(0,16);
+  const version = hash(JSON.stringify({id:product.id,title,description,imageHash:social.imageHash,source:social.source,updatedAt:product.updated_at || '',schema:2})).slice(0,16);
   const html = shareHtml({ title, description, imageUrl, shareUrl, detailUrl, social, alt:product.name });
   return { slug, shareUrl, detailUrl, imageUrl, title, description, html, version, social };
 }
@@ -234,6 +228,7 @@ async function main() {
   }
   fs.writeFileSync(path.join(PUBLIC_DIR,'assets/data/share-manifest.json'),JSON.stringify(manifest));
   fs.writeFileSync(path.join(PUBLIC_DIR,'assets/js/share-versions.js'),`window.ROMIX_SHARE_VERSIONS=${JSON.stringify(versions)};\n`);
+  require('./generate-product-pages').main(list, siteUrl);
   require('./generate-seo').main(list, siteUrl);
 
   console.log(`Share pages generated: ${created}`);
@@ -247,6 +242,7 @@ module.exports = {
   buildSharePage,
   deploymentSiteUrl,
   productDescription,
+  productDetailsDescription,
   productImage,
   productSlug,
   productTitle,

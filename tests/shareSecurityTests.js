@@ -59,8 +59,9 @@ async function main() {
   const prefix='window.location.replace(';
   assert.ok(script.startsWith(prefix) && script.endsWith(');'));
   const redirect=JSON.parse(script.slice(prefix.length,-2));
-  assert.equal(new URL(redirect).origin,origin);
-  assert.equal(new URL(redirect).searchParams.get('name'),product.name);
+  assert.equal(new URL(redirect, origin).origin,origin);
+  assert.equal(new URL(redirect, origin).pathname, `/productos/${require('../scripts/generate-share-pages').productSlug(product)}/`);
+  assert.equal(new URL(redirect, "https://preview.vercel.app").origin, "https://preview.vercel.app", "Share redirect must preserve the preview host");
   const crafted={title:'x',description:'x',imageUrl:origin+'/images/a.jpg',shareUrl:origin+'/share/a/',detailUrl:origin+'/product.html?x=</script>\u2028&',social,alt:'x'};
   assert.equal(new JSDOM(shareHtml(crafted)).window.document.querySelectorAll('script').length,1);
   assert.throws(()=>shareHtml({...crafted,detailUrl:'https://evil.test/product.html'}));

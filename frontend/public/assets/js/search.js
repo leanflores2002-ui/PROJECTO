@@ -180,6 +180,7 @@
   }
 
   function buildDetailUrl(product, slugOverride, nameOverride) {
+    if (window.romixProductUrl) return window.romixProductUrl.detailHref(product);
     const slugValue = slugOverride || slugify(product && product.name ? product.name : "");
     const nameValue = nameOverride || globalFixUtf8(product && product.name ? product.name : "");
     const pid = typeof window.productId === "function" ? window.productId(product) : (product && (product.id || product.slug)) || slugValue;

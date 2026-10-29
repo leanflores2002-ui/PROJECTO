@@ -1,0 +1,38 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+const {JSDOM} = require('jsdom');
+const {renderProduct} = require('../scripts/generate-product-pages');
+const urls = require('../frontend/public/assets/js/product-url');
+const products = require('../frontend/public/assets/data/products.json');
+const origin = require('../config/site.json').origin;
+const root = path.resolve(__dirname, '../frontend/public');
+const context = {window: {}};
+vm.runInNewContext(fs.readFileSync(path.join(root, 'assets/js/product-url.js'), 'utf8'), context);
+for (const product of products.filter(p => p.visible !== false)) {
+  const url = urls.detailHref(product);
+  const html = fs.readFileSync(path.join(root, url, 'index.html'), 'utf8');
+  assert.equal(html, renderProduct(product, origin, {}), 'Generated product must match its sources');
+  const id = product.id || `${product.section}-${urls.productSlug(product)}`;
+  assert.equal(context.window.romixProductUrl.detailHref({...product, id}), url, 'Runtime normalization must preserve canonical identity');
+  const doc = new JSDOM(html, {url: origin + url}).window.document;
+  assert.equal(doc.querySelectorAll('h1').length, 1);
+  assert.equal(doc.querySelector('h1').textContent, product.name);
+  assert.equal(doc.querySelector('link[rel=canonical]').href, origin + url);
+  assert.equal(doc.querySelector('base').href, origin + '/');
+  assert.equal(doc.querySelector('meta[property="og:url"]').content, origin + url);
+  const schema = JSON.parse(doc.querySelector('#romix-product-schema').textContent);
+  assert.equal(schema.name, product.name);
+  assert.equal(schema.url, origin + url);
+  assert(!schema.offers && !schema.aggregateRating);
+  assert.equal(JSON.parse(doc.querySelector('#preloaded-product').textContent).name, product.name);
+  const preview = new JSDOM(renderProduct(product, origin, {VERCEL_ENV: 'preview'})).window.document;
+  assert.equal(preview.querySelector('meta[name=robots]').content, 'noindex, follow');
+  doc.defaultView.close(); preview.defaultView.close();
+}
+const catalog = new JSDOM(fs.readFileSync(path.join(root, 'catalogo.html'), 'utf8')).window.document;
+assert.equal(catalog.querySelectorAll('#product-grid .product-card').length, products.filter(p => p.visible !== false).length);
+for (const link of catalog.querySelectorAll('#product-grid a')) assert(fs.existsSync(path.join(root, link.getAttribute('href'), 'index.html')));
+catalog.defaultView.close();
+console.log('productSeoTests: passed (all static products, canonical identity, schema, Preview, catalog links)');

@@ -20,6 +20,8 @@ function wait(window, ms) {
 async function main() {
   const catalogSource = readPublic('assets/js/romix-catalog-pages.js');
   const homeSource = readPublic('index.html');
+  const homeCss = readPublic('assets/css/romix-home-bundle.css');
+  assert(homeSource.includes('assets/css/romix-home-bundle.css'), 'Home must load the styles under test');
   const catalogCss = readPublic('assets/css/romix-catalog-pages.css');
   const imageUtilsSource = readPublic('assets/js/romix-image-utils.js');
 
@@ -36,7 +38,7 @@ async function main() {
   assert(!homeSource.includes('thumbLink.classList.remove("is-loaded")'), 'Home no debe ocultar la foto anterior');
   assert(homeSource.includes('getSwatchPath'), 'Home debe resolver swatches derivados');
   assert(catalogCss.includes('.product-thumb img { object-fit: contain; object-position: center; opacity: 1;'), 'Catálogo debe mantener la imagen visible');
-  assert(/\.product-thumb img \{[\s\S]{0,400}?opacity:\s*1;/.test(homeSource), 'Home debe mantener la imagen visible');
+  assert(/\.product-thumb img \{[\s\S]{0,400}?opacity:\s*1;/.test(homeCss), 'Home debe mantener la imagen visible');
   assert(imageUtilsSource.includes('function loadImageResource(src)'), 'Debe existir precarga reutilizable');
   assert(imageUtilsSource.includes('probe.complete && probe.naturalWidth > 0'), 'La precarga debe contemplar caché');
 

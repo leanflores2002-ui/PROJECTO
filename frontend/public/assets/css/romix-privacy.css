@@ -1,0 +1,24 @@
+/* Institutional policy layout: compact hierarchy, comfortable reading, no index. */
+.privacy-page { width: min(100% - 64px, 1040px); margin: 24px auto 40px; color: #242426; font-family: Manrope, Arial, sans-serif; }
+.privacy-breadcrumb { font-size: 12px; margin-bottom: 18px; color: #555; }
+.privacy-heading { margin: 0 0 20px; padding-bottom: 16px; border-bottom: 1px solid #e2e2e5; }
+.privacy-heading h1 { margin: 0 0 10px; font: 800 clamp(25px, 2.5vw, 32px)/1.2 Manrope, Arial, sans-serif; letter-spacing: -.02em; text-transform: none; }
+.privacy-heading p { margin: 0 0 8px; font-size: 14px; line-height: 1.6; }
+.privacy-heading .privacy-updated { margin: 0; color: #555; font-size: 12px; }
+.privacy-copy { max-width: none; }
+.privacy-copy section { margin: 0 0 22px; scroll-margin-top: 110px; }
+.privacy-copy h2 { margin: 0 0 8px; font: 800 17px/1.4 Manrope, Arial, sans-serif; letter-spacing: 0; text-transform: none; }
+.privacy-copy p, .privacy-copy li { font-size: 14px; line-height: 1.65; overflow-wrap: anywhere; }
+.privacy-copy p { margin: 0 0 9px; }
+.privacy-copy p:last-child { margin-bottom: 0; }
+.privacy-copy ul { padding-left: 20px; margin: 0 0 10px; }
+.privacy-copy li { margin: 0 0 8px; }
+.privacy-page a { color: #8b1054; text-decoration: underline; text-underline-offset: 3px; }
+.privacy-page :focus-visible, .cookie-consent .cookie-privacy-link:focus-visible { outline: 3px solid #b91470; outline-offset: 4px; }
+@media (max-width: 600px) {
+  .privacy-page { width: calc(100% - 32px); margin: 18px auto 28px; }
+  .privacy-breadcrumb { margin-bottom: 14px; }
+  .privacy-heading { margin-bottom: 18px; padding-bottom: 14px; }
+  .privacy-copy section { margin-bottom: 20px; }
+  .privacy-copy h2 { font-size: 16px; }
+}

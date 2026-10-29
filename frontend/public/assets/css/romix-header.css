@@ -8,10 +8,10 @@ header.romix-shared-header {
   position: sticky;
   top: 0;
   z-index: 1200;
-  background: rgba(255, 255, 255, 0.95);
-  border-bottom: 2px solid rgba(255, 143, 180, 0.55);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 6px 16px rgba(30, 30, 30, 0.04);
+  background: var(--romix-white);
+  border-bottom: 1px solid var(--romix-border);
+  backdrop-filter: none;
+  box-shadow: none;
   margin: 0;
   padding: 0;
   border-radius: 0;
@@ -96,7 +96,7 @@ header.romix-shared-header .logo {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--romix-font-heading);
+  font-family: var(--romix-font-body);
   font-weight: 800;
   font-size: clamp(1.3rem, 1.85vw, 1.58rem);
   letter-spacing: 0.02em;
@@ -466,7 +466,7 @@ header.romix-shared-header .mega-promo-eyebrow {
 
 .site-header .mega-promo-title,
 header.romix-shared-header .mega-promo-title {
-  font-family: var(--romix-font-heading);
+  font-family: var(--romix-font-body);
   font-size: clamp(1.2rem, 1.9vw, 1.52rem);
   line-height: 1.08;
 }
@@ -1343,7 +1343,7 @@ header.romix-shared-header .global-search button[type="submit"] {
     gap: 10px;
     color: #1f1f1f;
     text-decoration: none;
-    font-family: var(--romix-font-heading);
+    font-family: var(--romix-font-body);
     font-size: 1rem;
     font-weight: 800;
     letter-spacing: 0.03em;
@@ -1558,7 +1558,7 @@ header.romix-shared-header .header-row {
 header.romix-shared-header .brand {
   gap: 12px;
   color: var(--header-ink);
-  font-family: var(--romix-font-heading);
+  font-family: var(--romix-font-body);
   font-size: clamp(1.18rem, 1.5vw, 1.42rem);
   font-weight: 900;
   letter-spacing: 0.04em;
@@ -1602,7 +1602,7 @@ header.romix-shared-header .main-nav .mega-trigger {
   min-height: 38px;
   padding: 0 2px;
   color: #39363b;
-  font-family: "Outfit", "Manrope", sans-serif;
+  font-family: var(--romix-font-body);
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -1846,7 +1846,7 @@ header.romix-shared-header .cart-pill__text {
 
 .site-header .cart-pill__text strong,
 header.romix-shared-header .cart-pill__text strong {
-  font-family: "Outfit", sans-serif;
+  font-family: var(--romix-font-body);
   font-size: 0.86rem;
   font-weight: 900;
 }
@@ -2101,7 +2101,7 @@ header.romix-shared-header .brand {
   align-items: center;
   justify-self: start;
   color: #19181f;
-  font-family: "Outfit", "Manrope", sans-serif;
+  font-family: var(--romix-font-body);
   font-size: 1.85rem;
   font-weight: 800;
   letter-spacing: -.03em;
@@ -2303,7 +2303,7 @@ header.romix-shared-header .global-search button[type="submit"] {
   header.romix-shared-header .header-row {
     min-height: 60px;
     grid-template-columns: 92px minmax(0, 1fr) 52px;
-    grid-template-areas: "left brand actions";
+    grid-template-areas: "brand actions left";
     gap: 6px;
     padding: 0;
   }
@@ -2318,7 +2318,7 @@ header.romix-shared-header .global-search button[type="submit"] {
   .site-header .brand,
   header.romix-shared-header .brand {
     grid-area: brand;
-    justify-self: center;
+    justify-self: start;
     font-size: 1.35rem;
   }
 
@@ -2372,7 +2372,7 @@ header.romix-shared-header .global-search button[type="submit"] {
   .site-header .mobile-drawer-brand,
   header.romix-shared-header .mobile-drawer-brand {
     color: #19181f;
-    font-family: "Outfit", sans-serif;
+    font-family: var(--romix-font-body);
     font-size: 1.3rem;
     font-weight: 800;
     text-decoration: none;
@@ -2714,7 +2714,7 @@ header.romix-shared-header .global-search.romix-search-form .romix-search-cancel
 .romix-search-popular h3 {
   margin: 0;
   color: #242426;
-  font-family: "Outfit", "Manrope", sans-serif;
+  font-family: var(--romix-font-body);
   font-weight: 800;
   line-height: 1.2;
 }
@@ -3576,15 +3576,15 @@ header.romix-shared-header .romix-icon-btn:hover {
   background: var(--romix-pink-bg);
 }
 
-/* Mobile header: symmetric columns keep the logo centered while preserving two 44px actions. */
+/* Mobile header: brand left, search/cart, then the 44px navigation control. */
 @media (max-width: 768px) {
   .site-header .header-row,
   header.romix-shared-header .header-row {
     width: calc(100% - 16px);
     height: 60px;
     min-height: 60px;
-    grid-template-columns: 96px minmax(0, 1fr) 96px;
-    grid-template-areas: "left brand actions";
+    grid-template-columns: minmax(0, 1fr) 88px 44px;
+    grid-template-areas: "brand actions left";
     gap: 12px;
     padding: 0;
   }
@@ -3601,7 +3601,7 @@ header.romix-shared-header .romix-icon-btn:hover {
   .site-header .brand,
   header.romix-shared-header .brand {
     grid-area: brand;
-    justify-self: center;
+    justify-self: start;
     white-space: nowrap;
   }
 
@@ -3612,7 +3612,7 @@ header.romix-shared-header .romix-icon-btn:hover {
     align-items: center;
     justify-content: flex-end;
     gap: 8px;
-    min-width: 96px;
+    min-width: 88px;
   }
 
   .site-header .header-actions-left .icon-btn,

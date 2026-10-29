@@ -1,5 +1,6 @@
 (function(){
   const imageUtils = window.romixImageUtils || {};
+  const IMAGE_PLACEHOLDER = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="640" height="853"><rect width="100%" height="100%" fill="#f6f6f6"/><text x="50%" y="50%" text-anchor="middle" fill="#777">Imagen no disponible</text></svg>');
   const cardImageSize = imageUtils.dimensions && imageUtils.dimensions.productCard
     ? imageUtils.dimensions.productCard
     : { width: 720, height: 960 };
@@ -36,6 +37,7 @@
     return (Array.isArray(list) ? list : []).filter(p => !hideProduct(p));
   }
   function detailHref(product, buy){
+    if (window.romixProductUrl) return window.romixProductUrl.detailHref(product) + (buy ? '?buy=1' : '');
     const slugVal = slugForProduct(product);
     const nameVal = typeof window.fixUtf8 === 'function'
       ? window.fixUtf8(product && product.name ? product.name : '')
@@ -64,11 +66,11 @@
         : (p.image || '');
       const img = typeof imageUtils.getThumbPath === 'function' && mainImage
         ? imageUtils.getThumbPath(mainImage)
-        : (mainImage || 'images/placeholder.jpg');
+        : (mainImage || IMAGE_PLACEHOLDER);
       return `
       <div class="product-card" data-type="${p.type||''}">
         <div class="product-image">
-          <img src="${img}" alt="${p.name||''}" loading="lazy" decoding="async" width="${cardImageSize.width}" height="${cardImageSize.height}" onerror="this.onerror=null;this.src='images/placeholder.jpg';"/>
+          <img src="${img}" alt="${p.name||''}" loading="lazy" decoding="async" width="${cardImageSize.width}" height="${cardImageSize.height}" onerror="this.onerror=null;this.src='${IMAGE_PLACEHOLDER}';"/>
           ${badge}
         </div>
         <div class="product-info">
