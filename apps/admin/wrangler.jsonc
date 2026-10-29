@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "romix-admin",
+  "compatibility_date": "2026-10-29",
+  "workers_dev": true,
+  "assets": {
+    "not_found_handling": "single-page-application"
+  }
+}

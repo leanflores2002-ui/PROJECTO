@@ -1,16 +1,36 @@
 {
-  "name": "web",
+  "name": "romix-platform",
   "version": "1.0.0",
-  "description": "",
+  "private": true,
+  "description": "ROMIX legacy storefront plus Cloudflare-native platform",
   "main": "index.js",
   "directories": {
     "doc": "docs"
   },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "pretest": "node scripts/sync-storefront-shells.js",
-    "build": "node scripts/generate-share-pages.js",
+    "pretest": "npm run pretest:legacy",
+    "pretest:legacy": "node scripts/sync-storefront-shells.js",
+    "build": "npm run build:legacy && npm run build:storefront && npm run build:admin && npm run build:api",
+    "build:legacy": "node scripts/generate-share-pages.js",
+    "dev:api": "npm --workspace apps/api run dev",
+    "dev:storefront": "npm --workspace apps/storefront run dev",
+    "dev:admin": "npm --workspace apps/admin run dev",
+    "build:storefront": "npm --workspace apps/storefront run build",
+    "build:admin": "npm --workspace apps/admin run build",
+    "build:api": "npm --workspace apps/api run build",
+    "deploy:storefront": "npm --workspace apps/storefront run deploy",
+    "deploy:admin": "npm --workspace apps/admin run deploy",
+    "deploy:api": "npm --workspace apps/api run deploy",
+    "lint": "eslint apps packages --max-warnings=0",
+    "typecheck": "npm run check:ts && npm --workspace packages/shared run typecheck && npm --workspace apps/api run typecheck && npm --workspace apps/storefront run typecheck && npm --workspace apps/admin run typecheck",
+    "test": "npm run test:legacy && npm --workspace apps/api run test && npm --workspace apps/admin run test",
+    "test:cloudflare": "npm --workspace apps/api run test && npm --workspace apps/admin run test",
     "test:templates": "node tests/storefrontTemplateTests.js",
-    "test": "node tests/storefrontTemplateTests.js && node tests/catalogSyncTests.js && node tests/pageTests.js && node tests/romixIconButtonTests.js && node tests/catalogRouteTests.js && node tests/catalogFilterTests.js && node tests/cardVariantTests.js && node tests/productGalleryTests.js && node tests/salePricingTests.js && node tests/cartOrderTests.js && node tests/colorNameTests.js && node tests/seasonVisibilityTests.js && node tests/recommendedOrderTests.js && node tests/storefrontStabilityTests.js && node tests/sharePreviewTests.js && node tests/productImageResolverTests.js && node tests/imageUtilsTests.js && node tests/mediaStorageTests.js && node tests/shareSecurityTests.js && node tests/seoTests.js && node tests/categoryPagesTests.js",
+    "test:legacy": "node tests/storefrontTemplateTests.js && node tests/catalogSyncTests.js && node tests/pageTests.js && node tests/romixIconButtonTests.js && node tests/catalogRouteTests.js && node tests/catalogFilterTests.js && node tests/cardVariantTests.js && node tests/productGalleryTests.js && node tests/salePricingTests.js && node tests/cartOrderTests.js && node tests/colorNameTests.js && node tests/seasonVisibilityTests.js && node tests/recommendedOrderTests.js && node tests/storefrontStabilityTests.js && node tests/sharePreviewTests.js && node tests/productImageResolverTests.js && node tests/imageUtilsTests.js && node tests/mediaStorageTests.js && node tests/shareSecurityTests.js && node tests/seoTests.js && node tests/categoryPagesTests.js",
     "test:buttons": "node tests/romixIconButtonTests.js",
     "test:season-backend": "python tests/season_visibility_backend_tests.py",
     "test:share-backend": "python tests/product_share_backend_tests.py",
@@ -37,7 +57,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Leandro18122022/web.git"
+    "url": "git+https://github.com/leanflores2002-ui/Romix-.git"
   },
   "keywords": [],
   "author": "",
@@ -48,11 +68,15 @@
   },
   "homepage": "https://github.com/Leandro18122022/web#readme",
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
     "axe-core": "^4.11.0",
+    "eslint": "^9.0.0",
+    "globals": "^16.0.0",
     "jsdom": "^27.3.0",
     "lucide": "^0.468.0",
     "playwright": "^1.63.0",
     "sharp": "^0.35.4",
-    "typescript": "^7.0.2"
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.0.0"
   }
 }

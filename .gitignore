@@ -2,6 +2,12 @@
 node_modules/
 frontend/admin/dist/
 
+# Cloudflare workspace output
+apps/*/dist/
+apps/*/.astro/
+apps/*/.wrangler/
+.wrangler/
+
 # Python
 __pycache__/
 *.py[cod]

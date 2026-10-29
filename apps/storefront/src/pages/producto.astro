@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Producto · ROMIX" description="Ruta base de producto ROMIX.">
+  <section class="page">
+    <h1>Producto</h1>
+    <p>La resolución por slug se conectará a la API cuando finalice la normalización del catálogo D1.</p>
+    <p><code>/producto/:slug</code> queda reservado para esa integración.</p>
+    <a href="/catalogo/">Volver al catálogo</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .page { padding: 5rem clamp(1.25rem, 8vw, 8rem); }
+  h1 { font-size: clamp(2.25rem, 6vw, 4rem); }
+  a { color: inherit; }
+</style>

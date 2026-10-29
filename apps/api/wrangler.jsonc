@@ -1,0 +1,52 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "romix-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-29",
+  "workers_dev": true,
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "ENVIRONMENT": "development",
+    "CORS_ORIGINS": "http://localhost:4321,http://localhost:5173",
+    "ADMIN_ACCESS_AUDIENCE": "romix-admin-local"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "romix-dev",
+      "migrations_dir": "../../migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "ASSETS_BUCKET",
+      "bucket_name": "romix-assets"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "INVENTORY",
+        "class_name": "InventoryDurableObject"
+      }
+    ]
+  },
+  "exports": {
+    "InventoryDurableObject": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    }
+  },
+  "access": {
+    "dev": {
+      "aud": "romix-admin-local",
+      "identity": {
+        "email": "admin@example.com",
+        "name": "Local ROMIX Admin",
+        "groups": ["romix-admin"]
+      }
+    }
+  }
+}

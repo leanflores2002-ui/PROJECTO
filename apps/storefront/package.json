@@ -1,0 +1,24 @@
+{
+  "name": "@romix/storefront",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node ../../scripts/run-astro.mjs dev",
+    "build": "node ../../scripts/run-astro.mjs build",
+    "preview": "node ../../scripts/run-astro.mjs preview",
+    "deploy": "npm run build && wrangler deploy",
+    "typecheck": "node ../../scripts/run-astro.mjs check",
+    "test": "node ../../scripts/run-astro.mjs check"
+  },
+  "dependencies": {
+    "@romix/shared": "*",
+    "astro": "^6.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@cloudflare/workers-types": "^4.20260702.1",
+    "typescript": "^5.9.0",
+    "wrangler": "^4.0.0"
+  }
+}
