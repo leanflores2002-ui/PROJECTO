@@ -4,6 +4,7 @@
   const LEGACY_CACHE_KEYS = ['romixProductsCacheV5', 'romixProductsCacheV6'];
   const CACHE_TTL_MS = 30 * 60 * 1000;
   const DATA_URL = 'assets/data/products.json';
+  const API_BASE_URL = 'https://romix-api.lean-flores2002.workers.dev';
   const pricing = window.romixPricing || {};
 
   let memoryCache = null;
@@ -247,14 +248,24 @@
     const opts = options || {};
     const dataUrl = new URL(opts.dataUrl || DATA_URL, document.baseURI || location.href);
     const errors = [];
+    const apiEnabled = opts.useApi === true
+      || window.ROMIX_USE_API === true
+      || (/\.workers\.dev$/i.test(location.hostname) && opts.useApi !== false);
+    const configuredApiBase = String(opts.apiBaseUrl || window.ROMIX_API_BASE_URL || '').trim();
+    const apiBase = configuredApiBase || (
+      /^(localhost|127\.0\.0\.1)$/.test(location.hostname)
+        ? 'http://127.0.0.1:8787'
+        : API_BASE_URL
+    );
 
-    if (opts.useApi === true) {
+    if (apiEnabled) {
       try {
-        const apiRes = await fetch('/api/products', { cache: 'no-cache' });
+        const apiRes = await fetch(`${apiBase.replace(/\/$/, '')}/api/public/products?limit=200`, { cache: 'no-cache' });
         if (!apiRes.ok) throw new Error(`API products respondió ${apiRes.status}`);
         const payload = await apiRes.json();
-        if (!Array.isArray(payload)) throw new Error('API products devolvió un formato inválido');
-        const apiList = sanitizeList(payload);
+        const apiItems = Array.isArray(payload) ? payload : payload && payload.items;
+        if (!Array.isArray(apiItems)) throw new Error('API products devolvió un formato inválido');
+        const apiList = sanitizeList(apiItems);
         writeSessionCache(apiList, 'api');
         loadStatus = { source: 'api', stale: false, errors: [] };
         return apiList;

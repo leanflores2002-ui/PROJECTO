@@ -11,6 +11,33 @@ function request(path: string, init?: RequestInit) {
   return app.fetch(new Request(`https://api.example.test${path}`, init), {}, context);
 }
 
+function catalogDb() {
+  const rows = [{
+    id: 'mujer-calza-demo',
+    section: 'mujer',
+    type: 'calzas',
+    name: 'Calza demo ROMIX',
+    season: 'invierno',
+    image: 'images/products/demo.webp',
+    price: 11500,
+    price_by_group_json: '{"common":11500}',
+    special_sizes_json: '[6,7,8]',
+    colors_json: '[]',
+    sizes_json: '["1","2"]',
+    visible: 1,
+  }];
+  return {
+    prepare: (sql: string) => ({
+      bind: (...args: unknown[]) => ({
+        all: async () => ({ results: sql.includes('catalog_products') && args.includes('%demo%') ? rows : [] }),
+        first: async () => rows[0],
+      }),
+      all: async () => ({ results: rows }),
+      first: async () => ({ ok: 1 }),
+    }),
+  } as unknown as D1Database;
+}
+
 describe('Cloudflare API', () => {
   it('returns the cloudflare health contract', async () => {
     const response = await request('/api/health');
@@ -51,5 +78,19 @@ describe('Cloudflare API', () => {
     const response = await request('/api/public/search?q=');
     expect(response.status).toBe(400);
     expect(await response.json()).toMatchObject({ error: 'invalid_query' });
+  });
+
+  it('lists catalog products from D1', async () => {
+    const response = await app.fetch(
+      new Request('https://api.example.test/api/public/products?q=demo'),
+      { DB: catalogDb() },
+      context,
+    );
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({
+      count: 1,
+      items: [{ id: 'mujer-calza-demo', name: 'Calza demo ROMIX', price: 11500 }],
+      status: 'ok',
+    });
   });
 });
