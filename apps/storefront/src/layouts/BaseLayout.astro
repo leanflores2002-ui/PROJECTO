@@ -1,0 +1,40 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">ROMIX</a>
+      <nav aria-label="Navegación principal">
+        <a href="/catalogo/">Catálogo</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer>ROMIX · Nueva plataforma Cloudflare en preparación</footer>
+  </body>
+</html>
+
+<style>
+  :global(*) { box-sizing: border-box; }
+  :global(body) { margin: 0; font-family: system-ui, sans-serif; color: #171717; background: #fff; }
+  .site-header { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem clamp(1.25rem, 4vw, 4rem); border-bottom: 1px solid #e5e5e5; }
+  .brand { color: inherit; font-weight: 800; letter-spacing: .16em; text-decoration: none; }
+  nav { display: flex; gap: 1rem; }
+  nav a { color: inherit; text-decoration: none; }
+  main { min-height: 70vh; }
+  footer { padding: 2rem clamp(1.25rem, 4vw, 4rem); color: #666; border-top: 1px solid #e5e5e5; font-size: .9rem; }
+</style>

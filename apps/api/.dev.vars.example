@@ -1,0 +1,5 @@
+ENVIRONMENT=development
+CORS_ORIGINS=http://localhost:4321,http://localhost:5173
+ADMIN_ACCESS_AUDIENCE=romix-admin-local
+# Optional comma-separated allowlist for fine-grained admin authorization.
+ADMIN_ALLOWED_EMAILS=admin@example.com

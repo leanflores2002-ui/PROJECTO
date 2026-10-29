@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const apiBaseUrl = import.meta.env.PUBLIC_API_BASE_URL || 'http://localhost:8787';
+---
+<BaseLayout title="ROMIX" description="Catálogo ROMIX preparado para la nueva plataforma Cloudflare.">
+  <section class="intro">
+    <p class="eyebrow">Nueva base Cloudflare</p>
+    <h1>El storefront ROMIX se reconstruirá por etapas.</h1>
+    <p>Esta shell confirma el build, el routing y el punto de integración con la API. La interfaz completa existente permanece intacta.</p>
+    <div class="actions">
+      <a class="primary" href="/catalogo/">Ver ruta de catálogo</a>
+      <a href={`${apiBaseUrl}/api/health`}>API health</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro { max-width: 48rem; padding: clamp(5rem, 15vw, 10rem) clamp(1.25rem, 8vw, 8rem); }
+  .eyebrow { color: #666; text-transform: uppercase; letter-spacing: .12em; font-size: .75rem; }
+  h1 { max-width: 12ch; font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: .98; margin: 1rem 0; }
+  p { max-width: 42rem; line-height: 1.6; }
+  .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+  .actions a { color: inherit; padding: .8rem 1rem; border: 1px solid #222; text-decoration: none; }
+  .actions .primary { background: #171717; color: #fff; }
+</style>
